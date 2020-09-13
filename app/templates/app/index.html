@@ -1,0 +1,185 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block content %}
+    <section class="index">
+        <div class="wrapper">
+            <h1 class="h1-page-title">ASCII-Generator</h1>
+            <div class="img2ascii-input {% if app_txt_mode %}hide{% endif %}">
+                <h2 class="h2-method-desc">Upload an image to convert it into the ASCII-format<br>
+                    with different algorithm types</h2>
+                <div class="file-upload__modal" role="section">
+                    {# https://codepen.io/mmhuntsberry/pen/QowZwR #}
+                    <p class="file-upload__modal-title" role="heading">UPLOAD IMAGE</p>
+                    <p class="file-upload__error" role="alertdialog"></p>
+                    <ul class="file__list js-file__list" role="list"></ul>
+                    <form class="file-upload__form js-dropzone" role="form" method="POST"
+                          enctype="multipart/form-data"
+                          action="{% url 'image_to_ascii_generator_url' %}">
+                        {% csrf_token %}
+                        <input
+                                type="file"
+                                name="img"
+                                id="file-dropzone"
+                                class="file__input js-file__input"
+                                accept="image/*"
+                        >
+                        <label
+                                class="file__input-label"
+                                for="file-dropzone"
+                        >DRAG FILE HERE OR
+                            <button class="file__input-label-button" role="button">BROWSE</button>
+                        </label>
+                    </form>
+                </div>
+                <div class="ascii-image-output hide">
+                    <div class="container_slider">
+                        <div class="font-size_config">
+                                <div class="font-size_up">
+                                    <input type="button" value="+">
+                                </div>
+                                <div class="font-size_cur"><span class="font-size_number">12</span>px</div>
+                                <div class="font-size_down">
+                                    <input type="button" value="-">
+                                </div>
+                            </div>
+                        <div class="slider-window">
+                            <div class="image" id="image_slider">
+                                <img src="">
+                            </div>
+                            <div class="ascii-art" id="art_download"></div>
+                        </div>
+                        <input type="range" min="0" max="100" value="50" id="slider_itself" oninput="moveDivisor()">
+                    </div>
+                    <div class="grid_container">
+                        <div class="buttons first_row">
+                            <div class="new_file">
+                                <img src="{% static 'svg/add.svg' %}" width="40" height="40"
+                                     title="New image">
+                            </div>
+                            <div class="invert_colors">
+                                <img src="{% static 'svg/day-and-night.svg' %}" width="40" height="40"
+                                     title="Invert colors">
+                            </div>
+                            <div class="copy_to_clipboard">
+                                <img src="{% static 'svg/copy.svg' %}" width="40" height="40"
+                                     title="Copy to clipboard">
+                            </div>
+                            <div class="download_art">
+                                <img src="{% static 'svg/download.svg' %}" width="40" height="40"
+                                     title="Download ASCII-art as .png" id="button_art_download">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid_container">
+                        <div class="buttons second_row">
+                            <div class="method_1 chosen" data-method_id="0">1</div>
+                            <div class="method_2" data-method_id="1">2</div>
+                            <div class="method_3" data-method_id="2">3</div>
+                            <div class="method_4" data-method_id="3">4</div>
+                        </div>
+                    </div>
+                    <div class="options_container">
+                        <form action="{% url 'image_to_ascii_generator_url' %}" method="POST" autocomplete="off">
+                            {% csrf_token %}
+                            <p class="title">Options:</p>
+                            <div class="options_grid">
+                                <div class="option num_cols">
+                                    <label for="option_num_cols">Columns</label>
+                                    <input type="text" value="90" id="option_num_cols" name="num_cols">
+                                </div>
+                                <div class="option brightness">
+                                    <label for="option_brightness">Brightness</label>
+                                    <input type="text" value="100" id="option_brightness" name="brightness"><span
+                                        class="percent_sign">%</span>
+                                </div>
+                                <div class="option contrast">
+                                    <label for="option_contrast">Contrast</label>
+                                    <input type="text" value="100" id="option_contrast" name="contrast"><span
+                                        class="percent_sign">%</span>
+                                </div>
+                            </div>
+                            <input type="submit" value="Apply">
+                        </form>
+                    </div>
+                </div>
+                <p class="ps-tiny">...or try the text to ASCII</p>
+            </div>
+            <div class="txt2ascii-input {% if not app_txt_mode %}hide{% endif %}">
+                <h2 class="h2-method-desc">Type text to convert it into the ASCII-format</h2>
+                <form action="{% url 'text_to_ascii_generator_url' %}" class="txt2ascii-form" method="POST" autocomplete="off">
+                    {% csrf_token %}
+                    <div class="single-line_text">
+                        <div class="inline-grid_inline-text">
+                            <input name="txt" type="text" placeholder="Hello World" maxlength="256">
+                            <input type="submit" value="GO" class="btn_2">
+                        </div>
+                    </div>
+                    <div class="multi-line_text hide">
+                        <textarea name="txt_multi" placeholder="Hello&#10;World" maxlength="256"></textarea>
+                        <input type="submit" value="GO" class="btn_2">
+                    </div>
+                    <input type="checkbox" id="multiple_strings_checkbox" name="multiple_strings"
+                           style="position: absolute; opacity: 0">
+                    <label class="label_checkbox" for="multiple_strings_checkbox">Multi-line mode</label>
+                </form>
+                <div class="ascii-text-output hide">
+                    <div id="ascii-text-output-resize-textarea">
+                        <textarea name="output" value="" wrap="off" readonly></textarea>
+                    </div>
+                    <div class="grid_container">
+                        <div class="buttons first_row">
+                            <div class="invert_colors">
+                                <img src="{% static 'svg/day-and-night.svg' %}" width="40" height="40"
+                                     title="Invert colors">
+                            </div>
+                            <div class="randomize">
+                                <img src="{% static 'svg/dices.svg' %}" width="40" height="40"
+                                     title="Random font">
+                            </div>
+                            <div class="copy_to_clipboard">
+                                <img src="{% static 'svg/copy.svg' %}" width="40" height="40"
+                                     title="Copy to clipboard">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid_container">
+                        <div class="buttons second_row">
+                            <div class="back">
+                                <img src="{% static 'svg/arrow.svg' %}" width="40" height="40"
+                                     title="Previous font">
+                            </div>
+                            <select name="method" id="select-method">
+                            </select>
+                            <div class="forward">
+                                <img src="{% static 'svg/arrow.svg' %}" width="40" height="40"
+                                     title="Next font">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="ps-tiny">...or try the image to ASCII</p>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block body_end %}
+    <script src="{% static 'js/textToASCII-multiline-switcher.js' %}" type="text/javascript"></script>
+    <!-- html2canvas -->
+    <script src="{% static 'js/html2canvas.min.js' %}" type="text/javascript"></script>
+    <!-- filesaver -->
+    <script src="{% static 'js/FileSaver.js' %}" type="text/javascript"></script>
+    <script>
+        var slider_image = document.getElementById("image_slider"),
+            slider_itself = document.getElementById("slider_itself");
+
+        function moveDivisor() {
+            slider_image.style.width = slider_itself.value + "%";
+        }
+
+        window.onload = function () {
+            moveDivisor();
+        };
+    </script>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'app/base.html' %}
+{% block page_title %}About{% endblock %}
+
+{% block content %}
+    <section class="about">
+        <div class="wrapper">
+            <div class="text-window">
+                <h3>About</h3>
+                <p>On this website, you can generate ASCII arts out of any image or text. Use two upper buttons to switch between both types of input. If you don't know what ASCII art is, check out <a href="https://en.wikipedia.org/wiki/ASCII_art">this Wikipedia page</a>.</p>
+                <p>Once you uploaded the image, the generated ASCII-art will be shown. With a slider, you can compare the original picture to art. Under it, you can use some action buttons like "New image", "Invert colors", "Copy to clipboard" and "Download ASCII-art as .png". Below them, you can switch between different art types and apply options to them. Also on the left side of the art, you can adjust font-size. For example, if the final art is a bit messy, you can try to raise the number of columns and contrast, as lowering font-size.</p>
+                <p>This project is made by <a href="https://github.com/hermanTenuki">hermanTenuki</a>. All the code can be found at <a href="https://github.com/hermanTenuki/ASCII-Generator.site" title="Please star us on GitHub">it's GitHub page</a>, it is distributing under open-source <a href="https://github.com/hermanTenuki/ASCII-Generator.site/blob/master/LICENSE">MIT-License - Copyright (c) 2020 Herman Schechkin</a>.</p>
+                <p>For generating ASCII arts from images or text, three different sources were used:</p>
+                <ul>
+                    <li><a href="https://github.com/uvipen/ASCII-generator">ASCII-generator</a> by <a href="https://github.com/uvipen">uvipen</a> (<a href="https://github.com/uvipen/ASCII-generator/blob/master/LICENSE">MIT-License - Copyright (c) 2018 Viet Nguyen</a>);</li>
+                    <li><a href="https://github.com/ajalt/pyasciigen">pyasciigen</a> by <a href="https://github.com/ajalt">ajalt</a> (<a href="https://github.com/ajalt/pyasciigen/blob/master/README.md">MIT-License - Copyright (c) 2012 AJ Alt</a>);</li>
+                    <li><a href="https://github.com/sepandhaghighi/art">art</a> by <a href="https://github.com/sepandhaghighi">sepandhaghighi</a> (<a href="https://github.com/sepandhaghighi/art/blob/master/LICENSE">MIT-License - Copyright (c) 2017 Sepand Haghighi</a>).</li>
+                </ul>
+                <p>If you want to contact me, suggest any improvement/idea or report a bug, you can use <a href="mailto:ascii-generator.site@gmail.com">ascii-generator.site@gmail.com</a> email or <a href="{% url 'feedback_url' %}">Feedback</a> page.</p>
+                <p>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>.</p>
+                <p>Our <a href="{% url 'policy_privacy_url' %}">Privacy Policy</a>, <a href="{% url 'policy_cookie_url' %}">Cookie Policy</a>.</p>
+            </div>
+        </div>
+    </section>
+{% endblock %}

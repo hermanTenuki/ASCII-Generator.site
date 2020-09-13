@@ -1,0 +1,25 @@
+{% extends 'app/base.html' %}
+{% block page_title %}Staff Authentication{% endblock %}
+{% block content %}
+    <section class="staff_authentication">
+        <form action="{% url 'staff_authentication_url' %}" method="POST">
+            {% csrf_token %}
+            {{ form.username }}
+            {% for error in form.errors.username %}
+                <p class="error">{{ error }}</p>
+            {% endfor %}
+            {{ form.password }}
+            {% for error in form.errors.password %}
+                <p class="error">{{ error }}</p>
+            {% endfor %}
+            {{ form.captcha }}
+            {% for error in form.errors.captcha %}
+                <p class="error">{{ error }}</p>
+            {% endfor %}
+            {% for error in errors %}
+                <p class="error">{{ error }}</p>
+            {% endfor %}
+            <input type="submit" value="Authenticate">
+        </form>
+    </section>
+{% endblock %}

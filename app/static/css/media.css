@@ -1,0 +1,171 @@
+@media screen and (max-height: 830px) {
+  body main section.index {
+    padding: 5vh 0;
+  }
+}
+@media screen and (max-height: 740px) {
+  body main section.index {
+    padding: 0;
+  }
+}
+@media screen and (max-height: 900px) {
+  body main section.feedback {
+    padding: 5vh 0;
+  }
+}
+@media screen and (max-height: 800px) {
+  body main section.feedback {
+    padding: 20px 0;
+  }
+}
+@media screen and (max-height: 600px) {
+  body main section.page_error {
+    padding-bottom: 30px;
+  }
+  body main section.page_error .wrapper {
+    margin: auto 0;
+  }
+  body main section.page_error .wrapper .page_error_message {
+    position: unset;
+    transform: unset;
+  }
+}
+@media screen and (max-width: 900px) {
+  body header .wrapper {
+    grid-template-columns: repeat(3, auto);
+  }
+}
+@media screen and (max-width: 770px) {
+  body main section.index .wrapper h1.h1-page-title {
+    font-size: 50px;
+  }
+  body main section.index .wrapper h2.h2-method-desc {
+    font-size: 26px;
+  }
+}
+@media screen and (max-width: 700px) {
+  body header {
+    height: unset;
+  }
+  body header .wrapper {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-areas: 'pos1 pos2' 'pos3 pos3';
+  }
+  body header .wrapper .logo {
+    grid-area: pos1;
+  }
+  body header .wrapper .links {
+    grid-area: pos2;
+  }
+  body header .wrapper .switcher {
+    grid-area: pos3;
+    padding-bottom: 15px;
+  }
+  body main section.index .wrapper h1.h1-page-title {
+    font-size: 45px;
+  }
+  body main section.index .wrapper h2.h2-method-desc {
+    font-size: 24px;
+  }
+  body main#full-size {
+    min-height: calc(100vh -  98px  -  60px );
+  }
+}
+@media screen and (max-width: 550px) {
+  body main section.index .wrapper .ascii-image-output .options_container .options_grid {
+    grid-column-gap: unset;
+  }
+  body main section.about .wrapper,
+  body main section.policy_cookie .wrapper,
+  body main section.policy_privacy .wrapper {
+    background-color: white;
+    border: 2px dashed #242424;
+    border-right: 0;
+    border-left: 0;
+  }
+  body main section.about .wrapper .text-window,
+  body main section.policy_cookie .wrapper .text-window,
+  body main section.policy_privacy .wrapper .text-window {
+    padding: 20px 0;
+    border-radius: 0;
+    border: 0;
+  }
+  body main section.feedback {
+    padding: 20px 0;
+  }
+  body main section.feedback .wrapper {
+    background-color: white;
+    border: 2px dashed #242424;
+    border-right: 0;
+    border-left: 0;
+  }
+  body main section.feedback .wrapper form.feedback-form {
+    padding: 20px 0;
+    border-radius: 0;
+    border: 0;
+  }
+}
+@media screen and (max-width: 470px) {
+  body header .wrapper {
+    grid-template-areas: unset;
+    grid-template-columns: unset;
+    grid-template-rows: repeat(3, auto);
+  }
+  body header .wrapper .logo {
+    grid-area: unset;
+    margin: 9px auto;
+  }
+  body header .wrapper .logo a {
+    display: block;
+    font-size: 9vw;
+  }
+  body header .wrapper .links {
+    display: inline-grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-column-gap: 15px;
+    grid-area: unset;
+    margin: 0 auto;
+    grid-row: 2/3;
+  }
+  body header .wrapper .links a {
+    margin: 0;
+  }
+  body header .wrapper .switcher {
+    grid-area: unset;
+    padding: 15px 0 0 0;
+    grid-row: 3/4;
+  }
+  body header#header_on_error_page {
+    height: 155px;
+  }
+  body main section.index .wrapper h1.h1-page-title {
+    display: none;
+  }
+  body main section.index .wrapper h2.h2-method-desc {
+    font-size: 22px;
+    padding-top: 30px;
+  }
+  body main section.index .wrapper .ascii-image-output .options_container .options_grid {
+    grid-template-columns: repeat(3, auto);
+    grid-column-gap: 15px;
+  }
+  body main section.feedback .wrapper form.feedback-form {
+    min-width: unset;
+  }
+  body main section.feedback .wrapper form.feedback-form textarea,
+  body main section.feedback .wrapper form.feedback-form input[type=email] {
+    width: 100%;
+    max-width: unset;
+    text-align: left;
+  }
+  body main section.feedback .wrapper form.feedback-form .feedback-agreement #id_agreement {
+    left: 0;
+    transform: translateX(29px);
+  }
+  body main section.feedback .wrapper form.feedback-form .feedback-agreement #id_agreement + label {
+    max-width: unset;
+  }
+  body main#full-size {
+    min-height: calc(100vh -  155px  -  60px );
+  }
+}

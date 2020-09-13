@@ -1,0 +1,38 @@
+{% extends 'app/base.html' %}
+{% block page_title %}Feedback{% endblock %}
+
+{% block content %}
+    <section class="feedback">
+        <div class="wrapper">
+            <form class="feedback-form" action="{% url 'feedback_url' %}" method="POST">
+                <h3>Feedback</h3>
+                <p class="text">Here you can contact me, suggest any improvement/idea or report a bug. Type your email
+                    if expecting reply.</p>
+                {% csrf_token %}
+                {{ form.text }}
+                {% for error in form.errors.text %}
+                    <p class="error">{{ error }}</p>
+                {% endfor %}
+                {{ form.email }}
+                {% for error in form.errors.email %}
+                    <p class="error">{{ error }}</p>
+                {% endfor %}
+                <div class="captcha-div">
+                    {{ form.captcha }}
+                    {% for error in form.errors.captcha %}
+                        <p class="error">{{ error }}</p>
+                    {% endfor %}
+                </div>
+                <div class="feedback-agreement">
+                    {{ form.agreement }}
+                    <label for="id_agreement"><span>By clicking the "Send" button, I give my consent to the processing of my personal data, and also agree to the <a
+                            href="{% url 'policy_privacy_url' %}" class="a_accent">privacy policy</a>.</span></label>
+                </div>
+                {% for error in form.errors.agreement %}
+                    <p class="error">{{ error }}</p>
+                {% endfor %}
+                <input type="submit" value="Send" class="btn_1">
+            </form>
+        </div>
+    </section>
+{% endblock %}

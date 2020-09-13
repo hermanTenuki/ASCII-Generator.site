@@ -1,0 +1,12 @@
+{% extends 'app/base.html' %}
+{% block content %}
+    <section class="page_error">
+        <div class="wrapper">
+            <div class="page_error_message">
+                <p class="title">{% block error_code %}{% endblock %}</p>
+                <p class="description">Oops, {% block error_desc %}{% endblock %}!</p>
+                <a href="https://www.ASCII-Generator.site" class="go_home"> <input type="button" value="Go to the Main page"></a>
+            </div>
+        </div>
+    </section>
+{% endblock %}

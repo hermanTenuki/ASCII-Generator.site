@@ -1,0 +1,61 @@
+{% extends 'app/base.html' %}
+{% block page_title %}Feedback Manage{% endblock %}
+{% block content %}
+    <section class="staff_feedback">
+        <div class="wrapper">
+            <div class="feedback_objs">
+                {% csrf_token %}
+                <input type="button" class="delete_all" value="Delete All"
+                       data-url="{% url 'staff_feedback_del_all' %}">
+                {% for obj in objs %}
+                    <div class="feedback_obj">
+                        {% if obj.email %}
+                            <p class="email">{{ obj.email }}</p>
+                        {% endif %}
+                        <p class="message">{{ obj.text }}</p>
+                        <input type="button" class="delete_specific" value="Delete" data-feedback_obj_id="{{ obj.id }}" data-url="{% url 'staff_feedback_del_spec' %}">
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{% block body_end %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('section.staff_feedback .feedback_objs').on('click', 'input.delete_all', function () {
+                const cur_elem = $(this);
+                const csrf_token = $('section.staff_feedback .feedback_objs').find('input[name="csrfmiddlewaretoken"]').val();
+
+                $.ajax({
+                    url: cur_elem.data('url'),
+                    type: 'POST',
+                    data: {},
+                    headers: {
+                        'X-CSRFToken': csrf_token,
+                    },
+                    success: function (response) {
+                        $('section.staff_feedback .feedback_objs').find('.feedback_obj').remove();
+                    }
+                })
+            });
+
+            $('section.staff_feedback .feedback_objs').on('click', 'input.delete_specific', function () {
+                const cur_elem = $(this);
+                const csrf_token = $('section.staff_feedback .feedback_objs').find('input[name="csrfmiddlewaretoken"]').val();
+
+                $.ajax({
+                    url: cur_elem.data('url'),
+                    type: 'POST',
+                    data: {'obj_id': cur_elem.data('feedback_obj_id')},
+                    headers: {
+                        'X-CSRFToken': csrf_token,
+                    },
+                    success: function (response) {
+                        cur_elem.parent().remove();
+                    }
+                })
+            })
+        });
+    </script>
+{% endblock %}

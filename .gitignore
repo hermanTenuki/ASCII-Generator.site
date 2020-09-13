@@ -1,0 +1,7 @@
+env_vars.py
+__pycache__/
+*.env
+Dockerfile
+.dockerignore
+/_temporary_images/*
+.idea/
