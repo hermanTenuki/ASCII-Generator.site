@@ -6,8 +6,8 @@
 
 You can find it at [www.ASCII-Generator.site](https://www.ASCII-Generator.site)
 
+> ![demo GIF](__demo/github-demo.gif)</br>
 > Example
-![demo GIF](__demo/github-demo.gif)
 
 ## Environment variables
 This Django project is using these environment variables:
