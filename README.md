@@ -28,7 +28,7 @@ For creating this project, several open-source repositories were used:
 - [django-cleanup](https://github.com/un1t/django-cleanup) by [un1t](https://github.com/un1t) ([MIT-License - Copyright (C) 2012 by Ilya Shalyapin](https://github.com/un1t/django-cleanup/blob/master/LICENSE));
 - [django-recaptcha](https://github.com/praekelt/django-recaptcha) by [praekelt](https://github.com/praekelt) ([BSD-3-Clause License - Copyright (c) Praekelt Consulting](https://github.com/praekelt/django-recaptcha/blob/develop/LICENSE)).
 ## Personal Todo
-- [x] Add support for more image file types;
+- [x] ~~Add support for more image file types;~~
 - [ ] Option to save generated results with access by link (models are made already);
 - [ ] Implement languages;
 - [ ] Integrate neural-network-based image to ASCII-art generator;
