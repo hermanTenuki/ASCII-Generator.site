@@ -265,7 +265,7 @@ $(document).ready(function () {
     const fileValidation = function (files) {
         const errMessageOutput = document.querySelector('.file-upload__error');
         const validatedFileArray = [];
-        const supportedExts = ['png', 'jpg', 'jpeg', 'bmp'];
+        const supportedExts = ['png', 'jpg', 'jpeg', 'bmp', 'gif', 'ico', 'webp'];
         files.forEach(file => {
             const ext = getFileExtension(file);
             if (file.size > 5242880) {
@@ -274,7 +274,7 @@ $(document).ready(function () {
                 errMessageOutput.textContent = errMessage;
             } else if (supportedExts.indexOf(ext) === -1) {
                 let errMessage =
-                    'Please upload a .png, .jpg or .bmp file only.';
+                    'Supported formats are: .png, .jpg, .bmp, .gif, .ico, .webp.';
                 errMessageOutput.style.display = 'block';
                 errMessageOutput.textContent = errMessage;
                 // return '';

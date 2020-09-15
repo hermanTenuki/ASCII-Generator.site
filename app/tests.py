@@ -230,6 +230,26 @@ class TestFeedbackView(TestCase):
 
 class TestImageToAsciiGeneratorView(TestCase):
 
+    def _test_image(self, path):
+        """
+        Ajax POST with right image type should return 200, arts, and create temporary file
+        """
+        with open(path, mode='rb') as file:
+            response = self.client.post(reverse('image_to_ascii_generator_url'),
+                                        HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+                                        data={'img': file},
+                                        format='multipart')
+        json_content = json.loads(response.content, encoding='utf-8')
+        file_name = json_content.get('file_name', '')
+        file_path = os.path.join(settings.BASE_DIR, '_temporary_images/', file_name)
+        self.assertEqual(response.status_code, 200)
+        # Check if there's 3 or more arts
+        self.assertGreaterEqual(len(json_content.get('arts', [])), 3)
+        # Check if image is actually saved
+        self.assertTrue(os.path.exists(file_path))
+        # Delete temporary image after test
+        os.remove(file_path)
+
     def test_non_ajax(self):
         """
         All non-ajax requests should redirect to main page
@@ -271,38 +291,50 @@ class TestImageToAsciiGeneratorView(TestCase):
         """
         Ajax POST with wrong file should return 400
         """
-        with open('app/tests_img_bad.jpg', mode='rb') as file:
+        with open('__test_images/test_img_bad.jpg', mode='rb') as file:
             response = self.client.post(reverse('image_to_ascii_generator_url'),
                                         HTTP_X_REQUESTED_WITH='XMLHttpRequest',
                                         data={'img': file},
                                         format='multipart')
         self.assertEqual(response.status_code, 400)
 
-    def test_ajax_post_success_image(self):
-        """
-        Ajax POST with right image should return 200, arts and create temporary file on server
-        """
-        with open('app/tests_img_good.jpg', mode='rb') as file:
-            response = self.client.post(reverse('image_to_ascii_generator_url'),
-                                        HTTP_X_REQUESTED_WITH='XMLHttpRequest',
-                                        data={'img': file},
-                                        format='multipart')
-        json_content = json.loads(response.content, encoding='utf-8')
-        file_name = json_content.get('file_name', '')
-        file_path = os.path.join(settings.BASE_DIR, '_temporary_images/', file_name)
-        self.assertEqual(response.status_code, 200)
-        # Check if there's 3 or more arts
-        self.assertGreaterEqual(len(json_content.get('arts', [])), 3)
-        # Check if image is actually saved
-        self.assertTrue(os.path.exists(file_path))
-        # Delete temporary image after test
-        os.remove(file_path)
+    def test_ajax_post_image_type_jpg(self):
+        self._test_image('__test_images/w3c_home.jpg')
+        self._test_image('__test_images/w3c_home.jpg')
+        self._test_image('__test_images/w3c_home_256.jpg')
+        self._test_image('__test_images/w3c_home_gray.jpg')
+        self._test_image('__test_images/test_img_good.jpg')
+
+    def test_ajax_post_image_type_png(self):
+        self._test_image('__test_images/w3c_home.png')
+        self._test_image('__test_images/w3c_home_2.png')
+        self._test_image('__test_images/w3c_home_256.png')
+        self._test_image('__test_images/w3c_home_gray.png')
+
+    def test_ajax_post_image_type_ico(self):
+        self._test_image('__test_images/ICO.ico')
+
+    def test_ajax_post_image_type_webp(self):
+        self._test_image('__test_images/WEBP.webp')
+
+    def test_ajax_post_image_type_bmp(self):
+        self._test_image('__test_images/w3c_home.bmp')
+        self._test_image('__test_images/w3c_home_2.bmp')
+        self._test_image('__test_images/w3c_home_256.bmp')
+        self._test_image('__test_images/w3c_home_gray.bmp')
+
+    def test_ajax_post_image_type_gif(self):
+        self._test_image('__test_images/w3c_home.gif')
+        self._test_image('__test_images/w3c_home_2.gif')
+        self._test_image('__test_images/w3c_home_256.gif')
+        self._test_image('__test_images/w3c_home_animation.gif')
+        self._test_image('__test_images/w3c_home_gray.gif')
 
     def test_ajax_post_right_image_high_num_cols(self):
         """
         Ajax POST with right image but high amount of num_cols should return arts with num_cols=300
         """
-        with open('app/tests_img_good.jpg', mode='rb') as file:
+        with open('__test_images/test_img_good.jpg', mode='rb') as file:
             response = self.client.post(reverse('image_to_ascii_generator_url'),
                                         HTTP_X_REQUESTED_WITH='XMLHttpRequest',
                                         data={'img': file, 'num_cols': 100000},
@@ -318,7 +350,7 @@ class TestImageToAsciiGeneratorView(TestCase):
         """
         Ajax POST with right image but wrong settings input should return 200 with arts but with default settings
         """
-        with open('app/tests_img_good.jpg', mode='rb') as file:
+        with open('__test_images/test_img_good.jpg', mode='rb') as file:
             response = self.client.post(reverse('image_to_ascii_generator_url'),
                                         HTTP_X_REQUESTED_WITH='XMLHttpRequest',
                                         data={'img': file,
@@ -339,7 +371,7 @@ class TestImageToAsciiGeneratorView(TestCase):
         """
         Ajax POST with right image and some settings, should return 200 and settings back with new arts
         """
-        with open('app/tests_img_good.jpg', mode='rb') as file:
+        with open('__test_images/test_img_good.jpg', mode='rb') as file:
             response = self.client.post(reverse('image_to_ascii_generator_url'),
                                         HTTP_X_REQUESTED_WITH='XMLHttpRequest',
                                         data={'img': file,
@@ -362,7 +394,7 @@ class TestImageToAsciiGeneratorView(TestCase):
         """
         file_name = 'test_image_' + ''.join(random.choices(string.ascii_lowercase, k=10)) + '.jpg'
         file_path = os.path.join(settings.BASE_DIR, '_temporary_images/', file_name)
-        with open('app/tests_img_good.jpg', mode='rb') as file:
+        with open('__test_images/test_img_good.jpg', mode='rb') as file:
             with open(file_path, 'wb') as file_new:
                 file_new.write(file.read())
         response = self.client.post(reverse('image_to_ascii_generator_url'),
@@ -439,4 +471,3 @@ class TestTextToAsciiGeneratorView(TestCase):
                                     data={'txt': '򣠦ඪ󧯁ⶵӡ؎ᱜ'},
                                     HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 400)
-

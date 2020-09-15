@@ -7,7 +7,6 @@ import string
 import os
 from django.conf import settings
 from PIL import Image
-from django.template import RequestContext
 
 
 def handler400_view(request, *args, **kwargs):
@@ -119,27 +118,43 @@ def image_to_ascii_generator(request):
             elif img is not None:  # If we are uploading new image
                 # Getting extension of image
                 unused_fn, file_extension = os.path.splitext(img.name)
+                # If .bmp or .gif uploaded, convert it to .png
+                converted_to_jpg = False
+                if file_extension in '.bmp .gif':
+                    file_extension = '.png'
+                    converted_to_jpg = True
                 # Generating unique full path to image (None if many recursions for some reason)
                 path, file_name = _generate_unique_image_path(file_extension)
                 if path is None:
                     return JsonResponse({}, status=400)
-                #  Trying to open user's image
+                #  Trying to open user's image (and convert it if needed)
                 try:
                     input_img = Image.open(img)
+                    if converted_to_jpg:
+                        if file_extension == '.bmp':
+                            input_img = input_img.convert('RGB')
+                        elif file_extension == '.gif':
+                            input_img = input_img.convert("RGBA")
+                            bg = Image.new("RGBA", input_img.size)
+                            input_img = Image.composite(input_img, bg, input_img)
                 except Exception as error:
                     # print(error)
                     return JsonResponse({'error': error.args}, status=400)
                 # Saving image to defined path with some compression and removing transparency from png
                 if file_extension == '.png':
                     try:
-                        image = Image.new("RGB", input_img.size, "WHITE")
-                        image.paste(input_img, (0, 0), input_img)
+                        image = input_img.convert('RGBA')
+                        background = Image.new('RGBA', image.size, (255, 255, 255))
+                        image = Image.alpha_composite(background, image)
                     except:
                         image = input_img
                 else:
                     image = input_img
                 if image.height > 1000 or image.width > 1000:
                     image.thumbnail((1000, 1000), Image.ANTIALIAS)
+                # If uploaded image is small, configure num_cols to it's width
+                elif image.width < 95:
+                    num_cols = image.width - 5
                 image.save(path, optimize=True, quality=95)
             else:
                 return JsonResponse({}, status=400)
