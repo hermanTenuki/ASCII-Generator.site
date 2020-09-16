@@ -98,6 +98,24 @@ class TestPolicyCookieView(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
+class TestSitemapXmlView(TestCase):
+
+    def test_render(self):
+        """
+        GET and POST should return sitemap.xml and status 200
+        """
+        response = self.client.get(reverse('sitemap_xml'))
+        content = response.content
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(type(content), bytes)
+        self.assertIn(bytes('xml', encoding='UTF-8'), content)
+        response = self.client.post(reverse('sitemap_xml'))
+        content = response.content
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(type(content), bytes)
+        self.assertIn(bytes('xml', encoding='UTF-8'), content)
+
+
 class TestFeedbackView(TestCase):
 
     def test_get_request(self):

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+
+<url>
+  <loc>https://www.ascii-generator.site/</loc>
+  <lastmod>2020-09-16T03:53:31+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://www.ascii-generator.site/about/</loc>
+  <lastmod>2020-09-16T03:53:31+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
+<url>
+  <loc>https://www.ascii-generator.site/feedback/</loc>
+  <lastmod>2020-09-16T03:53:31+00:00</lastmod>
+  <priority>0.70</priority>
+</url>
+<url>
+  <loc>https://www.ascii-generator.site/policy/privacy/</loc>
+  <lastmod>2020-09-16T03:53:31+00:00</lastmod>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://www.ascii-generator.site/policy/cookie/</loc>
+  <lastmod>2020-09-16T03:53:31+00:00</lastmod>
+  <priority>0.60</priority>
+</url>
+<url>
+  <loc>https://www.ascii-generator.site/t/</loc>
+  <lastmod>2020-09-16T03:53:31+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+
+
+</urlset>

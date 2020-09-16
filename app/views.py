@@ -47,6 +47,10 @@ def policy_cookie(request):
     return render(request, 'app/policy_cookie.html')
 
 
+def sitemap_xml(request):
+    return render(request, 'sitemap.xml', content_type='text/xml')
+
+
 def feedback(request):
     if request.is_ajax():
         if request.method == 'POST':
@@ -119,10 +123,10 @@ def image_to_ascii_generator(request):
                 # Getting extension of image
                 unused_fn, file_extension = os.path.splitext(img.name)
                 # If .bmp or .gif uploaded, convert it to .png
-                converted_to_jpg = False
+                converted_to_png = False
                 if file_extension in '.bmp .gif':
                     file_extension = '.png'
-                    converted_to_jpg = True
+                    converted_to_png = True
                 # Generating unique full path to image (None if many recursions for some reason)
                 path, file_name = _generate_unique_image_path(file_extension)
                 if path is None:
@@ -130,7 +134,7 @@ def image_to_ascii_generator(request):
                 #  Trying to open user's image (and convert it if needed)
                 try:
                     input_img = Image.open(img)
-                    if converted_to_jpg:
+                    if converted_to_png:
                         if file_extension == '.bmp':
                             input_img = input_img.convert('RGB')
                         elif file_extension == '.gif':

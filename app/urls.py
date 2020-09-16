@@ -9,5 +9,6 @@ urlpatterns = [
     path('feedback/', feedback, name='feedback_url'),
     path('about/', about, name='about_url'),
     path('policy/privacy/', policy_privacy, name='policy_privacy_url'),
-    path('policy/cookie/', policy_cookie, name='policy_cookie_url')
+    path('policy/cookie/', policy_cookie, name='policy_cookie_url'),
+    path('sitemap.xml/', sitemap_xml, name='sitemap_xml')
 ]
