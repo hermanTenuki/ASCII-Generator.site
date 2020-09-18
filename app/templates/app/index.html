@@ -6,8 +6,7 @@
         <div class="wrapper">
             <h1 class="h1-page-title">ASCII-Generator</h1>
             <div class="img2ascii-input {% if app_txt_mode %}hide{% endif %}">
-                <h2 class="h2-method-desc">Upload an image to convert it into the ASCII-format<br>
-                    with different algorithm types</h2>
+                <h2 class="h2-method-desc">Upload an image file to convert it to ASCII art</h2>
                 <div class="file-upload__modal" role="section">
                     {# https://codepen.io/mmhuntsberry/pen/QowZwR #}
                     <p class="file-upload__modal-title" role="heading">UPLOAD IMAGE</p>
@@ -35,14 +34,14 @@
                 <div class="ascii-image-output hide">
                     <div class="container_slider">
                         <div class="font-size_config">
-                                <div class="font-size_up">
-                                    <input type="button" value="+">
-                                </div>
-                                <div class="font-size_cur"><span class="font-size_number">12</span>px</div>
-                                <div class="font-size_down">
-                                    <input type="button" value="-">
-                                </div>
+                            <div class="font-size_up">
+                                <input type="button" value="+">
                             </div>
+                            <div class="font-size_cur"><span class="font-size_number">12</span>px</div>
+                            <div class="font-size_down">
+                                <input type="button" value="-">
+                            </div>
+                        </div>
                         <div class="slider-window">
                             <div class="image" id="image_slider">
                                 <img src="">
@@ -55,19 +54,23 @@
                         <div class="buttons first_row">
                             <div class="new_file">
                                 <img src="{% static 'svg/add.svg' %}" width="40" height="40"
-                                     title="New image">
+                                     title="New image"
+                                     alt="New image">
                             </div>
                             <div class="invert_colors">
                                 <img src="{% static 'svg/day-and-night.svg' %}" width="40" height="40"
-                                     title="Invert colors">
+                                     title="Invert colors"
+                                     alt="Invert colors">
                             </div>
                             <div class="copy_to_clipboard">
                                 <img src="{% static 'svg/copy.svg' %}" width="40" height="40"
-                                     title="Copy to clipboard">
+                                     title="Copy to clipboard"
+                                     alt="Copy to clipboard">
                             </div>
                             <div class="download_art">
                                 <img src="{% static 'svg/download.svg' %}" width="40" height="40"
-                                     title="Download ASCII-art as .png" id="button_art_download">
+                                     title="Download ASCII art as .png" id="button_art_download"
+                                     alt="Download ASCII art as .png">
                             </div>
                         </div>
                     </div>
@@ -106,8 +109,9 @@
                 <p class="ps-tiny">...or try the text to ASCII</p>
             </div>
             <div class="txt2ascii-input {% if not app_txt_mode %}hide{% endif %}">
-                <h2 class="h2-method-desc">Type text to convert it into the ASCII-format</h2>
-                <form action="{% url 'text_to_ascii_generator_url' %}" class="txt2ascii-form" method="POST" autocomplete="off">
+                <h2 class="h2-method-desc">Type text to convert it to ASCII art</h2>
+                <form action="{% url 'text_to_ascii_generator_url' %}" class="txt2ascii-form" method="POST"
+                      autocomplete="off">
                     {% csrf_token %}
                     <div class="single-line_text">
                         <div class="inline-grid_inline-text">
@@ -131,15 +135,18 @@
                         <div class="buttons first_row">
                             <div class="invert_colors">
                                 <img src="{% static 'svg/day-and-night.svg' %}" width="40" height="40"
-                                     title="Invert colors">
+                                     title="Invert colors"
+                                     alt="Invert colors">
                             </div>
                             <div class="randomize">
                                 <img src="{% static 'svg/dices.svg' %}" width="40" height="40"
-                                     title="Random font">
+                                     title="Random font"
+                                     alt="Random font">
                             </div>
                             <div class="copy_to_clipboard">
                                 <img src="{% static 'svg/copy.svg' %}" width="40" height="40"
-                                     title="Copy to clipboard">
+                                     title="Copy to clipboard"
+                                     alt="Copy to clipboard">
                             </div>
                         </div>
                     </div>
@@ -147,13 +154,15 @@
                         <div class="buttons second_row">
                             <div class="back">
                                 <img src="{% static 'svg/arrow.svg' %}" width="40" height="40"
-                                     title="Previous font">
+                                     title="Previous font"
+                                     alt="Previous font">
                             </div>
                             <select name="method" id="select-method">
                             </select>
                             <div class="forward">
                                 <img src="{% static 'svg/arrow.svg' %}" width="40" height="40"
-                                     title="Next font">
+                                     title="Next font"
+                                     alt="Next font">
                             </div>
                         </div>
                     </div>

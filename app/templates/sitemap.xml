@@ -8,34 +8,34 @@
 
 
 <url>
-  <loc>https://www.ascii-generator.site/</loc>
-  <lastmod>2020-09-16T03:53:31+00:00</lastmod>
+  <loc>https://ascii-generator.site/</loc>
+  <lastmod>2020-09-18T18:07:36+00:00</lastmod>
   <priority>1.00</priority>
 </url>
 <url>
-  <loc>https://www.ascii-generator.site/about/</loc>
-  <lastmod>2020-09-16T03:53:31+00:00</lastmod>
+  <loc>https://ascii-generator.site/t/</loc>
+  <lastmod>2020-09-18T18:07:36+00:00</lastmod>
   <priority>0.90</priority>
 </url>
 <url>
-  <loc>https://www.ascii-generator.site/feedback/</loc>
-  <lastmod>2020-09-16T03:53:31+00:00</lastmod>
+  <loc>https://ascii-generator.site/about/</loc>
+  <lastmod>2020-09-18T18:07:36+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://ascii-generator.site/feedback/</loc>
+  <lastmod>2020-09-18T18:07:36+00:00</lastmod>
   <priority>0.70</priority>
 </url>
 <url>
-  <loc>https://www.ascii-generator.site/policy/privacy/</loc>
-  <lastmod>2020-09-16T03:53:31+00:00</lastmod>
+  <loc>https://ascii-generator.site/policy/privacy/</loc>
+  <lastmod>2020-09-18T18:07:36+00:00</lastmod>
   <priority>0.60</priority>
 </url>
 <url>
-  <loc>https://www.ascii-generator.site/policy/cookie/</loc>
-  <lastmod>2020-09-16T03:53:31+00:00</lastmod>
+  <loc>https://ascii-generator.site/policy/cookie/</loc>
+  <lastmod>2020-09-18T18:07:36+00:00</lastmod>
   <priority>0.60</priority>
-</url>
-<url>
-  <loc>https://www.ascii-generator.site/t/</loc>
-  <lastmod>2020-09-16T03:53:31+00:00</lastmod>
-  <priority>0.80</priority>
 </url>
 
 

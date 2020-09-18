@@ -4,7 +4,7 @@
 
 **This is a Django website for generating ASCII-arts out of images or text 🎨**
 
-You can find it at [www.ASCII-Generator.site](https://www.ASCII-Generator.site)
+You can find it at [https://ASCII-Generator.site](https://ascii-generator.site)
 
 > ![demo GIF](__demo/github-demo.gif)</br>
 > Example
