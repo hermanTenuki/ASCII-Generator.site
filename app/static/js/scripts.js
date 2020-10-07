@@ -187,7 +187,16 @@ $(document).ready(function () {
 
         // Prevents default behavior of automatically opening the file
         fileDropZone.addEventListener('dragover', function (e) {
+            $(fileDropZone).addClass('hovered');
             e.preventDefault();
+        });
+
+        fileDropZone.addEventListener('dragenter', function() {
+            $(fileDropZone).addClass('hovered');
+        });
+
+        fileDropZone.addEventListener('dragleave', function() {
+            $(fileDropZone).removeClass('hovered');
         });
 
         // Gets node element list of files Converts them to a list of Arrays
@@ -426,9 +435,13 @@ $(document).ready(function () {
         const cur_elem = $(this);
         const submit_btn = cur_elem.find('input[type=submit]');
         const cur_ascii_img = $('section.index .ascii-image-output .image img');
+        const loading_twirl = $('section.index .ascii-image-output .loading_twirl');
         let data = cur_elem.serialize();
         data += '&file_name=' + cur_ascii_img.data('file_name');
         submit_btn.attr('disabled', '');
+        submit_btn.css({'color': 'transparent'});
+        animate_fade_in(loading_twirl, 200);
+
 
         $.ajax({
             url: cur_elem.attr('action'),
@@ -447,7 +460,8 @@ $(document).ready(function () {
                 update_displayed_image_options(response);
             },
             complete: function () {
-                submit_btn.removeAttr('disabled');
+                submit_btn.removeAttr('disabled style');
+                animate_fade_out(loading_twirl, 50)
             }
         });
         return false

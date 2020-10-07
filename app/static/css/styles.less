@@ -303,6 +303,10 @@ main {
           border: 2px dashed rgba(233, 54, 68, .3);
           border-radius: 15px;
 
+          &.hovered {
+            border: 2px dashed @color-primary-brighter;
+          }
+
           &:hover {
             border: 2px dashed @color-primary-brighter;
           }
@@ -391,7 +395,8 @@ main {
         display: block;
 
         input[type=submit]:disabled {
-          background-color: lightgray;
+          background-color: #e4e4e4;
+          cursor: wait;
         }
 
         .inline-grid_inline-text {
@@ -734,6 +739,7 @@ main {
             }
 
             input {
+              color: @color-black;
               margin-top: 5px;
               padding: 3px 4px;
               text-align: center;
@@ -746,14 +752,39 @@ main {
             }
           }
 
+          .loading_twirl {
+            position: absolute;
+            text-align: center;
+            left: 50%;
+            transform: translateX(-50%) translateY(31px);
+            height: 26px;
+            width: 26px;
+            pointer-events: none;
+
+            img {
+              width: 100%;
+              height: 100%;
+              animation: animation-loading-twirl 2s infinite linear;
+            }
+
+          }
+
           input[type=submit] {
+            color: @color-black;
             display: block;
             margin: 25px auto 0 auto;
             font-size: @font-size-normal;
             padding: 8px 18px;
+            transition: background-color 0.2s, box-shadow 0.2s, color 0.2s;
+
+            &:hover {
+              box-shadow: 0 0 8px 0 rgba(255, 255, 255, 0.5);
+            }
 
             &:disabled {
-              background-color: #bdbdbd;
+              box-shadow: none;
+              background-color: #e4e4e4;
+              cursor: wait;
             }
           }
         }
@@ -1219,7 +1250,14 @@ footer {
   }
 }
 
-
+@keyframes animation-loading-twirl {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg)
+  }
+}
 
 
 

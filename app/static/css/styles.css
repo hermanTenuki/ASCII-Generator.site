@@ -227,6 +227,9 @@ main section.index .wrapper .file-upload__modal .file-upload__form {
   border: 2px dashed rgba(233, 54, 68, 0.3);
   border-radius: 15px;
 }
+main section.index .wrapper .file-upload__modal .file-upload__form.hovered {
+  border: 2px dashed #e93644;
+}
 main section.index .wrapper .file-upload__modal .file-upload__form:hover {
   border: 2px dashed #e93644;
 }
@@ -298,7 +301,8 @@ main section.index .wrapper form.txt2ascii-form {
   display: block;
 }
 main section.index .wrapper form.txt2ascii-form input[type=submit]:disabled {
-  background-color: lightgray;
+  background-color: #e4e4e4;
+  cursor: wait;
 }
 main section.index .wrapper form.txt2ascii-form .inline-grid_inline-text {
   display: inline-grid;
@@ -590,6 +594,7 @@ main section.index .wrapper .ascii-image-output .options_container .option label
   display: block;
 }
 main section.index .wrapper .ascii-image-output .options_container .option input {
+  color: #242424;
   margin-top: 5px;
   padding: 3px 4px;
   text-align: center;
@@ -599,14 +604,35 @@ main section.index .wrapper .ascii-image-output .options_container .option span.
   position: absolute;
   transform: translateX(5px) translateY(8px);
 }
+main section.index .wrapper .ascii-image-output .options_container .loading_twirl {
+  position: absolute;
+  text-align: center;
+  left: 50%;
+  transform: translateX(-50%) translateY(31px);
+  height: 26px;
+  width: 26px;
+  pointer-events: none;
+}
+main section.index .wrapper .ascii-image-output .options_container .loading_twirl img {
+  width: 100%;
+  height: 100%;
+  animation: animation-loading-twirl 2s infinite linear;
+}
 main section.index .wrapper .ascii-image-output .options_container input[type=submit] {
+  color: #242424;
   display: block;
   margin: 25px auto 0 auto;
   font-size: 19px;
   padding: 8px 18px;
+  transition: background-color 0.2s, box-shadow 0.2s, color 0.2s;
+}
+main section.index .wrapper .ascii-image-output .options_container input[type=submit]:hover {
+  box-shadow: 0 0 8px 0 rgba(255, 255, 255, 0.5);
 }
 main section.index .wrapper .ascii-image-output .options_container input[type=submit]:disabled {
-  background-color: #bdbdbd;
+  box-shadow: none;
+  background-color: #e4e4e4;
+  cursor: wait;
 }
 main section.index .wrapper .ascii-text-output {
   padding: 20px 0;
@@ -991,4 +1017,12 @@ footer .wrapper .language-switcher .language-switcher-window::after {
   width: 100%;
   font-size: 19px;
   transition: background-color 0.2s;
+}
+@keyframes animation-loading-twirl {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
 }
