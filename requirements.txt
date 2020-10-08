@@ -2,7 +2,7 @@ asgiref==3.2.10
 Django==3.1
 django-cleanup==5.1.0
 django-recaptcha==2.0.6
-numpy==1.19.1
+numpy==1.19.2
 opencv-python==4.4.0.42
 Pillow==7.2.0
 psycopg2==2.8.5
