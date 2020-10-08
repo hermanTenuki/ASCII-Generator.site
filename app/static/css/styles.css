@@ -750,6 +750,8 @@ main section.policy_cookie .wrapper .text-window li,
 main section.policy_privacy .wrapper .text-window li {
   padding-top: 4px;
   list-style: disc;
+  line-height: 27px;
+  text-align: justify;
 }
 main section.about .wrapper .text-window p,
 main section.policy_cookie .wrapper .text-window p,
