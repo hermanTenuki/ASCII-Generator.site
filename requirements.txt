@@ -7,4 +7,4 @@ opencv-python==4.4.0.44
 Pillow==7.2.0
 psycopg2==2.8.6
 pytz==2020.1
-sqlparse==0.4.0
+sqlparse==0.4.1
