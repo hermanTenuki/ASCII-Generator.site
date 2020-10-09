@@ -1,0 +1,44 @@
+name: Django test runner
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  djangoTestRunner:
+    name: djangoTestRunner
+    runs-on: ubuntu-18.04
+    env:
+      SECRET_KEY: test
+      DB_NAME: test_db
+      DB_USERNAME: test_user
+      DB_PASSWORD: test_pass
+      DB_HOST: localhost
+      DB_PORT: 5432
+      RECAPTCHA_PUBLIC_KEY: test
+      RECAPTCHA_PRIVATE_KEY: test
+    steps:
+    - name: Setup PostgreSQL
+      uses: Harmon758/postgresql-action@v1.0.0
+      with:
+        postgresql version: 10
+        postgresql db: test_db
+        postgresql user: test_user
+        postgresql password: test_pass
+    - name: Setup Project
+      uses: actions/checkout@v2
+    - name: Setup Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.7'
+    - name: Build Django Project
+      run: |
+        mkdir static
+        mkdir media
+        pip install -r requirements.txt
+        python manage.py collectstatic --noinput
+        python manage.py makemigrations
+        python manage.py migrate
+    - name: Run tests
+      run: python manage.py test
