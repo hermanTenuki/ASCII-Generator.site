@@ -1,4 +1,4 @@
-name: Django test runner
+name: Django Tests Runner
 on:
   push:
     branches: [ master ]
@@ -6,8 +6,8 @@ on:
     branches: [ master ]
 
 jobs:
-  djangoTestRunner:
-    name: djangoTestRunner
+  python3_8:
+    name: python3.8
     runs-on: ubuntu-18.04
     env:
       SECRET_KEY: test
@@ -31,7 +31,8 @@ jobs:
     - name: Setup Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.7'
+        python-version: '3.8'
+        architecture: 'x64'
     - name: Build Django Project
       run: |
         mkdir static
@@ -40,5 +41,5 @@ jobs:
         python manage.py collectstatic --noinput
         python manage.py makemigrations
         python manage.py migrate
-    - name: Run tests
+    - name: Run Tests
       run: python manage.py test
