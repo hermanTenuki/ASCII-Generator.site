@@ -617,7 +617,7 @@ $(document).ready(function () {
         const font_size = parseInt(art_div.css('font-size'));
         const container_slider_width = $('section.index .ascii-image-output .container_slider').width();
         const wrapper_width = $('section.index .wrapper').width();
-        if ((container_slider_width + 100 >= wrapper_width) && (font_size > 2)) {
+        if ((container_slider_width + 100 >= wrapper_width) && (font_size > 1)) {
             change_font_size_on_art(false, '-');
             update_displayed_image_art(true);
         }
