@@ -599,6 +599,10 @@ main section.index .wrapper .ascii-image-output .options_container .option input
   padding: 3px 4px;
   text-align: center;
   width: 60px;
+  transition: background-color 0.2s;
+}
+main section.index .wrapper .ascii-image-output .options_container .option input:disabled {
+  background-color: #e4e4e4;
 }
 main section.index .wrapper .ascii-image-output .options_container .option span.percent_sign {
   position: absolute;

@@ -436,8 +436,10 @@ $(document).ready(function () {
         const submit_btn = cur_elem.find('input[type=submit]');
         const cur_ascii_img = $('section.index .ascii-image-output .image img');
         const loading_twirl = $('section.index .ascii-image-output .loading_twirl');
+        const option_inputs = $('section.index .ascii-image-output .options_grid input[type=text]');
         let data = cur_elem.serialize();
         data += '&file_name=' + cur_ascii_img.data('file_name');
+        option_inputs.attr('disabled', '');
         submit_btn.attr('disabled', '');
         submit_btn.css({'color': 'transparent'});
         animate_fade_in(loading_twirl, 200);
@@ -460,6 +462,7 @@ $(document).ready(function () {
                 update_displayed_image_options(response);
             },
             complete: function () {
+                option_inputs.removeAttr('disabled');
                 submit_btn.removeAttr('disabled style');
                 animate_fade_out(loading_twirl, 50)
             }
