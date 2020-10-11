@@ -156,21 +156,22 @@ def image_to_ascii_generator(request):
                     image = input_img
                 if image.height > 1000 or image.width > 1000:
                     image.thumbnail((1000, 1000), Image.ANTIALIAS)
-                # If uploaded image is small, configure num_cols to it's width
-                elif image.width < 95:
-                    num_cols = image.width - 5
+                # !DEPRECATED! # If uploaded image is small, configure num_cols to it's width
+                # elif image.width < 95:
+                #     num_cols = image.width - 5
                 image.save(path, optimize=True, quality=95)
             else:
                 return JsonResponse({}, status=400)
             # Calling image_to_ascii generators, giving them full path to image and options
-            art1 = img2ascii_2.image_to_ascii(path, num_cols=num_cols, mode='simple',
-                                              contrast=contrast, brightness=brightness)
-            art2 = img2ascii_2.image_to_ascii(path, num_cols=num_cols, mode='bars',
-                                              contrast=contrast, brightness=brightness)
-            art3 = img2ascii_2.image_to_ascii(path, num_cols=num_cols, contrast=contrast,
+            # Getting new num_cols from img2ascii_2 so we can set it to img2ascii_1
+            art1, num_cols = img2ascii_2.image_to_ascii(path, num_cols=num_cols, mode='simple',
+                                                        contrast=contrast, brightness=brightness)
+            art2, _ = img2ascii_2.image_to_ascii(path, num_cols=num_cols, mode='bars',
+                                                 contrast=contrast, brightness=brightness)
+            art3 = img2ascii_1.image_to_ascii(path, num_cols=num_cols, contrast=contrast,
                                               brightness=brightness)
-            art4 = img2ascii_1.image_to_ascii(path, num_cols=num_cols, contrast=contrast,
-                                              brightness=brightness)
+            art4, _ = img2ascii_2.image_to_ascii(path, num_cols=num_cols, contrast=contrast,
+                                                 brightness=brightness)
             # Converting some options back to percentage
             brightness = int(brightness * 100)
             contrast = int(contrast * 100)

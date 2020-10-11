@@ -348,11 +348,27 @@ class TestImageToAsciiGeneratorView(TestCase):
         self._test_image('__test_images/w3c_home_animation.gif')
         self._test_image('__test_images/w3c_home_gray.gif')
 
+    def test_ajax_post_small_image_high_num_cols(self):
+        """
+        Ajax POST with small image but high amount of num_cols should return arts with adapted num_cols
+        """
+        with open('__test_images/test_img_good.jpg', mode='rb') as file:
+            response = self.client.post(reverse('image_to_ascii_generator_url'),
+                                        HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+                                        data={'img': file, 'num_cols': 300},
+                                        format='multipart')
+        json_content = json.loads(response.content, encoding='utf-8')
+        file_name = json_content.get('file_name', '')
+        file_path = os.path.join(settings.BASE_DIR, '_temporary_images/', file_name)
+        self.assertEqual(response.status_code, 200)
+        self.assertLess(json_content.get('num_cols', 0), 300)
+        os.remove(file_path)
+
     def test_ajax_post_right_image_high_num_cols(self):
         """
         Ajax POST with right image but high amount of num_cols should return arts with num_cols=300
         """
-        with open('__test_images/test_img_good.jpg', mode='rb') as file:
+        with open('__test_images/test_img_good_big.jpg', mode='rb') as file:
             response = self.client.post(reverse('image_to_ascii_generator_url'),
                                         HTTP_X_REQUESTED_WITH='XMLHttpRequest',
                                         data={'img': file, 'num_cols': 100000},

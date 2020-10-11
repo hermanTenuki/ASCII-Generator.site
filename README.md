@@ -22,7 +22,7 @@ This Django project is using these environment variables:
 For creating this project, several open-source repositories were used:
 #### Generators
 - [ASCII-generator](https://github.com/uvipen/ASCII-generator) by [uvipen](https://github.com/uvipen) ([MIT-License - Copyright (c) 2018 Viet Nguyen](https://github.com/uvipen/ASCII-generator/blob/master/LICENSE));
-- [pyasciigen](https://github.com/ajalt/pyasciigen) by [ajalt](https://github.com/ajalt) ([MIT-License - Copyright (c) 2012 AJ Alt](https://github.com/ajalt/pyasciigen/blob/master/README.md));
+- [asciify](https://github.com/RameshAditya/asciify) by [RameshAditya](https://github.com/RameshAditya);
 - [art](https://github.com/sepandhaghighi/art) by [sepandhaghighi](https://github.com/sepandhaghighi) ([MIT-License - Copyright (c) 2017 Sepand Haghighi](https://github.com/sepandhaghighi/art/blob/master/LICENSE)).<br>Also, check out [his project's website](https://www.4r7.ir/).
 #### Django apps
 - [django-cleanup](https://github.com/un1t/django-cleanup) by [un1t](https://github.com/un1t) ([MIT-License - Copyright (C) 2012 by Ilya Shalyapin](https://github.com/un1t/django-cleanup/blob/master/LICENSE));
