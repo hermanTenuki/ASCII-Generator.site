@@ -68,6 +68,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'app.middleware.ForceDefaultLanguageMiddleware',  # Deletes "HTTP_ACCEPT_LANGUAGE" to keep default lang
+    'django.middleware.locale.LocaleMiddleware',
 ]
 
 ROOT_URLCONF = 'project.urls'
@@ -136,7 +138,16 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, '_locale/'),
+)
+
 LANGUAGE_CODE = 'en-us'
+
+LANGUAGES = (
+    ('en-us', 'English'),
+    ('ru-RU', 'Русский')
+)
 
 TIME_ZONE = 'UTC'
 

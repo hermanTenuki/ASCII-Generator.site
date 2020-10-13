@@ -986,6 +986,9 @@ footer .wrapper .language-switcher .language-switcher-window::after {
   background-color: #3e2526;
   transform: translateX(108px) translateY(9px) rotateZ(45deg);
 }
+footer .wrapper .language-switcher .language-switcher-window span {
+  cursor: pointer;
+}
 .agreements {
   z-index: 100000;
   background-color: white;

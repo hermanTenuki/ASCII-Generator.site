@@ -1,15 +1,16 @@
 {% extends 'app/base.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block content %}
     <section class="index">
         <div class="wrapper">
             <h1 class="h1-page-title">ASCII-Generator</h1>
             <div class="img2ascii-input {% if app_txt_mode %}hide{% endif %}">
-                <h2 class="h2-method-desc">Upload an image file to convert it to ASCII art</h2>
+                <h2 class="h2-method-desc">{% translate 'Upload an image file to convert it to ASCII art' %}</h2>
                 <div class="file-upload__modal" role="section">
                     {# https://codepen.io/mmhuntsberry/pen/QowZwR #}
-                    <p class="file-upload__modal-title" role="heading">UPLOAD IMAGE</p>
+                    <p class="file-upload__modal-title" role="heading">{% translate 'UPLOAD IMAGE' %}</p>
                     <p class="file-upload__error" role="alertdialog"></p>
                     <ul class="file__list js-file__list" role="list"></ul>
                     <form class="file-upload__form js-dropzone" role="form" method="POST"
@@ -26,8 +27,12 @@
                         <label
                                 class="file__input-label"
                                 for="file-dropzone"
-                        >DRAG FILE HERE OR
-                            <button class="file__input-label-button" role="button">BROWSE</button>
+                        >
+                            {% comment %}Translators: for context, full text is: DRAG FILE HERE OR (BROWSE){% endcomment %}
+                            {% translate 'DRAG FILE HERE OR' %}
+                            <button class="file__input-label-button" role="button">
+                                {% comment %}Translators: for context, full text is: (DRAG FILE HERE OR) BROWSE{% endcomment %}
+                                {% translate 'BROWSE' %}</button>
                         </label>
                     </form>
                 </div>
@@ -85,19 +90,21 @@
                     <div class="options_container">
                         <form action="{% url 'image_to_ascii_generator_url' %}" method="POST" autocomplete="off">
                             {% csrf_token %}
-                            <p class="title">Options:</p>
+                            <p class="title">
+                                {% comment %}Translators: options is like settings{% endcomment %}
+                                {% translate 'Options' %}:</p>
                             <div class="options_grid">
                                 <div class="option num_cols">
-                                    <label for="option_num_cols">Columns</label>
+                                    <label for="option_num_cols">{% translate 'Columns' %}</label>
                                     <input type="text" value="90" id="option_num_cols" name="num_cols">
                                 </div>
                                 <div class="option brightness">
-                                    <label for="option_brightness">Brightness</label>
+                                    <label for="option_brightness">{% translate 'Brightness' %}</label>
                                     <input type="text" value="100" id="option_brightness" name="brightness"><span
                                         class="percent_sign">%</span>
                                 </div>
                                 <div class="option contrast">
-                                    <label for="option_contrast">Contrast</label>
+                                    <label for="option_contrast">{% translate 'Contrast' %}</label>
                                     <input type="text" value="100" id="option_contrast" name="contrast"><span
                                         class="percent_sign">%</span>
                                 </div>
@@ -109,10 +116,10 @@
                         </form>
                     </div>
                 </div>
-                <p class="ps-tiny">...or try the text to ASCII</p>
+                <p class="ps-tiny">{% translate '...or try the text to ASCII' %}</p>
             </div>
             <div class="txt2ascii-input {% if not app_txt_mode %}hide{% endif %}">
-                <h2 class="h2-method-desc">Type text to convert it to ASCII art</h2>
+                <h2 class="h2-method-desc">{% translate 'Type text to convert it to ASCII art' %}</h2>
                 <form action="{% url 'text_to_ascii_generator_url' %}" class="txt2ascii-form" method="POST"
                       autocomplete="off">
                     {% csrf_token %}
@@ -128,7 +135,7 @@
                     </div>
                     <input type="checkbox" id="multiple_strings_checkbox" name="multiple_strings"
                            style="position: absolute; opacity: 0">
-                    <label class="label_checkbox" for="multiple_strings_checkbox">Multi-line mode</label>
+                    <label class="label_checkbox" for="multiple_strings_checkbox">{% translate 'Multi-line mode' %}</label>
                 </form>
                 <div class="ascii-text-output hide">
                     <div id="ascii-text-output-resize-textarea">
@@ -170,7 +177,7 @@
                         </div>
                     </div>
                 </div>
-                <p class="ps-tiny">...or try the image to ASCII</p>
+                <p class="ps-tiny">{% translate '...or try the image to ASCII' %}</p>
             </div>
         </div>
     </section>
