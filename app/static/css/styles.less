@@ -125,6 +125,46 @@ a.a_accent {
   color: @color-primary-brighter;
 }
 
+a.a_underline_animation, a.a_underline_animation_small, a.a_underline_animation_primary,
+section.about .text-window a,
+section.policy_privacy .text-window a, section.policy_cookie .text-window a {
+  position: relative;
+
+  &:after {
+    pointer-events: none;
+    background: none repeat scroll 0 0 transparent;
+    bottom: 0;
+    content: "";
+    display: block;
+    height: 2px;
+    left: 50%;
+    position: absolute;
+    transform: translateY(3px);
+    background: #fff;
+    opacity: 0;
+    transition: width 0.2s ease 0s, left 0.2s ease 0s, opacity 0.1s ease 0s;
+    width: 0;
+  }
+
+  &:hover:after {
+    width: 100%;
+    left: 0;
+    opacity: 1;
+  }
+}
+
+a.a_underline_animation_small:after {
+  background: @color-lightgray;
+  height: 1px;
+}
+
+a.a_underline_animation_primary:after,
+section.about .text-window a:after,
+section.policy_privacy .text-window a:after, section.policy_cookie .text-window a:after {
+  background: @color-primary-brighter;
+  height: 1px;
+}
+
 input, textarea {
   background-color: @color-white;
   outline: none;

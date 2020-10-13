@@ -57,11 +57,11 @@
                 {% endif %}
             </div>
             <div class="links">
-                <a href="{% url 'about_url' %}">
+                <a href="{% url 'about_url' %}" class="a_underline_animation">
                     {% comment %}Translators: Link to About page (like about us){% endcomment %}
                     {% translate 'About' %}</a>
                 {#                <a href="">Examples</a>#}
-                <a href="{% url 'feedback_url' %}">{% translate 'Feedback' %}</a>
+                <a href="{% url 'feedback_url' %}" class="a_underline_animation">{% translate 'Feedback' %}</a>
                 {% if request.user.is_authenticated and request.user.is_staff %}
                     <a href="{% url 'staff_feedback_url' %}">$Feedback</a>
                     <a href="{% url 'staff_logout_url' %}">$Logout</a>
@@ -77,11 +77,11 @@
     <footer>
         <div class="wrapper">
             <div class="policy">
-                <a href="{% url 'policy_privacy_url' %}">{% translate 'Privacy Policy' %}</a>
+                <a href="{% url 'policy_privacy_url' %}" class="a_underline_animation_small">{% translate 'Privacy Policy' %}</a>
             </div>
             <div class="GitHub">
-                <a href="https://github.com/hermanTenuki/ASCII-Generator.site" title="Please star us on GitHub"><img
-                        src="{% static 'svg/star.svg' %}" alt="">GitHub</a>
+                <a href="https://github.com/hermanTenuki/ASCII-Generator.site" title="Please star us on GitHub" class="a_underline_animation_small"><img
+                        src="{% static 'svg/star.svg' %}" alt="" class="">GitHub</a>
             </div>
             {#            <div class="policy" style="text-align: right">#}
             {#                <a href="{% url 'policy_cookie_url' %}">{% translate 'Cookie Policy' %}</a>#}
