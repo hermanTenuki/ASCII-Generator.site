@@ -127,7 +127,9 @@ a.a_accent {
 
 a.a_underline_animation, a.a_underline_animation_small, a.a_underline_animation_primary,
 section.about .text-window a,
-section.policy_privacy .text-window a, section.policy_cookie .text-window a {
+section.policy_privacy .text-window a, section.policy_cookie .text-window a,
+header .switcher .element p,
+section.index .img2ascii-input .buttons.second_row div {
   position: relative;
 
   &:after {
@@ -142,11 +144,11 @@ section.policy_privacy .text-window a, section.policy_cookie .text-window a {
     transform: translateY(3px);
     background: #fff;
     opacity: 0;
-    transition: width 0.2s ease 0s, left 0.2s ease 0s, opacity 0.1s ease 0s;
+    transition: width 0.2s ease 0s, left 0.2s ease 0s, opacity 0.2s ease 0s;
     width: 0;
   }
 
-  &:hover:after {
+  &:hover:after, &.chosen:after {
     width: 100%;
     left: 0;
     opacity: 1;
@@ -226,8 +228,14 @@ header {
       margin: 9px 0;
 
       a {
+        display: inline-table;
         font-size: @font-size-big;
         font-family: @font-family-handwriting;
+        transition: transform 0.2s;
+
+        &:hover {
+          transform: scale(1.05);
+        }
       }
     }
 
@@ -242,14 +250,6 @@ header {
         p {
           cursor: pointer;
           width: max-content;
-
-          &:hover {
-            text-decoration: underline;
-          }
-        }
-
-        p.chosen {
-          text-decoration: underline;
         }
 
         &:nth-of-type(1) p {
@@ -339,7 +339,7 @@ main {
           max-width: 300px;
           height: 150px;
           margin: 0 25px;
-          transition: all .3s;
+          transition: all .2s;
           border: 2px dashed rgba(233, 54, 68, .3);
           border-radius: 15px;
 
@@ -372,7 +372,7 @@ main {
           font-size: @font-size-normal;
           letter-spacing: 1.3px;
           line-height: 1.5;
-          transition: all .3s;
+          transition: all .2s;
           color: @color-primary-brighter;
           cursor: pointer;
           border: none;
@@ -734,8 +734,9 @@ main {
             font-family: @font-family-normal;
             font-size: 34px;
 
-            &.chosen {
-              text-decoration: underline;
+            &:after {
+              bottom: 2px;
+              height: 3px;
             }
           }
         }

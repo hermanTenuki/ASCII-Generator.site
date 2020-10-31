@@ -84,7 +84,9 @@ a.a_underline_animation_small,
 a.a_underline_animation_primary,
 section.about .text-window a,
 section.policy_privacy .text-window a,
-section.policy_cookie .text-window a {
+section.policy_cookie .text-window a,
+header .switcher .element p,
+section.index .img2ascii-input .buttons.second_row div {
   position: relative;
 }
 a.a_underline_animation:after,
@@ -92,7 +94,9 @@ a.a_underline_animation_small:after,
 a.a_underline_animation_primary:after,
 section.about .text-window a:after,
 section.policy_privacy .text-window a:after,
-section.policy_cookie .text-window a:after {
+section.policy_cookie .text-window a:after,
+header .switcher .element p:after,
+section.index .img2ascii-input .buttons.second_row div:after {
   pointer-events: none;
   background: none repeat scroll 0 0 transparent;
   bottom: 0;
@@ -104,7 +108,7 @@ section.policy_cookie .text-window a:after {
   transform: translateY(3px);
   background: #fff;
   opacity: 0;
-  transition: width 0.2s ease 0s, left 0.2s ease 0s, opacity 0.1s ease 0s;
+  transition: width 0.2s ease 0s, left 0.2s ease 0s, opacity 0.2s ease 0s;
   width: 0;
 }
 a.a_underline_animation:hover:after,
@@ -112,7 +116,17 @@ a.a_underline_animation_small:hover:after,
 a.a_underline_animation_primary:hover:after,
 section.about .text-window a:hover:after,
 section.policy_privacy .text-window a:hover:after,
-section.policy_cookie .text-window a:hover:after {
+section.policy_cookie .text-window a:hover:after,
+header .switcher .element p:hover:after,
+section.index .img2ascii-input .buttons.second_row div:hover:after,
+a.a_underline_animation.chosen:after,
+a.a_underline_animation_small.chosen:after,
+a.a_underline_animation_primary.chosen:after,
+section.about .text-window a.chosen:after,
+section.policy_privacy .text-window a.chosen:after,
+section.policy_cookie .text-window a.chosen:after,
+header .switcher .element p.chosen:after,
+section.index .img2ascii-input .buttons.second_row div.chosen:after {
   width: 100%;
   left: 0;
   opacity: 1;
@@ -183,8 +197,13 @@ header .wrapper .logo {
   margin: 9px 0;
 }
 header .wrapper .logo a {
+  display: inline-table;
   font-size: 24px;
   font-family: Pacifico, 'Ubuntu Medium', 'Ubuntu', sans-serif, 'Times New Roman';
+  transition: transform 0.2s;
+}
+header .wrapper .logo a:hover {
+  transform: scale(1.05);
 }
 header .wrapper .switcher {
   display: inline-grid;
@@ -197,12 +216,6 @@ header .wrapper .switcher .element {
 header .wrapper .switcher .element p {
   cursor: pointer;
   width: max-content;
-}
-header .wrapper .switcher .element p:hover {
-  text-decoration: underline;
-}
-header .wrapper .switcher .element p.chosen {
-  text-decoration: underline;
 }
 header .wrapper .switcher .element:nth-of-type(1) p {
   margin: 0 0 0 auto;
@@ -272,7 +285,7 @@ main section.index .wrapper .file-upload__modal .file-upload__form {
   max-width: 300px;
   height: 150px;
   margin: 0 25px;
-  transition: all .3s;
+  transition: all .2s;
   border: 2px dashed rgba(233, 54, 68, 0.3);
   border-radius: 15px;
 }
@@ -300,7 +313,7 @@ main section.index .wrapper .file-upload__modal .file__input-label-button {
   font-size: 19px;
   letter-spacing: 1.3px;
   line-height: 1.5;
-  transition: all .3s;
+  transition: all .2s;
   color: #e93644;
   cursor: pointer;
   border: none;
@@ -607,8 +620,9 @@ main section.index .wrapper .ascii-image-output .buttons div {
   font-family: 'Ubuntu', sans-serif, 'Times New Roman';
   font-size: 34px;
 }
-main section.index .wrapper .ascii-image-output .buttons div.chosen {
-  text-decoration: underline;
+main section.index .wrapper .ascii-image-output .buttons div:after {
+  bottom: 2px;
+  height: 3px;
 }
 main section.index .wrapper .ascii-image-output .buttons.first_row {
   grid-template-columns: repeat(4, 1fr);
