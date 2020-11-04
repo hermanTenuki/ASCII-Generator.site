@@ -1,3 +1,5 @@
 {% extends 'errors/base.html' %}
-{% block error_code %}400{% endblock %}
-{% block error_desc %}Bad Request{% endblock %}
+{% load i18n %}
+{% block error_code1 %}400{% endblock %}
+{% block error_code2 %}400{% endblock %}
+{% block error_desc %}{% translate 'Bad Request' %}{% endblock %}

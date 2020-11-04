@@ -1,13 +1,14 @@
 {% extends 'app/base.html' %}
-{% block page_title %}Feedback{% endblock %}
+{% load i18n %}
+{% block page_title %}{% translate 'Feedback' %}{% endblock %}
+
 
 {% block content %}
     <section class="feedback">
         <div class="wrapper">
             <form class="feedback-form" action="{% url 'feedback_url' %}" method="POST">
-                <h3>Feedback</h3>
-                <p class="text">Here you can contact me, suggest any improvement/idea or report a bug. Type your email
-                    if expecting reply.</p>
+                <h3>{% translate 'Feedback' %}</h3>
+                <p class="text">{% translate 'Here you can contact me, suggest any improvement/idea or report a bug. Type your email if expecting reply.' %}</p>
                 {% csrf_token %}
                 {{ form.text }}
                 {% for error in form.errors.text %}
@@ -25,13 +26,13 @@
                 </div>
                 <div class="feedback-agreement">
                     {{ form.agreement }}
-                    <label for="id_agreement"><span>By clicking the "Send" button, I give my consent to the processing of my personal data, and also agree to the <a
-                            href="{% url 'policy_privacy_url' %}" class="a_accent">privacy policy</a>.</span></label>
+                    {% url 'policy_privacy_url' as URL_policy_privacy_url %}
+                    <label for="id_agreement"><span>{% blocktranslate with class_a_underline='class="a_accent a_underline_animation_primary"' %}By clicking the "Send" button, I give my consent to the processing of my personal data, and also agree to the <a href="{{ URL_policy_privacy_url }}" {{ class_a_underline }}>privacy policy</a>.{% endblocktranslate %}</span></label>
                 </div>
                 {% for error in form.errors.agreement %}
                     <p class="error">{{ error }}</p>
                 {% endfor %}
-                <input type="submit" value="Send" class="btn_1">
+                <input type="submit" value="{% translate 'Send' %}" class="btn_1">
             </form>
         </div>
     </section>

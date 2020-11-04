@@ -80,6 +80,14 @@ $(document).ready(function () {
         }
     });
 
+    // Switch language by clicking one
+    $('footer .language-switcher-window').on('click', 'span', function () {
+        const language_form = $('footer #language-form');
+        const language_input = $('footer #language-input');
+        language_input.val($(this).data('language'));
+        language_form.submit();
+    });
+
     // Display agreements if 'Agreement - user_agreed_v1' cookie is not found
     if (Cookies.get('Agreement') !== 'user_agreed_v1') {
         animate_fade_in($('.agreements'), 200, 1000);

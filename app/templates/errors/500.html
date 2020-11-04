@@ -1,3 +1,5 @@
 {% extends 'errors/base.html' %}
-{% block error_code %}500{% endblock %}
-{% block error_desc %}Server Error{% endblock %}
+{% load i18n %}
+{% block error_code1 %}500{% endblock %}
+{% block error_code2 %}500{% endblock %}
+{% block error_desc %}{% translate 'Server Error' %}{% endblock %}

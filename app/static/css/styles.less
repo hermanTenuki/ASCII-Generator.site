@@ -90,6 +90,10 @@ header, footer {
 #borders-dashed {
   position: relative;
   overflow: hidden;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  justify-content: space-between;
 
   &::before {
     pointer-events: none;
@@ -105,11 +109,12 @@ header, footer {
   }
 
   &::after {
+    bottom: 0;
     pointer-events: none;
     content: "";
-    position: fixed;
+    position: absolute;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) translateY(2px);
     width: @max-screen-width;
     border-bottom: 2px dashed @color-white;
   }
@@ -123,6 +128,48 @@ a {
 
 a.a_accent {
   color: @color-primary-brighter;
+}
+
+a.a_underline_animation, a.a_underline_animation_small, a.a_underline_animation_primary,
+section.about .text-window a,
+section.policy_privacy .text-window a, section.policy_cookie .text-window a,
+header .switcher .element p,
+section.index .img2ascii-input .buttons.second_row div {
+  position: relative;
+
+  &:after {
+    pointer-events: none;
+    background: none repeat scroll 0 0 transparent;
+    bottom: 0;
+    content: "";
+    display: block;
+    height: 2px;
+    left: 50%;
+    position: absolute;
+    transform: translateY(3px);
+    background: #fff;
+    opacity: 0;
+    transition: width 0.2s ease 0s, left 0.2s ease 0s, opacity 0.2s ease 0s;
+    width: 0;
+  }
+
+  &:hover:after, &.chosen:after {
+    width: 100%;
+    left: 0;
+    opacity: 1;
+  }
+}
+
+a.a_underline_animation_small:after {
+  background: @color-lightgray;
+  height: 1px;
+}
+
+a.a_underline_animation_primary:after,
+section.about .text-window a:after,
+section.policy_privacy .text-window a:after, section.policy_cookie .text-window a:after {
+  background: @color-primary-brighter;
+  height: 1px;
 }
 
 input, textarea {
@@ -186,8 +233,14 @@ header {
       margin: 9px 0;
 
       a {
+        display: inline-table;
         font-size: @font-size-big;
         font-family: @font-family-handwriting;
+        transition: transform 0.2s;
+
+        &:hover {
+          transform: scale(1.05);
+        }
       }
     }
 
@@ -202,14 +255,6 @@ header {
         p {
           cursor: pointer;
           width: max-content;
-
-          &:hover {
-            text-decoration: underline;
-          }
-        }
-
-        p.chosen {
-          text-decoration: underline;
         }
 
         &:nth-of-type(1) p {
@@ -241,7 +286,7 @@ header {
 main {
   section.index {
     text-align: center;
-    padding: 10vh 0;
+    padding: 10vh 0 0 0;
     margin-bottom: 20px;
 
     .wrapper {
@@ -299,7 +344,7 @@ main {
           max-width: 300px;
           height: 150px;
           margin: 0 25px;
-          transition: all .3s;
+          transition: all .2s;
           border: 2px dashed rgba(233, 54, 68, .3);
           border-radius: 15px;
 
@@ -332,7 +377,7 @@ main {
           font-size: @font-size-normal;
           letter-spacing: 1.3px;
           line-height: 1.5;
-          transition: all .3s;
+          transition: all .2s;
           color: @color-primary-brighter;
           cursor: pointer;
           border: none;
@@ -694,8 +739,9 @@ main {
             font-family: @font-family-normal;
             font-size: 34px;
 
-            &.chosen {
-              text-decoration: underline;
+            &:after {
+              bottom: 2px;
+              height: 3px;
             }
           }
         }
@@ -935,7 +981,7 @@ main {
     font-size: @font-size-normal;
     color: @color-black;
     text-align: center;
-    padding: 10vh 0;
+    padding-top: 10vh;
 
     .wrapper {
       form.feedback-form {
@@ -1109,10 +1155,8 @@ main {
 
     .wrapper {
       .page_error_message {
-        position: fixed;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
+        position: relative;
+        margin: auto;
 
         p.title {
           font-size: 150px;
@@ -1186,7 +1230,8 @@ footer {
       .language-switcher-window {
         color: @color-white;
         text-align: left;
-        transform: translateY(-120%) translateX(-72%);
+        transform: translateY(-50px) translateX(-104px);
+        bottom: 0px;
         width: 140px;
         padding: 15px 20px;
         position: absolute;
@@ -1201,6 +1246,10 @@ footer {
           height: 10px;
           background-color: #3e2526;
           transform: translateX(108px) translateY(9px) rotateZ(45deg);
+        }
+
+        span {
+          cursor: pointer;
         }
       }
     }
