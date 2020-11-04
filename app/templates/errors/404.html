@@ -1,3 +1,5 @@
 {% extends 'errors/base.html' %}
-{% block error_code %}404{% endblock %}
-{% block error_desc %}Page Not Found{% endblock %}
+{% load i18n %}
+{% block error_code1 %}404{% endblock %}
+{% block error_code2 %}404{% endblock %}
+{% block error_desc %}{% translate 'Page Not Found' %}{% endblock %}

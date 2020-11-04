@@ -2,6 +2,7 @@ from django import forms
 from captcha.fields import ReCaptchaField
 from .models import *
 from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 
 
 class FeedbackForm(forms.ModelForm):
@@ -14,16 +15,16 @@ class FeedbackForm(forms.ModelForm):
         model = Feedback
         fields = ['text', 'email']
         widgets = {
-            'text': forms.Textarea(attrs={'placeholder': 'Your message*'}),
-            'email': forms.EmailInput(attrs={'placeholder': 'Email for reply (optional)'})
+            'text': forms.Textarea(attrs={'placeholder': _('Your message*')}),
+            'email': forms.EmailInput(attrs={'placeholder': _('Email (optional)')})
         }
 
     def clean_text(self):
         text = self.cleaned_data['text']
         if not text or len(text) < 1:
-            raise ValidationError('Please write your text there.')
+            raise ValidationError(_('Please write your text there.'))
         if len(text) > 512:
-            raise ValidationError('Characters limit is 512.')
+            raise ValidationError(_('Characters limit is 512.'))
         return text
 
     # def clean_captcha(self):
@@ -35,5 +36,5 @@ class FeedbackForm(forms.ModelForm):
     def clean_agreement(self):
         agreement = self.cleaned_data['agreement']
         if not agreement:
-            raise ValidationError("We can't continue without your agreement.")
+            raise ValidationError(_("We can't continue without your agreement."))
         return agreement

@@ -49,6 +49,10 @@ footer {
 #borders-dashed {
   position: relative;
   overflow: hidden;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  justify-content: space-between;
 }
 #borders-dashed::before {
   pointer-events: none;
@@ -63,11 +67,12 @@ footer {
   overflow: hidden;
 }
 #borders-dashed::after {
+  bottom: 0;
   pointer-events: none;
   content: "";
-  position: fixed;
+  position: absolute;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateY(2px);
   width: 1920px;
   border-bottom: 2px dashed #ffffff;
 }
@@ -234,7 +239,7 @@ header .wrapper .links a:last-of-type {
 }
 main section.index {
   text-align: center;
-  padding: 10vh 0;
+  padding: 10vh 0 0 0;
   margin-bottom: 20px;
 }
 main section.index .wrapper h1.h1-page-title {
@@ -831,7 +836,7 @@ main section.feedback {
   font-size: 19px;
   color: #242424;
   text-align: center;
-  padding: 10vh 0;
+  padding-top: 10vh;
 }
 main section.feedback .wrapper form.feedback-form {
   background-color: #ffffff;
@@ -972,10 +977,8 @@ main section.page_error {
   text-align: center;
 }
 main section.page_error .wrapper .page_error_message {
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  position: relative;
+  margin: auto;
 }
 main section.page_error .wrapper .page_error_message p.title {
   font-size: 150px;
@@ -1033,7 +1036,8 @@ footer .wrapper .language-switcher p.lang img {
 footer .wrapper .language-switcher .language-switcher-window {
   color: #ffffff;
   text-align: left;
-  transform: translateY(-120%) translateX(-72%);
+  transform: translateY(-50px) translateX(-104px);
+  bottom: 0px;
   width: 140px;
   padding: 15px 20px;
   position: absolute;

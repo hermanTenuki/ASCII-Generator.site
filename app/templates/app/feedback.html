@@ -27,8 +27,7 @@
                 <div class="feedback-agreement">
                     {{ form.agreement }}
                     {% url 'policy_privacy_url' as URL_policy_privacy_url %}
-                    <label for="id_agreement"><span>{% blocktranslate %}By clicking the "Send" button, I give my consent to the processing of my personal data, and also agree to the <a
-                            href="{{ URL_policy_privacy_url }}" class="a_accent a_underline_animation_primary">privacy policy</a>.{% endblocktranslate %}</span></label>
+                    <label for="id_agreement"><span>{% blocktranslate with class_a_underline='class="a_accent a_underline_animation_primary"' %}By clicking the "Send" button, I give my consent to the processing of my personal data, and also agree to the <a href="{{ URL_policy_privacy_url }}" {{ class_a_underline }}>privacy policy</a>.{% endblocktranslate %}</span></label>
                 </div>
                 {% for error in form.errors.agreement %}
                     <p class="error">{{ error }}</p>

@@ -1,11 +1,14 @@
 {% extends 'app/base.html' %}
+{% load i18n %}
+{% block page_title %}{% translate 'Error' %} {% block error_code1 %}{% endblock %}{% endblock %}
+
 {% block content %}
     <section class="page_error">
         <div class="wrapper">
             <div class="page_error_message">
-                <p class="title">{% block error_code %}{% endblock %}</p>
-                <p class="description">Oops, {% block error_desc %}{% endblock %}!</p>
-                <a href="https://ASCII-Generator.site" class="go_home"> <input type="button" value="Go to the Main page"></a>
+                <p class="title">{% block error_code2 %}{% endblock %}</p>
+                <p class="description">{% translate 'Oops' %}, {% block error_desc %}{% endblock %}!</p>
+                <a href="https://ASCII-Generator.site" class="go_home"> <input type="button" value="{% translate 'Go to the Main page' %}"></a>
             </div>
         </div>
     </section>

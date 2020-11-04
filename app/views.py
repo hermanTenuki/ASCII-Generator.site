@@ -7,6 +7,9 @@ import string
 import os
 from django.conf import settings
 from PIL import Image
+import numpy as np
+import cv2
+import threading
 
 
 def handler400_view(request, *args, **kwargs):
@@ -75,8 +78,27 @@ def feedback(request):
             return render(request, 'app/feedback.html', context=context)
 
 
+def _calculate_num_cols(path: str, num_cols: int) -> int:
+    """
+    Recursive function to calculate biggest optimal num_cols for small images
+    :return: num_cols
+    """
+    image = Image.open(path)
+    image = np.array(image)
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    height, width = image.shape
+    cell_width = width / num_cols
+    cell_height = 2 * cell_width
+    num_rows = int(height / cell_height)
+    if num_cols > width or num_rows > height:
+        num_cols -= 1
+        num_cols = _calculate_num_cols(path, num_cols)
+    return num_cols
+
+
 def _generate_unique_image_path(file_extension, r=0, r_max=10):
     """
+    Recursive function that generates random unique file name and path
     :return: full path to file, name with extension
     """
     # Random name to image
@@ -93,6 +115,18 @@ def _generate_unique_image_path(file_extension, r=0, r_max=10):
     return x, y
 
 
+def _generator_thread_1_hub(l, args, kwargs, kwargs1, kwargs2):  # custom args/kwargs, others not accepted
+    art1 = img2ascii_2.image_to_ascii(*args, **kwargs, **kwargs1)
+    art2 = img2ascii_2.image_to_ascii(*args, **kwargs, **kwargs2)
+    l[0], l[1] = art1, art2  # mutable list, return is not needed
+
+
+def _generator_thread_2_hub(l, args, kwargs):
+    art1 = img2ascii_2.image_to_ascii(*args, **kwargs)
+    art2 = img2ascii_1.image_to_ascii(*args, **kwargs)
+    l[0], l[1] = art1, art2
+
+
 def image_to_ascii_generator(request):
     if request.is_ajax():
         if request.method == 'POST':
@@ -100,21 +134,24 @@ def image_to_ascii_generator(request):
             num_cols = request.POST.get('num_cols', 90)
             brightness = request.POST.get('brightness', 100)
             contrast = request.POST.get('contrast', 100)
-            try:  # Validating user's input
+
+            # Validating user's input
+            try:
                 brightness = float(brightness) / 100
             except:
                 brightness = 1
-            try:  # Validating user's input
+            try:
                 contrast = float(contrast) / 100
             except:
                 contrast = 1
-            try:  # Validating user's input
+            try:
                 num_cols = int(num_cols)
             except:
                 num_cols = 90
             if num_cols > 300:
                 num_cols = 300
             img = request.FILES.get('img', None)
+
             if file_name is not None:  # If we are already having image saved - just need to re-generate arts
                 path = f'{settings.BASE_DIR}/_temporary_images/{file_name}'
                 if not os.path.exists(path):
@@ -122,15 +159,18 @@ def image_to_ascii_generator(request):
             elif img is not None:  # If we are uploading new image
                 # Getting extension of image
                 unused_fn, file_extension = os.path.splitext(img.name)
+
                 # If .bmp or .gif uploaded, convert it to .png
                 converted_to_png = False
                 if file_extension in '.bmp .gif':
                     file_extension = '.png'
                     converted_to_png = True
+
                 # Generating unique full path to image (None if many recursions for some reason)
                 path, file_name = _generate_unique_image_path(file_extension)
                 if path is None:
                     return JsonResponse({}, status=400)
+
                 #  Trying to open user's image (and convert it if needed)
                 try:
                     input_img = Image.open(img)
@@ -144,6 +184,7 @@ def image_to_ascii_generator(request):
                 except Exception as error:
                     # print(error)
                     return JsonResponse({'error': error.args}, status=400)
+
                 # Saving image to defined path with some compression and removing transparency from png
                 if file_extension == '.png':
                     try:
@@ -156,32 +197,47 @@ def image_to_ascii_generator(request):
                     image = input_img
                 if image.height > 1000 or image.width > 1000:
                     image.thumbnail((1000, 1000), Image.ANTIALIAS)
-                # !DEPRECATED! # If uploaded image is small, configure num_cols to it's width
-                # elif image.width < 95:
-                #     num_cols = image.width - 5
                 image.save(path, optimize=True, quality=95)
             else:
                 return JsonResponse({}, status=400)
-            # Calling image_to_ascii generators, giving them full path to image and options
-            # Getting new num_cols from img2ascii_2 so we can set it to img2ascii_1
-            art1, num_cols = img2ascii_2.image_to_ascii(path, num_cols=num_cols, mode='simple',
-                                                        contrast=contrast, brightness=brightness)
-            art2, _ = img2ascii_2.image_to_ascii(path, num_cols=num_cols, mode='bars',
-                                                 contrast=contrast, brightness=brightness)
-            art3 = img2ascii_1.image_to_ascii(path, num_cols=num_cols, contrast=contrast,
-                                              brightness=brightness)
-            art4, _ = img2ascii_2.image_to_ascii(path, num_cols=num_cols, contrast=contrast,
-                                                 brightness=brightness)
+
+            # Calculating optimal num_cols for small images
+            num_cols = _calculate_num_cols(path, num_cols)
+
+            # Calling image_to_ascii generators in 2 threads, giving them full path to image and options
+            args = [path]
+            kwargs = {'num_cols': num_cols, 'contrast': contrast, 'brightness': brightness}
+
+            # ---- Thread 1
+            arts_1_list = [None, None]
+            kwargs1 = {'mode': 'simple'}
+            kwargs2 = {'mode': 'bars'}
+            arts_1_thread = threading.Thread(target=_generator_thread_1_hub, daemon=True, args=(
+                arts_1_list, args, kwargs, kwargs1, kwargs2
+            ))
+            arts_1_thread.start()
+
+            # ---- Thread 2
+            arts_2_list = [None, None]
+            arts_2_thread = threading.Thread(target=_generator_thread_2_hub, daemon=True, args=(
+                arts_2_list, args, kwargs
+            ))
+            arts_2_thread.start()
+
             # Converting some options back to percentage
             brightness = int(brightness * 100)
             contrast = int(contrast * 100)
+
+            # ---- Wait Wait for threads to join here
+            arts_1_thread.join()
+            arts_2_thread.join()
 
             return JsonResponse({
                 'file_name': file_name,
                 'num_cols': num_cols,
                 'brightness': brightness,
                 'contrast': contrast,
-                'arts': [art1, art2, art3, art4]
+                'arts': [*arts_1_list, *arts_2_list]
             }, status=200)
 
         return JsonResponse({}, status=405)

@@ -29,3 +29,4 @@ if settings.DEBUG:
     urlpatterns.append(path('admin/', admin.site.urls))
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns.append(path('rosetta/', include('rosetta.urls')))  # Also add "rosetta" for translation

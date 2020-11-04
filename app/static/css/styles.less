@@ -90,6 +90,10 @@ header, footer {
 #borders-dashed {
   position: relative;
   overflow: hidden;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  justify-content: space-between;
 
   &::before {
     pointer-events: none;
@@ -105,11 +109,12 @@ header, footer {
   }
 
   &::after {
+    bottom: 0;
     pointer-events: none;
     content: "";
-    position: fixed;
+    position: absolute;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) translateY(2px);
     width: @max-screen-width;
     border-bottom: 2px dashed @color-white;
   }
@@ -281,7 +286,7 @@ header {
 main {
   section.index {
     text-align: center;
-    padding: 10vh 0;
+    padding: 10vh 0 0 0;
     margin-bottom: 20px;
 
     .wrapper {
@@ -976,7 +981,7 @@ main {
     font-size: @font-size-normal;
     color: @color-black;
     text-align: center;
-    padding: 10vh 0;
+    padding-top: 10vh;
 
     .wrapper {
       form.feedback-form {
@@ -1150,10 +1155,8 @@ main {
 
     .wrapper {
       .page_error_message {
-        position: fixed;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
+        position: relative;
+        margin: auto;
 
         p.title {
           font-size: 150px;
@@ -1227,7 +1230,8 @@ footer {
       .language-switcher-window {
         color: @color-white;
         text-align: left;
-        transform: translateY(-120%) translateX(-72%);
+        transform: translateY(-50px) translateX(-104px);
+        bottom: 0px;
         width: 140px;
         padding: 15px 20px;
         position: absolute;

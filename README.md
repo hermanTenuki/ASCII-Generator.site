@@ -6,7 +6,7 @@
 
 You can find it at [https://ASCII-Generator.site](https://ascii-generator.site)
 
-> ![demo GIF](.github/github-demo.gif)</br>
+> ![demo GIF](.github/media/demo.gif)</br>
 > Example
 
 ## Environment variables

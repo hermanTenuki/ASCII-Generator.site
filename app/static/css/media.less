@@ -1,18 +1,24 @@
-@media screen and (max-height: 830px) {
-  body main section.index {
-    padding: 5vh 0;
+@media screen and (min-height: 1080px) {
+  #borders-dashed {
+    min-height: 1080px;
   }
 }
 
-@media screen and (max-height: 740px) {
-  body main section.index {
+@media screen and (max-height: 870px) {
+  body main section.index, body main section.page_error {
+    padding-top: 5vh;
+  }
+}
+
+@media screen and (max-height: 800px) {
+  body main section.index, body main section.page_error {
     padding: 0;
   }
 }
 
 @media screen and (max-height: 900px) {
   body main section.feedback {
-    padding: 5vh 0;
+    padding-top: 5vh;
   }
 }
 
@@ -39,8 +45,24 @@
 @media screen and (max-width: 900px) {
   body {
     header {
+      height: unset;
+
       .wrapper {
-        grid-template-columns: repeat(3, auto);
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-areas: 'pos1 pos2' 'pos3 pos3';
+
+        .logo {
+          grid-area: pos1;
+        }
+
+        .links {
+          grid-area: pos2;
+        }
+
+        .switcher {
+          grid-area: pos3;
+          padding-bottom: 15px;
+        }
       }
     }
   }
@@ -66,28 +88,6 @@
 
 @media screen and (max-width: 700px) {
   body {
-    header {
-      height: unset;
-
-      .wrapper {
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-areas: 'pos1 pos2' 'pos3 pos3';
-
-        .logo {
-          grid-area: pos1;
-        }
-
-        .links {
-          grid-area: pos2;
-        }
-
-        .switcher {
-          grid-area: pos3;
-          padding-bottom: 15px;
-        }
-      }
-    }
-
     main {
       section.index {
         .wrapper {
@@ -100,10 +100,6 @@
           }
         }
       }
-    }
-
-    main#full-size {
-      min-height: calc(~"100vh - " 98px ~" - " 60px ~"");
     }
   }
 }
@@ -158,31 +154,30 @@
   }
 }
 
-@media screen and (max-width: 470px) {
+@media screen and (max-width: 520px) {
   body {
     header {
       .wrapper {
-        grid-template-areas: unset;
         grid-template-columns: unset;
+        grid-template-areas: 'a' 'b' 'c';
         grid-template-rows: repeat(3, auto);
 
         .logo {
-          grid-area: unset;
+          grid-area: a;
           margin: 9px auto;
 
           a {
             display: block;
-            font-size: 9vw;
+            font-size: 8vw;
           }
         }
 
         .links {
-          display: inline-grid;
-          grid-template-columns: repeat(2, 1fr);
-          grid-column-gap: 15px;
-          grid-area: unset;
+          width: 100%;
+          grid-area: b;
+          display: inline-flex;
+          justify-content: space-between;
           margin: 0 auto;
-          grid-row: ~'2/3';
 
           a {
             margin: 0;
@@ -190,15 +185,13 @@
         }
 
         .switcher {
-          grid-area: unset;
-          padding: 15px 0 0 0;
-          grid-row: ~'3/4';
+          width: 100%;
+          display: inline-flex;
+          justify-content: space-between;
+          grid-area: c;
+          padding: 15px 0;
         }
       }
-    }
-
-    header#header_on_error_page {
-      height: 155px;
     }
 
     main {
@@ -210,7 +203,7 @@
 
           h2.h2-method-desc {
             font-size: 22px;
-            padding-top: 30px;
+            padding-top: 15px;
           }
 
           .ascii-image-output {
@@ -250,8 +243,31 @@
       }
     }
 
-    main#full-size {
-      min-height: calc(~"100vh - " 155px ~" - " 60px ~"");
+    footer {
+      height: unset;
+      padding-bottom: 21px;
+
+      .wrapper {
+        grid-template-columns: unset;
+        grid-template-areas: 'c c c' 'a x b';
+        grid-row-gap: 15px;
+
+        .policy {
+          grid-area: c;
+          margin: auto auto;
+          text-align: center;
+        }
+
+        .GitHub {
+          text-align: left;
+          grid-area: a;
+          margin: auto 0;
+        }
+
+        .language-switcher {
+          grid-area: b;
+        }
+      }
     }
   }
 }

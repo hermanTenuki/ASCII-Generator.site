@@ -35,52 +35,54 @@
 </head>
 <body>
 <div id="borders-dashed">
-    <header {% if error_handler_page %}id="header_on_error_page"{% endif %}>
-        <div class="wrapper">
-            <div class="logo"><a href="{% url 'index_page_url' %}">ASCII-Generator</a></div>
-            <div class="switcher">
-                {% if app_page %}
-                    <div class="element"><p class="img2ascii {% if not app_txt_mode %}chosen{% endif %}">{% translate 'Image to ASCII' %}</p></div>
-                    <div class="element"><p class="txt2ascii {% if app_txt_mode %}chosen{% endif %}">{% translate 'Text to ASCII' %}</p>
-                    </div>
-                {% else %}
-                    <div class="element">
-                        <p class="img2ascii">
-                            <a href="{% url 'index_page_url' %}">{% translate 'Image to ASCII' %}</a>
-                        </p>
-                    </div>
-                    <div class="element">
-                        <p class="txt2ascii">
-                            <a href="{% url 'index_txt_page_url' %}">{% translate 'Text to ASCII' %}</a>
-                        </p>
-                    </div>
-                {% endif %}
+    <div class="header_and_main_together">
+        <header>
+            <div class="wrapper">
+                <div class="logo"><a href="{% url 'index_page_url' %}">ASCII-Generator</a></div>
+                <div class="switcher">
+                    {% if app_page %}
+                        <div class="element"><p class="img2ascii {% if not app_txt_mode %}chosen{% endif %}">{% translate 'Image to ASCII' %}</p></div>
+                        <div class="element"><p class="txt2ascii {% if app_txt_mode %}chosen{% endif %}">{% translate 'Text to ASCII' %}</p>
+                        </div>
+                    {% else %}
+                        <div class="element">
+                            <p class="img2ascii">
+                                <a href="{% url 'index_page_url' %}">{% translate 'Image to ASCII' %}</a>
+                            </p>
+                        </div>
+                        <div class="element">
+                            <p class="txt2ascii">
+                                <a href="{% url 'index_txt_page_url' %}">{% translate 'Text to ASCII' %}</a>
+                            </p>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="links">
+                    <a href="{% url 'about_url' %}" class="a_underline_animation">
+                        {% comment %}Translators: Link to About page (like about us){% endcomment %}
+                        {% translate 'About' %}</a>
+                    {#                <a href="">Examples</a>#}
+                    <a href="{% url 'feedback_url' %}" class="a_underline_animation">{% translate 'Feedback' %}</a>
+                    {% if request.user.is_authenticated and request.user.is_staff %}
+                        <a href="{% url 'staff_feedback_url' %}">$Feedback</a>
+                        <a href="{% url 'staff_logout_url' %}">$Logout</a>
+                    {% endif %}
+                </div>
             </div>
-            <div class="links">
-                <a href="{% url 'about_url' %}" class="a_underline_animation">
-                    {% comment %}Translators: Link to About page (like about us){% endcomment %}
-                    {% translate 'About' %}</a>
-                {#                <a href="">Examples</a>#}
-                <a href="{% url 'feedback_url' %}" class="a_underline_animation">{% translate 'Feedback' %}</a>
-                {% if request.user.is_authenticated and request.user.is_staff %}
-                    <a href="{% url 'staff_feedback_url' %}">$Feedback</a>
-                    <a href="{% url 'staff_logout_url' %}">$Logout</a>
-                {% endif %}
-            </div>
-        </div>
-    </header>
-    <main id="full-size">
-        {% block content %}
+        </header>
+        <main>
+            {% block content %}
 
-        {% endblock %}
-    </main>
+            {% endblock %}
+        </main>
+    </div>
     <footer>
         <div class="wrapper">
             <div class="policy">
                 <a href="{% url 'policy_privacy_url' %}" class="a_underline_animation_small">{% translate 'Privacy Policy' %}</a>
             </div>
             <div class="GitHub">
-                <a href="https://github.com/hermanTenuki/ASCII-Generator.site" title="Please star us on GitHub" class="a_underline_animation_small"><img
+                <a href="https://github.com/hermanTenuki/ASCII-Generator.site" title="{% translate 'Please, star us on GitHub' %}" class="a_underline_animation_small"><img
                         src="{% static 'svg/star.svg' %}" alt="" class="">GitHub</a>
             </div>
             {#            <div class="policy" style="text-align: right">#}
@@ -120,8 +122,8 @@
                 {% url 'policy_cookie_url' as URL_policy_cookie_url %}
 
                 <p class="bottom-text">
-                    {% comment %}Translators: HTML tags should be included and be the same, translate only text{% endcomment %}
-                    {% blocktranslate %}By clicking the «<strong>I Agree</strong>» button, you give consent to <a href="{{ URL_policy_privacy_url }}" class="a_underline_animation_primary">our privacy policy</a> and <a href="{{ URL_policy_cookie_url }}" class="a_underline_animation_primary">our use of cookies</a> stored in your browser.{% endblocktranslate %}
+                    {% translate 'I Agree' as I_Agree %}
+                    {% blocktranslate with class_underline_anim='class="a_underline_animation_primary"' %}By clicking the «<strong>{{ I_Agree }}</strong>» button, you give consent to <a href="{{ URL_policy_privacy_url }}" {{ class_underline_anim }}>our privacy policy</a> and <a href="{{ URL_policy_cookie_url }}" {{ class_underline_anim }}>our use of cookies</a> stored in your browser.{% endblocktranslate %}
                 </p>
             </div>
             <div class="btn">
