@@ -21,7 +21,7 @@ For easier translating, this project is using [mbi](https://github.com/mbi) / [d
 
 To translate, do the following steps:
 
-- Create language files with ```python makemessages -l ru_ru``` where ```ru_ru``` - your language's code (that's actually Russian's language code);
+- Create language files with ```python makemessages -l ru_RU``` where ```ru_RU``` - your language's code (that's actually Russian's language code);
 - Create admin account by typing ```python manage.py createsuperuser```;
 - Start server by ```python manage.py runserver```;
 - Log in admin account on ```localhost:8000/admin/```;
