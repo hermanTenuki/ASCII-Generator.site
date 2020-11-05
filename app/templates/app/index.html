@@ -112,7 +112,8 @@
                             <div class="loading_twirl hide">
                                 <img src="{% static 'svg/loading twirl.svg' %}" alt="">
                             </div>
-                            <input type="submit" value="Apply">
+                            {% comment %}Translators: Apply settings{% endcomment %}
+                            <input type="submit" value="{% translate 'Apply' %}">
                         </form>
                     </div>
                 </div>

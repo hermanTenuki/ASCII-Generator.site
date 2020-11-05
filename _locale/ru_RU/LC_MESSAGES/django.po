@@ -2,15 +2,16 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # AUTHORS LIST: NAME <EMAIL@ADDRESS>, YEAR.
-# 
+# Herman Schechkin <itseasy322@gmail.com>, 2020
+#
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-04 21:52+0300\n"
-"PO-Revision-Date: 2020-11-04 21:53+0000\n"
+"POT-Creation-Date: 2020-11-05 15:44+0300\n"
+"PO-Revision-Date: 2020-11-05 15:45+0000\n"
 "Last-Translator: b'  <>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -40,15 +41,15 @@ msgid "We can't continue without your agreement."
 msgstr "Мы не можем продолжить без вашего согласия."
 
 #. Translators: Link to About page (like about us)
-#: .\app\templates\app\about.html:3 .\app\templates\app\about.html:11
-#: .\app\templates\app\base.html:63
+#: .\app\templates\app\about.html:3 .\app\templates\app\about.html:9
+#: .\app\templates\app\base.html:50 .\app\templates\app\base.html:79
 msgid "About"
 msgstr "О Нас"
 
 #. Translators: That's not important, but you can change english wikipedia
 #. page link to your's language page if it's exists (sometimes it won't work
 #. due slug in link).
-#: .\app\templates\app\about.html:13
+#: .\app\templates\app\about.html:11
 msgid ""
 "On this website, you can generate ASCII arts out of any image or text. Use "
 "two upper buttons to switch between both types of input. If you don't know "
@@ -60,32 +61,53 @@ msgstr ""
 "генератора. Если вы не знаете что такое ASCII арт, смотрите на <a "
 "href=\"https://en.wikipedia.org/wiki/ASCII_art\">странице Википедии</a>."
 
-#: .\app\templates\app\about.html:14
+#: .\app\templates\app\about.html:12 .\app\templates\app\index.html:62
+#: .\app\templates\app\index.html:63
+msgid "New image"
+msgstr "Новое изображение"
+
+#: .\app\templates\app\about.html:13 .\app\templates\app\index.html:67
+#: .\app\templates\app\index.html:68 .\app\templates\app\index.html:149
+#: .\app\templates\app\index.html:150
+msgid "Invert colors"
+msgstr "Инвертировать цвета"
+
+#: .\app\templates\app\about.html:14 .\app\templates\app\index.html:72
+#: .\app\templates\app\index.html:73 .\app\templates\app\index.html:159
+#: .\app\templates\app\index.html:160
+msgid "Copy to clipboard"
+msgstr "Скопировать в буфер обмена"
+
+#: .\app\templates\app\about.html:15 .\app\templates\app\index.html:77
+#: .\app\templates\app\index.html:78
+msgid "Download ASCII art as .png"
+msgstr "Скачать ASCII арт в .png"
+
+#: .\app\templates\app\about.html:16
+#, python-format
 msgid ""
 "Once you uploaded the image, the generated ASCII-art will be shown. With a "
 "slider, you can compare the original picture to art. Under it, you can use "
-"some action buttons like \"New image\", \"Invert colors\", \"Copy to "
-"clipboard\" and \"Download ASCII-art as .png\". Below them, you can switch "
-"between different art types and apply options to them. Also on the left side"
-" of the art, you can adjust font-size. For example, if the final art is a "
-"bit messy, you can try to raise the number of columns and contrast, as "
-"lowering font-size."
+"some action buttons like \"%(action1)s\", \"%(action2)s\", \"%(action3)s\" "
+"and \"%(action4)s\". Below them, you can switch between different art types "
+"and apply options to them. Also on the left side of the art, you can adjust "
+"font-size. For example, if the final art is a bit messy, you can try to "
+"raise the number of columns and contrast, as lowering font-size."
 msgstr ""
 "Как только вы загрузите картинку, отобразится сгенерированный ASCII арт. С "
 "помощью ползунка вы можете сравнить оригинальное изображение с артом. Под "
-"ним вы можете использовать кнопки действий, например, \"Новое изображение\","
-" \"Инвертировать цвета\", \"Скопировать в буфер обмена\" и \"Скачать ASCII "
-"арт в .png\". Под ними, вы можете переключаться между различными типами арта"
-" и применять к ним настройки. Также, на левой стороне от арта, вы можете "
-"регулировать размер шрифта. К примеру, если итоговый арт нечёткий, вы можете"
-" попробовать увеличить количество столбцов и контраст, понизив размер "
-"шрифта."
+"ним вы можете использовать кнопки действий, например, \"%(action1)s\", "
+"\"%(action2)s\", \"%(action3)s\" и \"%(action4)s\". Под ними, вы можете "
+"переключаться между различными типами арта и применять к ним настройки. "
+"Также, на левой стороне от арта, вы можете регулировать размер шрифта. К "
+"примеру, если итоговый арт нечёткий, вы можете попробовать увеличить "
+"количество столбцов и контраст, понизив размер шрифта."
 
-#: .\app\templates\app\about.html:15 .\app\templates\app\base.html:85
+#: .\app\templates\app\about.html:17 .\app\templates\app\base.html:101
 msgid "Please, star us on GitHub"
 msgstr "Пожалуйста, лайкните нас на GitHub"
 
-#: .\app\templates\app\about.html:16
+#: .\app\templates\app\about.html:18
 #, python-format
 msgid ""
 "This project is made by %(hermanTenuki)s. All the code can be found on <a "
@@ -96,7 +118,7 @@ msgstr ""
 "href=\"%(GitHubPage)s\" title=\"%(Please_star_us_text)s\">странице "
 "GitHub</a>, он распространяется под лицензией %(license)s."
 
-#: .\app\templates\app\about.html:17
+#: .\app\templates\app\about.html:19
 msgid ""
 "For generating ASCII arts from images or text, three different sources were "
 "used:"
@@ -104,18 +126,14 @@ msgstr ""
 "Для генерации ASCII артов из картинок или текста, были использованы три "
 "источника:"
 
-#: .\app\templates\app\about.html:21
+#: .\app\templates\app\about.html:23
 msgid "Also, check out <a href=\"https://www.4r7.ir/\">his project's website</a>."
 msgstr ""
 "Также, можете перейти на <a href=\"https://www.4r7.ir/\">сайт его "
 "проекта</a>."
 
-#: .\app\templates\app\about.html:23
+#: .\app\templates\app\about.html:26
 #, python-format
-#| msgid ""
-#| "If you want to contact me, suggest any improvement/idea, or report a bug, "
-#| "you can use %(email)s email, <a href=\"%(URL_feedback_url)s\">Feedback</a> "
-#| "page or <a %(GitHubIssuesHREF)s>GitHub issues</a>."
 msgid ""
 "If you want to contact me, suggest any improvement/idea, or report a bug, "
 "you can use %(email)s email, <a href=\"%(URL_feedback_url)s\">Feedback</a> "
@@ -125,21 +143,22 @@ msgstr ""
 "баге, вы можете использовать почту %(email)s, страницу <a "
 "href=\"%(URL_feedback_url)s\">Обратной Связи</a> или %(GitHubIssuesLINK)s."
 
-#: .\app\templates\app\about.html:24
+#: .\app\templates\app\about.html:27
 #, python-format
 msgid "Icons made by %(Freepik)s from %(Flaticon)s."
 msgstr "Иконки сделали %(Freepik)s с %(Flaticon)s."
 
-#: .\app\templates\app\about.html:27 .\app\templates\app\base.html:82
-#: .\app\templates\app\policy_privacy.html:3
+#: .\app\templates\app\about.html:30 .\app\templates\app\base.html:52
+#: .\app\templates\app\base.html:98 .\app\templates\app\policy_privacy.html:3
 msgid "Privacy Policy"
 msgstr "Политика Конфиденциальности"
 
-#: .\app\templates\app\about.html:28 .\app\templates\app\policy_cookie.html:3
+#: .\app\templates\app\about.html:31 .\app\templates\app\base.html:53
+#: .\app\templates\app\policy_cookie.html:3
 msgid "Cookie Policy"
 msgstr "Политика Cookie"
 
-#: .\app\templates\app\about.html:29
+#: .\app\templates\app\about.html:32
 #, python-format
 msgid ""
 "Our <a href=\"%(URL_policy_privacy_url)s\">%(Privacy_Policy)s</a>, <a "
@@ -162,28 +181,32 @@ msgstr ""
 "картинку с финальным артом и скачивайте его в формате изображения. Доступно "
 "более 300+ шрифтов."
 
-#: .\app\templates\app\base.html:44 .\app\templates\app\base.html:50
-msgid "Image to ASCII"
-msgstr "Изображение в ASCII"
+#: .\app\templates\app\base.html:49
+msgid "Main Page"
+msgstr "Главная"
 
-#: .\app\templates\app\base.html:45 .\app\templates\app\base.html:55
-msgid "Text to ASCII"
-msgstr "Текст в ASCII"
-
-#: .\app\templates\app\base.html:65 .\app\templates\app\feedback.html:3
-#: .\app\templates\app\feedback.html:10
+#: .\app\templates\app\base.html:51 .\app\templates\app\base.html:81
+#: .\app\templates\app\feedback.html:3 .\app\templates\app\feedback.html:10
 msgid "Feedback"
 msgstr "Обратная Связь"
 
-#: .\app\templates\app\base.html:120
+#: .\app\templates\app\base.html:60 .\app\templates\app\base.html:66
+msgid "Image to ASCII"
+msgstr "Изображение в ASCII"
+
+#: .\app\templates\app\base.html:61 .\app\templates\app\base.html:71
+msgid "Text to ASCII"
+msgstr "Текст в ASCII"
+
+#: .\app\templates\app\base.html:136
 msgid "Welcome! That’s our User agreement and it is important."
 msgstr "Добро Пожаловать! Это наше Пользовательское соглашение и это важно."
 
-#: .\app\templates\app\base.html:125 .\app\templates\app\base.html:130
+#: .\app\templates\app\base.html:141 .\app\templates\app\base.html:146
 msgid "I Agree"
 msgstr "Я Согласен"
 
-#: .\app\templates\app\base.html:126
+#: .\app\templates\app\base.html:142
 #, python-format
 msgid ""
 "By clicking the «<strong>%(I_Agree)s</strong>» button, you give consent to "
@@ -247,24 +270,6 @@ msgstr "Увеличить размер шрифта"
 msgid "Decrease font size"
 msgstr "Уменьшить размер шрифта"
 
-#: .\app\templates\app\index.html:62 .\app\templates\app\index.html:63
-msgid "New image"
-msgstr "Новое изображение"
-
-#: .\app\templates\app\index.html:67 .\app\templates\app\index.html:68
-#: .\app\templates\app\index.html:148 .\app\templates\app\index.html:149
-msgid "Invert colors"
-msgstr "Инвертировать цвета"
-
-#: .\app\templates\app\index.html:72 .\app\templates\app\index.html:73
-#: .\app\templates\app\index.html:158 .\app\templates\app\index.html:159
-msgid "Copy to clipboard"
-msgstr "Скопировать в буфер обмена"
-
-#: .\app\templates\app\index.html:77 .\app\templates\app\index.html:78
-msgid "Download ASCII art as .png"
-msgstr "Скачать ASCII арт в .png"
-
 #. Translators: options is like settings
 #: .\app\templates\app\index.html:95
 msgid "Options"
@@ -282,31 +287,36 @@ msgstr "Яркость"
 msgid "Contrast"
 msgstr "Контрастность"
 
-#: .\app\templates\app\index.html:119
+#. Translators: Apply settings
+#: .\app\templates\app\index.html:116
+msgid "Apply"
+msgstr "Применить"
+
+#: .\app\templates\app\index.html:120
 msgid "...or try the text to ASCII"
 msgstr "...или попробуйте текст в ASCII"
 
-#: .\app\templates\app\index.html:122
+#: .\app\templates\app\index.html:123
 msgid "Type text to convert it to ASCII art"
 msgstr "Введите текст чтобы конвертировать его в ASCII арт"
 
-#: .\app\templates\app\index.html:138
+#: .\app\templates\app\index.html:139
 msgid "Multi-line mode"
 msgstr "Многострочный режим"
 
-#: .\app\templates\app\index.html:153 .\app\templates\app\index.html:154
+#: .\app\templates\app\index.html:154 .\app\templates\app\index.html:155
 msgid "Random font"
 msgstr "Случайный шрифт"
 
-#: .\app\templates\app\index.html:167 .\app\templates\app\index.html:168
+#: .\app\templates\app\index.html:168 .\app\templates\app\index.html:169
 msgid "Previous font"
 msgstr "Предыдущий шрифт"
 
-#: .\app\templates\app\index.html:174 .\app\templates\app\index.html:175
+#: .\app\templates\app\index.html:175 .\app\templates\app\index.html:176
 msgid "Next font"
 msgstr "Следующий шрифт"
 
-#: .\app\templates\app\index.html:180
+#: .\app\templates\app\index.html:181
 msgid "...or try the image to ASCII"
 msgstr "...или попробуйте изображение в ASCII"
 
@@ -333,22 +343,3 @@ msgstr "Упс"
 #: .\app\templates\errors\base.html:11
 msgid "Go to the Main page"
 msgstr "Вернуться на Главную страницу"
-
-#~ msgid "World"
-#~ msgstr "Мир"
-
-#~ msgid ""
-#~ "\n"
-#~ "Hello, %(My_var)s!\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Привет, %(My_var)s!\n"
-
-#~ msgid ""
-#~ "Icons made by <a href=\"https://www.flaticon.com/authors/freepik\" "
-#~ "title=\"Freepik\">Freepik</a> from <a href=\"https://www.flaticon.com/\" "
-#~ "title=\"Flaticon\">www.flaticon.com</a>."
-#~ msgstr ""
-#~ "Иконки сделали <a href=\"https://www.flaticon.com/authors/freepik\" "
-#~ "title=\"Freepik\">Freepik</a> с <a href=\"https://www.flaticon.com/\" "
-#~ "title=\"Flaticon\">www.flaticon.com</a>."

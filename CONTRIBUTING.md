@@ -4,6 +4,8 @@ You can contribute to this project by fixing typos, bugs and [translating](CONTR
 
 Currently, there is no need in contributing new functionality.
 
+[Fast local setup](README.md#Fast-local-setup) guide might be handy.
+
 ## How to contribute in general
 
 To contribute to project, you need to follow simple steps:
@@ -30,6 +32,8 @@ To translate, do the following steps:
 - Translate text in rosetta UI. All the red variables and html code needs to be copied and not translated.
 
 That's all! No need in compiling messages. Make sure you are browsed translated website for issues.
+
+Also, in ```LC_MESSAGES/django.po``` file don't forget to add yourself under ```AUTHORS LIST: NAME <EMAIL@ADDRESS>, YEAR.``` and replace ```"Last-Translator: b'NAME <EMAIL@ADDRESS>'\n"```.
 
 P.S. Privacy Policy and Cookie Policy NOT translated, otherwise it would be cruel.
 
