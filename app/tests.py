@@ -259,7 +259,7 @@ class TestImageToAsciiGeneratorView(TestCase):
                                         format='multipart')
         json_content = json.loads(response.content, encoding='utf-8')
         file_name = json_content.get('file_name', '')
-        file_path = os.path.join(settings.BASE_DIR, '_temporary_images/', file_name)
+        file_path = os.path.join(settings.TEMPORARY_IMAGES, file_name)
         self.assertEqual(response.status_code, 200)
         # Check if there's 3 or more arts
         self.assertGreaterEqual(len(json_content.get('arts', [])), 3)
@@ -359,7 +359,7 @@ class TestImageToAsciiGeneratorView(TestCase):
                                         format='multipart')
         json_content = json.loads(response.content, encoding='utf-8')
         file_name = json_content.get('file_name', '')
-        file_path = os.path.join(settings.BASE_DIR, '_temporary_images/', file_name)
+        file_path = os.path.join(settings.TEMPORARY_IMAGES, file_name)
         self.assertEqual(response.status_code, 200)
         self.assertLess(json_content.get('num_cols', 0), 300)
         os.remove(file_path)
@@ -375,7 +375,7 @@ class TestImageToAsciiGeneratorView(TestCase):
                                         format='multipart')
         json_content = json.loads(response.content, encoding='utf-8')
         file_name = json_content.get('file_name', '')
-        file_path = os.path.join(settings.BASE_DIR, '_temporary_images/', file_name)
+        file_path = os.path.join(settings.TEMPORARY_IMAGES, file_name)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json_content.get('num_cols', 0), 300)
         os.remove(file_path)
@@ -394,7 +394,7 @@ class TestImageToAsciiGeneratorView(TestCase):
                                         format='multipart')
         json_content = json.loads(response.content, encoding='utf-8')
         file_name = json_content.get('file_name', '')
-        file_path = os.path.join(settings.BASE_DIR, '_temporary_images/', file_name)
+        file_path = os.path.join(settings.TEMPORARY_IMAGES, file_name)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json_content.get('num_cols', 0), 90)
         self.assertEqual(json_content.get('brightness', 0), 100)
@@ -415,7 +415,7 @@ class TestImageToAsciiGeneratorView(TestCase):
                                         format='multipart')
         json_content = json.loads(response.content, encoding='utf-8')
         file_name = json_content.get('file_name', '')
-        file_path = os.path.join(settings.BASE_DIR, '_temporary_images/', file_name)
+        file_path = os.path.join(settings.TEMPORARY_IMAGES, file_name)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json_content.get('num_cols', 0), 125)
         self.assertEqual(json_content.get('brightness', 0), 200)
@@ -427,7 +427,7 @@ class TestImageToAsciiGeneratorView(TestCase):
         Ajax POST with right file_name and settings should return new arts and settings without actual file upload
         """
         file_name = 'test_image_' + ''.join(random.choices(string.ascii_lowercase, k=10)) + '.jpg'
-        file_path = os.path.join(settings.BASE_DIR, '_temporary_images/', file_name)
+        file_path = os.path.join(settings.TEMPORARY_IMAGES, file_name)
         with open('__test_images/test_img_good.jpg', mode='rb') as file:
             with open(file_path, 'wb') as file_new:
                 file_new.write(file.read())

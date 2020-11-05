@@ -19,8 +19,6 @@ You can set up this project on your local network by using these easy steps:
 
 It will run faster locally than on actual website because of multi-threading (website is on virtual single-core cpu), file uploading time and actual distance to the server (ping).
 
-P.S. Take a note that all the uploaded images will store in ```_temporary_images/``` folder. This is made so that you don't need to re-upload the file to use settings after a first upload.
-
 ## Used repositories
 
 For creating this project, several open-source repositories were used:

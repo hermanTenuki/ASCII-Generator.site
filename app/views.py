@@ -1,15 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import *
 from django.http import JsonResponse
-from .ascii_generators import img2ascii_1, img2ascii_2, txt2ascii_1
-import random
-import string
-import os
-from django.conf import settings
-from PIL import Image
-import numpy as np
-import cv2
-import threading
+from .ascii_generators import ascii_generators
 
 
 def handler400_view(request, *args, **kwargs):
@@ -78,167 +70,13 @@ def feedback(request):
             return render(request, 'app/feedback.html', context=context)
 
 
-def _calculate_num_cols(path: str, num_cols: int) -> int:
-    """
-    Recursive function to calculate biggest optimal num_cols for small images
-    :return: num_cols
-    """
-    image = Image.open(path)
-    image = np.array(image)
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    height, width = image.shape
-    cell_width = width / num_cols
-    cell_height = 2 * cell_width
-    num_rows = int(height / cell_height)
-    if num_cols > width or num_rows > height:
-        num_cols -= 1
-        num_cols = _calculate_num_cols(path, num_cols)
-    return num_cols
-
-
-def _generate_unique_image_path(file_extension, r=0, r_max=10):
-    """
-    Recursive function that generates random unique file name and path
-    :return: full path to file, name with extension
-    """
-    # Random name to image
-    name = ''.join(random.choices(string.ascii_lowercase + string.digits, k=100))  # 100 symbols for security
-    # Making file name
-    y = f'{name}{file_extension}'
-    # Making path
-    x = f'{settings.BASE_DIR}/_temporary_images/{y}'
-    # Checking if it already exist
-    if os.path.exists(x):
-        if r >= r_max:
-            return None, None
-        x, y = _generate_unique_image_path(file_extension, r=r + 1)  # Recursion
-    return x, y
-
-
-def _generator_thread_1_hub(l, args, kwargs, kwargs1, kwargs2):  # custom args/kwargs, others not accepted
-    art1 = img2ascii_2.image_to_ascii(*args, **kwargs, **kwargs1)
-    art2 = img2ascii_2.image_to_ascii(*args, **kwargs, **kwargs2)
-    l[0], l[1] = art1, art2  # mutable list, return is not needed
-
-
-def _generator_thread_2_hub(l, args, kwargs):
-    art1 = img2ascii_2.image_to_ascii(*args, **kwargs)
-    art2 = img2ascii_1.image_to_ascii(*args, **kwargs)
-    l[0], l[1] = art1, art2
-
-
 def image_to_ascii_generator(request):
     if request.is_ajax():
         if request.method == 'POST':
-            file_name = request.POST.get('file_name', None)
-            num_cols = request.POST.get('num_cols', 90)
-            brightness = request.POST.get('brightness', 100)
-            contrast = request.POST.get('contrast', 100)
-
-            # Validating user's input
-            try:
-                brightness = float(brightness) / 100
-            except:
-                brightness = 1
-            try:
-                contrast = float(contrast) / 100
-            except:
-                contrast = 1
-            try:
-                num_cols = int(num_cols)
-            except:
-                num_cols = 90
-            if num_cols > 300:
-                num_cols = 300
-            img = request.FILES.get('img', None)
-
-            if file_name is not None:  # If we are already having image saved - just need to re-generate arts
-                path = f'{settings.BASE_DIR}/_temporary_images/{file_name}'
-                if not os.path.exists(path):
-                    return JsonResponse({}, status=400)
-            elif img is not None:  # If we are uploading new image
-                # Getting extension of image
-                unused_fn, file_extension = os.path.splitext(img.name)
-
-                # If .bmp or .gif uploaded, convert it to .png
-                converted_to_png = False
-                if file_extension in '.bmp .gif':
-                    file_extension = '.png'
-                    converted_to_png = True
-
-                # Generating unique full path to image (None if many recursions for some reason)
-                path, file_name = _generate_unique_image_path(file_extension)
-                if path is None:
-                    return JsonResponse({}, status=400)
-
-                #  Trying to open user's image (and convert it if needed)
-                try:
-                    input_img = Image.open(img)
-                    if converted_to_png:
-                        if file_extension == '.bmp':
-                            input_img = input_img.convert('RGB')
-                        elif file_extension == '.gif':
-                            input_img = input_img.convert("RGBA")
-                            bg = Image.new("RGBA", input_img.size)
-                            input_img = Image.composite(input_img, bg, input_img)
-                except Exception as error:
-                    # print(error)
-                    return JsonResponse({'error': error.args}, status=400)
-
-                # Saving image to defined path with some compression and removing transparency from png
-                if file_extension == '.png':
-                    try:
-                        image = input_img.convert('RGBA')
-                        background = Image.new('RGBA', image.size, (255, 255, 255))
-                        image = Image.alpha_composite(background, image)
-                    except:
-                        image = input_img
-                else:
-                    image = input_img
-                if image.height > 1000 or image.width > 1000:
-                    image.thumbnail((1000, 1000), Image.ANTIALIAS)
-                image.save(path, optimize=True, quality=95)
-            else:
-                return JsonResponse({}, status=400)
-
-            # Calculating optimal num_cols for small images
-            num_cols = _calculate_num_cols(path, num_cols)
-
-            # Calling image_to_ascii generators in 2 threads, giving them full path to image and options
-            args = [path]
-            kwargs = {'num_cols': num_cols, 'contrast': contrast, 'brightness': brightness}
-
-            # ---- Thread 1
-            arts_1_list = [None, None]
-            kwargs1 = {'mode': 'simple'}
-            kwargs2 = {'mode': 'bars'}
-            arts_1_thread = threading.Thread(target=_generator_thread_1_hub, daemon=True, args=(
-                arts_1_list, args, kwargs, kwargs1, kwargs2
-            ))
-            arts_1_thread.start()
-
-            # ---- Thread 2
-            arts_2_list = [None, None]
-            arts_2_thread = threading.Thread(target=_generator_thread_2_hub, daemon=True, args=(
-                arts_2_list, args, kwargs
-            ))
-            arts_2_thread.start()
-
-            # Converting some options back to percentage
-            brightness = int(brightness * 100)
-            contrast = int(contrast * 100)
-
-            # ---- Wait Wait for threads to join here
-            arts_1_thread.join()
-            arts_2_thread.join()
-
-            return JsonResponse({
-                'file_name': file_name,
-                'num_cols': num_cols,
-                'brightness': brightness,
-                'contrast': contrast,
-                'arts': [*arts_1_list, *arts_2_list]
-            }, status=200)
+            result = ascii_generators.image_to_ascii_generator(request)
+            if type(result) == JsonResponse:
+                return result
+            return JsonResponse(result, status=200)
 
         return JsonResponse({}, status=405)
     else:
@@ -248,29 +86,7 @@ def image_to_ascii_generator(request):
 def text_to_ascii_generator(request):
     if request.is_ajax():
         if request.method == 'POST':
-            if not request.POST.get('multiple_strings', False):  # If input is in single-line mode
-                input_text = request.POST.get('txt', '')
-                if len(input_text) == 0:
-                    input_text = 'Hello World'
-                lines = 1
-            else:  # If input is in multi-line mode
-                input_text = request.POST.get('txt_multi', '')
-                if len(input_text) == 0:
-                    input_text = 'Hello\nWorld'
-                lines = 1 + input_text.count('\n')
-            results = []
-            for font in txt2ascii_1.FONT_NAMES:
-                generated_ascii = txt2ascii_1.text2art(text=input_text, font=font)
-                if len(generated_ascii.split('\n')) > (3 * lines):  # Do not append very small arts
-                    cut = 0
-                    for line in generated_ascii[::-1].split('\n'):  # Remove some empty lines at the end of arts
-                        if len(line.replace(' ', '').replace('	', '').replace(' ', '')) == 0:  # don't work great tho
-                            cut += 1
-                        else:
-                            break
-                    if cut != 0:
-                        generated_ascii = generated_ascii[:-cut]
-                    results.append([font, generated_ascii])
+            results = ascii_generators.text_to_ascii_generator(request)
             if len(results) == 0:  # If no results generated, return response 400
                 return JsonResponse({}, status=400)
             return JsonResponse({'results': results}, status=200)
