@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+import atexit
 
 # SECURITY WARNING: don't run with EASY_SETUP_MODE turned on in production!
 # Variable for fast project start without dealing with environment variables
@@ -15,6 +16,12 @@ if EASY_RUN_MODE:
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
+
+TEMPORARY_IMAGES = os.path.join(BASE_DIR, '_images/temporary/')
+if not os.path.exists(TEMPORARY_IMAGES):  # If temporary images folder is not exists, create it with .keep file
+    os.mkdir(TEMPORARY_IMAGES)
+    with open(os.path.join(TEMPORARY_IMAGES, '.keep'), 'w') as file:
+        pass
 
 # Import environment variables from python file if it exist. For local development only.
 if os.path.exists(os.path.join(BASE_DIR, 'project\\env_vars.py')):
@@ -176,3 +183,11 @@ if EASY_RUN_MODE:
 # django-rosetta settings
 
 ROSETTA_SHOW_AT_ADMIN_PANEL = True
+
+# If DEBUG is True, at runserver exit delete all the temporary images
+if DEBUG:
+    def clear_temporary_images_folder():
+        for file_name in os.listdir(TEMPORARY_IMAGES):
+            if file_name != '.keep':  # Keep the .keep file
+                os.remove(os.path.join(TEMPORARY_IMAGES, file_name))
+    atexit.register(clear_temporary_images_folder)
