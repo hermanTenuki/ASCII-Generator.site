@@ -23,6 +23,13 @@ $(document).ready(function () {
         });
     }
 
+    // Mobile menu script
+    $('header .mobile-menu-btn').click(function () {
+        $('header .mobile-menu').toggleClass('menu--open');
+        $('.mobile-menu-btn').toggleClass('menu-btn--on');
+        $('body').toggleClass('overflowHidden')
+    });
+
     // Switch url link depending on what input type is selected ("/" for img, "t/" for txt)
     function switch_url_by_input(mode = '') {
         const root_url_href = window.location.href.replace('/t/', '/');

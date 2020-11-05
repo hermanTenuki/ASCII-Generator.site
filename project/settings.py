@@ -1,6 +1,18 @@
 import os
 from pathlib import Path
 
+# SECURITY WARNING: don't run with EASY_SETUP_MODE turned on in production!
+# Variable for fast project start without dealing with environment variables
+EASY_RUN_MODE = False
+
+if EASY_RUN_MODE:
+    os.environ['SECRET_KEY'] = 'test'
+    os.environ['DB_NAME'] = 'test_ascii_generator_db'
+    os.environ['DB_USERNAME'] = 'test_ascii_generator_user'
+    os.environ['DB_PASSWORD'] = 'test_ascii_generator_pass'
+    os.environ['RECAPTCHA_PUBLIC_KEY'] = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'  # Those are test keys, don't bother
+    os.environ['RECAPTCHA_PRIVATE_KEY'] = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
@@ -13,6 +25,8 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.getenv('DEBUG', False))
+if EASY_RUN_MODE:
+    DEBUG = True
 
 ALLOWED_HOSTS = ['www.ascii-generator.site', '.ascii-generator.site',
                  'ascii-generator.site']
@@ -20,7 +34,6 @@ ALLOWED_HOSTS = ['www.ascii-generator.site', '.ascii-generator.site',
 # If DEBUG is True - allow all hosts. For local development only.
 if DEBUG:
     ALLOWED_HOSTS.append('*')
-
 
 # Application definition
 
@@ -78,22 +91,21 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'project.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 db_sqlite3 = {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    'ENGINE': 'django.db.backends.sqlite3',
+    'NAME': BASE_DIR / 'db.sqlite3',
 }
 
 db_postgresql = {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('DB_USERNAME'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST', 'localhost'),
-        'PORT': os.getenv('DB_PORT', '5432')
+    'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    'NAME': os.getenv('DB_NAME'),
+    'USER': os.getenv('DB_USERNAME'),
+    'PASSWORD': os.getenv('DB_PASSWORD'),
+    'HOST': os.getenv('DB_HOST', 'localhost'),
+    'PORT': os.getenv('DB_PORT', '5432')
 }
 
 # Database can be switched here between sqlite3 and postgresql
@@ -101,6 +113,9 @@ DATABASES = {
     'default': db_postgresql
 }
 
+# If EASY_RUN_MODE is True, use sqlite3
+if EASY_RUN_MODE:
+    DATABASES['default'] = db_sqlite3
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -119,7 +134,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
@@ -143,7 +157,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
@@ -157,6 +170,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 RECAPTCHA_PUBLIC_KEY = os.getenv('RECAPTCHA_PUBLIC_KEY')
 RECAPTCHA_PRIVATE_KEY = os.getenv('RECAPTCHA_PRIVATE_KEY')
+if EASY_RUN_MODE:
+    SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
 
 # django-rosetta settings
 

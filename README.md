@@ -7,17 +7,19 @@ You can find it at [https://ASCII-Generator.site](https://ascii-generator.site)
 > ![demo GIF](.github/media/demo.gif)</br>
 > Example
 
-## Environment variables
+## Fast local setup
 
-This Django project is using these environment variables:
+You can set up this project on your local network by using these easy steps:
 
-- DEBUG
-- DB_NAME
-- DB_USERNAME
-- DB_PASSWORD
-- SECRET_KEY
-- RECAPTCHA_PUBLIC_KEY
-- RECAPTCHA_PRIVATE_KEY
+- Clone this repo on your pc;
+- Create virtual environment with ```virtualenv venv```, activate it and install dependencies with ```pip install -r requirements.txt```;
+- At the top of ```project/settings.py``` set ```EASY_RUN_MODE``` from ```False``` to ```True```;
+- Run ```python manage.py makemigrations``` and ```python manage.py migrate```;
+- Start server by ```python manage.py runserver``` or ```python manage.py runserver 0.0.0.0:7777``` to open it to local network (for example, over wifi).
+
+It will run faster locally than on actual website because of multi-threading (website is on virtual single-core cpu), file uploading time and actual distance to the server (ping).
+
+P.S. Take a note that all the uploaded images will store in ```_temporary_images/``` folder. This is made so that you don't need to re-upload the file to use settings after a first upload.
 
 ## Used repositories
 
@@ -32,7 +34,7 @@ For creating this project, several open-source repositories were used:
 #### Django apps
 
 - [django-cleanup](https://github.com/un1t/django-cleanup) by [un1t](https://github.com/un1t) ([MIT-License - Copyright (C) 2012 by Ilya Shalyapin](https://github.com/un1t/django-cleanup/blob/master/LICENSE));
-- [django-recaptcha](https://github.com/praekelt/django-recaptcha) by [praekelt](https://github.com/praekelt) ([BSD-3-Clause License - Copyright (c) Praekelt Consulting](https://github.com/praekelt/django-recaptcha/blob/develop/LICENSE)).
+- [django-recaptcha](https://github.com/praekelt/django-recaptcha) by [praekelt](https://github.com/praekelt) ([BSD-3-Clause License - Copyright (c) Praekelt Consulting](https://github.com/praekelt/django-recaptcha/blob/develop/LICENSE));
 - [django-rosetta](https://github.com/mbi/django-rosetta) by [mbi](https://github.com/mbi) ([MIT-License - Copyright (c) 2008-2010 Marco Bonetti](https://github.com/mbi/django-rosetta/blob/develop/LICENSE)).
 
 ## Personal Todo

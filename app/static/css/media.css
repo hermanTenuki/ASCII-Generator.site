@@ -4,15 +4,23 @@
   }
 }
 @media screen and (max-height: 870px) {
-  body main section.index,
-  body main section.page_error {
+  body main section.index {
     padding-top: 5vh;
   }
 }
 @media screen and (max-height: 800px) {
-  body main section.index,
-  body main section.page_error {
+  body main section.index {
     padding: 0;
+  }
+}
+@media screen and (max-height: 600px) {
+  body main section.page_error {
+    padding-top: 10vh;
+  }
+}
+@media screen and (max-height: 470px) {
+  body main section.page_error {
+    padding-top: 0;
   }
 }
 @media screen and (max-height: 900px) {
@@ -106,84 +114,85 @@
     border: 0;
   }
 }
-@media screen and (max-width: 520px) {
-  body header .wrapper {
-    grid-template-columns: unset;
-    grid-template-areas: 'a' 'b' 'c';
-    grid-template-rows: repeat(3, auto);
+@media screen and (max-width: 550px) {
+  body #borders-dashed .header_and_main_together header .mobile-menu-btn {
+    display: unset;
   }
-  body header .wrapper .logo {
+  body #borders-dashed .header_and_main_together header .mobile-menu {
+    display: flex;
+  }
+  body #borders-dashed .header_and_main_together header .wrapper {
+    grid-template-columns: unset;
+    grid-template-areas: 'a' 'b';
+    grid-template-rows: repeat(2, auto);
+  }
+  body #borders-dashed .header_and_main_together header .wrapper .logo {
     grid-area: a;
     margin: 9px auto;
   }
-  body header .wrapper .logo a {
+  body #borders-dashed .header_and_main_together header .wrapper .logo a {
     display: block;
     font-size: 8vw;
   }
-  body header .wrapper .links {
-    width: 100%;
-    grid-area: b;
-    display: inline-flex;
-    justify-content: space-between;
-    margin: 0 auto;
-  }
-  body header .wrapper .links a {
-    margin: 0;
-  }
-  body header .wrapper .switcher {
-    width: 100%;
-    display: inline-flex;
-    justify-content: space-between;
-    grid-area: c;
-    padding: 15px 0;
-  }
-  body main section.index .wrapper h1.h1-page-title {
+  body #borders-dashed .header_and_main_together header .wrapper .links {
     display: none;
   }
-  body main section.index .wrapper h2.h2-method-desc {
+  body #borders-dashed .header_and_main_together header .wrapper .switcher {
+    width: 100%;
+    grid-area: b;
+    padding: 10px 0;
+  }
+  body #borders-dashed .header_and_main_together main section.index .wrapper h1.h1-page-title {
+    display: none;
+  }
+  body #borders-dashed .header_and_main_together main section.index .wrapper h2.h2-method-desc {
     font-size: 22px;
     padding-top: 15px;
   }
-  body main section.index .wrapper .ascii-image-output .options_container .options_grid {
+  body #borders-dashed .header_and_main_together main section.index .wrapper .ascii-image-output .options_container .options_grid {
     grid-template-columns: repeat(3, auto);
     grid-column-gap: 15px;
   }
-  body main section.feedback .wrapper form.feedback-form {
+  body #borders-dashed .header_and_main_together main section.feedback .wrapper form.feedback-form {
     min-width: unset;
   }
-  body main section.feedback .wrapper form.feedback-form textarea,
-  body main section.feedback .wrapper form.feedback-form input[type=email] {
+  body #borders-dashed .header_and_main_together main section.feedback .wrapper form.feedback-form textarea,
+  body #borders-dashed .header_and_main_together main section.feedback .wrapper form.feedback-form input[type=email] {
     width: 100%;
     max-width: unset;
     text-align: left;
   }
-  body main section.feedback .wrapper form.feedback-form .feedback-agreement #id_agreement {
+  body #borders-dashed .header_and_main_together main section.feedback .wrapper form.feedback-form .feedback-agreement #id_agreement {
     left: 0;
     transform: translateX(29px);
   }
-  body main section.feedback .wrapper form.feedback-form .feedback-agreement #id_agreement + label {
+  body #borders-dashed .header_and_main_together main section.feedback .wrapper form.feedback-form .feedback-agreement #id_agreement + label {
     max-width: unset;
   }
-  body footer {
+  body #borders-dashed footer {
     height: unset;
     padding-bottom: 21px;
   }
-  body footer .wrapper {
-    grid-template-columns: unset;
-    grid-template-areas: 'c c c' 'a x b';
-    grid-row-gap: 15px;
+  body #borders-dashed footer .wrapper {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-areas: 'a b';
   }
-  body footer .wrapper .policy {
-    grid-area: c;
-    margin: auto auto;
-    text-align: center;
+  body #borders-dashed footer .wrapper .policy {
+    display: none;
   }
-  body footer .wrapper .GitHub {
+  body #borders-dashed footer .wrapper .GitHub {
     text-align: left;
     grid-area: a;
     margin: auto 0;
   }
-  body footer .wrapper .language-switcher {
+  body #borders-dashed footer .wrapper .language-switcher {
     grid-area: b;
+  }
+}
+@media screen and (max-width: 400px) {
+  body .wrapper .switcher {
+    display: inline-flex;
+    justify-content: space-between;
+    grid-column-gap: 10px;
   }
 }
