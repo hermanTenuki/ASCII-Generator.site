@@ -16,10 +16,12 @@ if EASY_RUN_MODE:
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
-TEMPORARY_IMAGES = os.path.join(BASE_DIR, '_temporary_images/')
-if not os.path.exists(TEMPORARY_IMAGES):
-    print('WARNING! Temporary images folder is not found.')
-    # raise NotADirectoryError("Temporary images folder is not found.")
+
+TEMPORARY_IMAGES = os.path.join(BASE_DIR, '_images/temporary/')
+if not os.path.exists(TEMPORARY_IMAGES):  # If temporary images folder is not exists, create it with .keep file
+    os.mkdir(TEMPORARY_IMAGES)
+    with open(os.path.join(TEMPORARY_IMAGES, '.keep'), 'w') as file:
+        pass
 
 # Import environment variables from python file if it exist. For local development only.
 if os.path.exists(os.path.join(BASE_DIR, 'project\\env_vars.py')):

@@ -309,7 +309,7 @@ class TestImageToAsciiGeneratorView(TestCase):
         """
         Ajax POST with wrong file should return 400
         """
-        with open('__test_images/test_img_bad.jpg', mode='rb') as file:
+        with open('_images/test/test_img_bad.jpg', mode='rb') as file:
             response = self.client.post(reverse('image_to_ascii_generator_url'),
                                         HTTP_X_REQUESTED_WITH='XMLHttpRequest',
                                         data={'img': file},
@@ -317,42 +317,42 @@ class TestImageToAsciiGeneratorView(TestCase):
         self.assertEqual(response.status_code, 400)
 
     def test_ajax_post_image_type_jpg(self):
-        self._test_image('__test_images/w3c_home.jpg')
-        self._test_image('__test_images/w3c_home.jpg')
-        self._test_image('__test_images/w3c_home_256.jpg')
-        self._test_image('__test_images/w3c_home_gray.jpg')
-        self._test_image('__test_images/test_img_good.jpg')
+        self._test_image('_images/test/w3c_home.jpg')
+        self._test_image('_images/test/w3c_home.jpg')
+        self._test_image('_images/test/w3c_home_256.jpg')
+        self._test_image('_images/test/w3c_home_gray.jpg')
+        self._test_image('_images/test/test_img_good.jpg')
 
     def test_ajax_post_image_type_png(self):
-        self._test_image('__test_images/w3c_home.png')
-        self._test_image('__test_images/w3c_home_2.png')
-        self._test_image('__test_images/w3c_home_256.png')
-        self._test_image('__test_images/w3c_home_gray.png')
+        self._test_image('_images/test/w3c_home.png')
+        self._test_image('_images/test/w3c_home_2.png')
+        self._test_image('_images/test/w3c_home_256.png')
+        self._test_image('_images/test/w3c_home_gray.png')
 
     def test_ajax_post_image_type_ico(self):
-        self._test_image('__test_images/ICO.ico')
+        self._test_image('_images/test/ICO.ico')
 
     def test_ajax_post_image_type_webp(self):
-        self._test_image('__test_images/WEBP.webp')
+        self._test_image('_images/test/WEBP.webp')
 
     def test_ajax_post_image_type_bmp(self):
-        self._test_image('__test_images/w3c_home.bmp')
-        self._test_image('__test_images/w3c_home_2.bmp')
-        self._test_image('__test_images/w3c_home_256.bmp')
-        self._test_image('__test_images/w3c_home_gray.bmp')
+        self._test_image('_images/test/w3c_home.bmp')
+        self._test_image('_images/test/w3c_home_2.bmp')
+        self._test_image('_images/test/w3c_home_256.bmp')
+        self._test_image('_images/test/w3c_home_gray.bmp')
 
     def test_ajax_post_image_type_gif(self):
-        self._test_image('__test_images/w3c_home.gif')
-        self._test_image('__test_images/w3c_home_2.gif')
-        self._test_image('__test_images/w3c_home_256.gif')
-        self._test_image('__test_images/w3c_home_animation.gif')
-        self._test_image('__test_images/w3c_home_gray.gif')
+        self._test_image('_images/test/w3c_home.gif')
+        self._test_image('_images/test/w3c_home_2.gif')
+        self._test_image('_images/test/w3c_home_256.gif')
+        self._test_image('_images/test/w3c_home_animation.gif')
+        self._test_image('_images/test/w3c_home_gray.gif')
 
     def test_ajax_post_small_image_high_num_cols(self):
         """
         Ajax POST with small image but high amount of num_cols should return arts with adapted num_cols
         """
-        with open('__test_images/test_img_good.jpg', mode='rb') as file:
+        with open('_images/test/test_img_good.jpg', mode='rb') as file:
             response = self.client.post(reverse('image_to_ascii_generator_url'),
                                         HTTP_X_REQUESTED_WITH='XMLHttpRequest',
                                         data={'img': file, 'num_cols': 300},
@@ -368,7 +368,7 @@ class TestImageToAsciiGeneratorView(TestCase):
         """
         Ajax POST with right image but high amount of num_cols should return arts with num_cols=300
         """
-        with open('__test_images/test_img_good_big.jpg', mode='rb') as file:
+        with open('_images/test/test_img_good_big.jpg', mode='rb') as file:
             response = self.client.post(reverse('image_to_ascii_generator_url'),
                                         HTTP_X_REQUESTED_WITH='XMLHttpRequest',
                                         data={'img': file, 'num_cols': 100000},
@@ -384,7 +384,7 @@ class TestImageToAsciiGeneratorView(TestCase):
         """
         Ajax POST with right image but wrong settings input should return 200 with arts but with default settings
         """
-        with open('__test_images/test_img_good.jpg', mode='rb') as file:
+        with open('_images/test/test_img_good.jpg', mode='rb') as file:
             response = self.client.post(reverse('image_to_ascii_generator_url'),
                                         HTTP_X_REQUESTED_WITH='XMLHttpRequest',
                                         data={'img': file,
@@ -405,7 +405,7 @@ class TestImageToAsciiGeneratorView(TestCase):
         """
         Ajax POST with right image and some settings, should return 200 and settings back with new arts
         """
-        with open('__test_images/test_img_good.jpg', mode='rb') as file:
+        with open('_images/test/test_img_good.jpg', mode='rb') as file:
             response = self.client.post(reverse('image_to_ascii_generator_url'),
                                         HTTP_X_REQUESTED_WITH='XMLHttpRequest',
                                         data={'img': file,
@@ -428,7 +428,7 @@ class TestImageToAsciiGeneratorView(TestCase):
         """
         file_name = 'test_image_' + ''.join(random.choices(string.ascii_lowercase, k=10)) + '.jpg'
         file_path = os.path.join(settings.TEMPORARY_IMAGES, file_name)
-        with open('__test_images/test_img_good.jpg', mode='rb') as file:
+        with open('_images/test/test_img_good.jpg', mode='rb') as file:
             with open(file_path, 'wb') as file_new:
                 file_new.write(file.read())
         response = self.client.post(reverse('image_to_ascii_generator_url'),
