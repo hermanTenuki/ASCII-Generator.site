@@ -3,8 +3,20 @@ import cv2
 import numpy as np
 from PIL import Image
 from PIL import ImageEnhance
+from numba import jit as _jit
+from django.conf import settings
 
 
+def jit():
+    def wrapped(func, *args, **kwargs):
+        if not settings.NUMBA:
+            return func
+        else:
+            return _jit(func, *args, **kwargs)
+    return wrapped
+
+
+@jit()
 def get_sizes(image, num_cols):
     height, width = image.shape
     cell_width = width / num_cols
@@ -13,6 +25,7 @@ def get_sizes(image, num_cols):
     return height, width, cell_width, cell_height, num_rows
 
 
+@jit()
 def image_to_ascii(path, num_cols=100, mode='complex', brightness=None, contrast=None) -> (str, int):
     if mode == "simple":
         CHAR_LIST = '@%#*+=-:. '
