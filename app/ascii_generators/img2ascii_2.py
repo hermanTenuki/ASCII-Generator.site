@@ -4,6 +4,7 @@ import numpy as np
 from PIL import Image
 from PIL import ImageEnhance
 from numba import jit as _jit
+from numba import njit as _njit
 from django.conf import settings
 
 
@@ -13,10 +14,21 @@ def jit():
             return func
         else:
             return _jit(func, *args, **kwargs)
+
     return wrapped
 
 
-@jit()
+def njit():
+    def wrapped(func, *args, **kwargs):
+        if not settings.NUMBA:
+            return func
+        else:
+            return _njit(func, *args, **kwargs)
+
+    return wrapped
+
+
+@njit()
 def get_sizes(image, num_cols):
     height, width = image.shape
     cell_width = width / num_cols
