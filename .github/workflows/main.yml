@@ -41,5 +41,9 @@ jobs:
         python manage.py collectstatic --noinput
         python manage.py makemigrations
         python manage.py migrate
-    - name: Run Tests
+    - name: Run Tests without Numba
       run: python manage.py test
+    - name: Run Tests with Numba
+      run: python manage.py test
+      env:
+        NUMBA: True

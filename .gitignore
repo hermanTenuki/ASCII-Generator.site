@@ -3,6 +3,7 @@ __pycache__/
 *.env
 Dockerfile
 .dockerignore
-/_temporary_images/*
-!/_temporary_images/.keep
+/_images/temporary/*
+!/_images/temporary/.keep
 .idea/
+db.sqlite3

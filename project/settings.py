@@ -1,12 +1,14 @@
 import os
 from pathlib import Path
 import atexit
+from distutils.util import strtobool
 
 # SECURITY WARNING: don't run with EASY_SETUP_MODE turned on in production!
 # Variable for fast project start without dealing with environment variables
 EASY_RUN_MODE = False
 
 if EASY_RUN_MODE:
+    os.environ['DEBUG'] = 'True'
     os.environ['SECRET_KEY'] = 'test'
     os.environ['DB_NAME'] = 'test_ascii_generator_db'
     os.environ['DB_USERNAME'] = 'test_ascii_generator_user'
@@ -20,20 +22,18 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 TEMPORARY_IMAGES = os.path.join(BASE_DIR, '_images/temporary/')
 if not os.path.exists(TEMPORARY_IMAGES):  # If temporary images folder is not exists, create it with .keep file
     os.mkdir(TEMPORARY_IMAGES)
-    with open(os.path.join(TEMPORARY_IMAGES, '.keep'), 'w') as file:
-        pass
+    file = open(os.path.join(TEMPORARY_IMAGES, '.keep'), 'w')
+    file.close()
 
 # Import environment variables from python file if it exist. For local development only.
-if os.path.exists(os.path.join(BASE_DIR, 'project\\env_vars.py')):
+if os.path.exists(os.path.join(BASE_DIR, 'project/env_vars.py')):
     from . import env_vars
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(os.getenv('DEBUG', False))
-if EASY_RUN_MODE:
-    DEBUG = True
+DEBUG = bool(strtobool(os.getenv('DEBUG', 'False')))
 
 ALLOWED_HOSTS = ['www.ascii-generator.site', '.ascii-generator.site',
                  'ascii-generator.site']
@@ -184,10 +184,22 @@ if EASY_RUN_MODE:
 
 ROSETTA_SHOW_AT_ADMIN_PANEL = True
 
+# Numba optimization (EXPERIMENTAL). Depending on the system, it can greatly improve or decrease performance.
+# 4 cores tested: 150%-300% speed improvement;
+# 1 core tested: 100%-70% speed decrease.
+
+NUMBA = bool(strtobool(os.getenv('NUMBA', 'False')))
+if NUMBA:
+    print('Numba optimization (EXPERIMENTAL) is enabled! '
+          'First use of generators will be long and can occur warning messages.')
+
 # If DEBUG is True, at runserver exit delete all the temporary images
+
 if DEBUG:
     def clear_temporary_images_folder():
         for file_name in os.listdir(TEMPORARY_IMAGES):
             if file_name != '.keep':  # Keep the .keep file
                 os.remove(os.path.join(TEMPORARY_IMAGES, file_name))
+
+
     atexit.register(clear_temporary_images_folder)
