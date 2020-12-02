@@ -6,7 +6,7 @@ django-cleanup==5.1.0
 django-recaptcha==2.0.6
 django-rosetta==0.9.5
 idna==2.10
-llvmlite==0.34.0
+llvmlite==0.35.0
 numba==0.51.2
 numpy==1.19.2
 opencv-python==4.4.0.44
