@@ -2,6 +2,9 @@ $(document).ready(function () {
     let generated_image_ascii = {};
     let generated_text_ascii = {};
 
+    // Turn on tippy.js tooltips
+    tippy('[data-tippy-content]');
+
     // Put jQuery selector to display
     function animate_fade_in(elem, speed = 750, delay = 0) {
         setTimeout(function () {

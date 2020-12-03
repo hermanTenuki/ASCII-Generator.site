@@ -40,11 +40,11 @@
                     <div class="container_slider">
                         <div class="font-size_config">
                             <div class="font-size_up">
-                                <input type="button" value="+" title="{% translate 'Increase font size' %}">
+                                <input type="button" value="+" data-tippy-content="{% translate 'Increase font size' %}">
                             </div>
                             <div class="font-size_cur"><span class="font-size_number">12</span>px</div>
                             <div class="font-size_down">
-                                <input type="button" value="-" title="{% translate 'Decrease font size' %}">
+                                <input type="button" value="-" data-tippy-content="{% translate 'Decrease font size' %}">
                             </div>
                         </div>
                         <div class="slider-window">
@@ -59,22 +59,22 @@
                         <div class="buttons first_row">
                             <div class="new_file">
                                 <img src="{% static 'svg/add.svg' %}" width="40" height="40"
-                                     title="{% translate 'New image' %}"
+                                     data-tippy-content="{% translate 'New image' %}"
                                      alt="{% translate 'New image' %}">
                             </div>
                             <div class="invert_colors">
                                 <img src="{% static 'svg/day-and-night.svg' %}" width="40" height="40"
-                                     title="{% translate 'Invert colors' %}"
+                                     data-tippy-content="{% translate 'Invert colors' %}"
                                      alt="{% translate 'Invert colors' %}">
                             </div>
                             <div class="copy_to_clipboard">
                                 <img src="{% static 'svg/copy.svg' %}" width="40" height="40"
-                                     title="{% translate 'Copy to clipboard' %}"
+                                     data-tippy-content="{% translate 'Copy to clipboard' %}"
                                      alt="{% translate 'Copy to clipboard' %}">
                             </div>
                             <div class="download_art">
                                 <img src="{% static 'svg/download.svg' %}" width="40" height="40"
-                                     title="{% translate 'Download ASCII art as .png' %}" id="button_art_download"
+                                     data-tippy-content="{% translate 'Download ASCII art as .png' %}" id="button_art_download"
                                      alt="{% translate 'Download ASCII art as .png' %}">
                             </div>
                         </div>
@@ -146,17 +146,17 @@
                         <div class="buttons first_row">
                             <div class="invert_colors">
                                 <img src="{% static 'svg/day-and-night.svg' %}" width="40" height="40"
-                                     title="{% translate 'Invert colors' %}"
+                                     data-tippy-content="{% translate 'Invert colors' %}"
                                      alt="{% translate 'Invert colors' %}">
                             </div>
                             <div class="randomize">
                                 <img src="{% static 'svg/dices.svg' %}" width="40" height="40"
-                                     title="{% translate 'Random font' %}"
+                                     data-tippy-content="{% translate 'Random font' %}"
                                      alt="{% translate 'Random font' %}">
                             </div>
                             <div class="copy_to_clipboard">
                                 <img src="{% static 'svg/copy.svg' %}" width="40" height="40"
-                                     title="{% translate 'Copy to clipboard' %}"
+                                     data-tippy-content="{% translate 'Copy to clipboard' %}"
                                      alt="{% translate 'Copy to clipboard' %}">
                             </div>
                         </div>
@@ -165,14 +165,14 @@
                         <div class="buttons second_row">
                             <div class="back">
                                 <img src="{% static 'svg/arrow.svg' %}" width="40" height="40"
-                                     title="{% translate 'Previous font' %}"
+                                     data-tippy-content="{% translate 'Previous font' %}"
                                      alt="{% translate 'Previous font' %}">
                             </div>
                             <select name="method" id="select-method">
                             </select>
                             <div class="forward">
                                 <img src="{% static 'svg/arrow.svg' %}" width="40" height="40"
-                                     title="{% translate 'Next font' %}"
+                                     data-tippy-content="{% translate 'Next font' %}"
                                      alt="{% translate 'Next font' %}">
                             </div>
                         </div>
