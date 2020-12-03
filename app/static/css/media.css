@@ -63,6 +63,19 @@
     grid-area: pos3;
     padding-bottom: 15px;
   }
+  body .agreements .wrapper .inline_grid {
+    display: grid;
+    grid-template-columns: auto;
+  }
+  body .agreements .wrapper .inline_grid .text p {
+    text-align: justify;
+  }
+  body .agreements .wrapper .inline_grid .btn {
+    margin: auto;
+  }
+  body .agreements .wrapper .inline_grid .btn input[type=button] {
+    width: unset;
+  }
 }
 @media screen and (max-width: 770px) {
   body main section.index .wrapper h1.h1-page-title {

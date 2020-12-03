@@ -1394,8 +1394,8 @@ footer {
     .inline_grid {
       width: 100%;
       display: inline-grid;
-      grid-template-columns: auto 140px;
-      grid-column-gap: @elements-gap;
+      grid-template-columns: auto auto;
+      grid-gap: @elements-gap;
 
       .text {
         p.upper-text {
@@ -1409,11 +1409,11 @@ footer {
       }
 
       .btn {
-        margin: auto 0;
+        margin: auto 0 auto auto;
 
         input[type=button] {
-          padding: 4px 0;
-          width: 100%;
+          padding: 4px 20px;
+          width: unset;
           font-size: @font-size-normal;
           transition: background-color .2s;
         }
