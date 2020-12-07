@@ -103,16 +103,23 @@ class TestStaffAuthenticationView(TestCase):
         self.assertNotIn('class="error"', response.content.decode('utf-8'))
 
 
-class TestStaffLogout(TestCase):
+class TestStaffLoginLogout(TestCase):
 
-    def test_staff_logged_out(self):
+    def test_staff_logged_in(self):
         """
-        If staff was logged, he should not more see special links, also redirect 302 to main page
+        If staff is logged, he should see special links
         """
         user = _create_staff_user('admin', 'admin')
         self.client.login(**user)
         response = self.client.get(reverse('index_page_url'))
-        self.assertIn('$Logout', response.content.decode('utf-8'))
+        self.assertIn('Logout</a>', response.content.decode('utf-8'))
+
+    def test_staff_logged_out(self):
+        """
+        If staff log out, he should no more see special links and should be redirected to the main page
+        """
+        user = _create_staff_user('admin', 'admin')
+        self.client.login(**user)
         response = self.client.get(reverse('staff_logout_url'))
         self.assertRedirects(response, '/', status_code=302)
-        self.assertNotIn('$Logout', response.content.decode('utf-8'))
+        self.assertNotIn('Logout</a>', response.content.decode('utf-8'))

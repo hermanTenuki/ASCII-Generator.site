@@ -130,7 +130,7 @@ class TestFeedbackView(TestCase):
         """
         POST with wrong data should return 200 and errors
         """
-        data = {'text': 'a' * 600, 'email': 'email123'}  # a*600 is higher than limit 512 symbols
+        data = {'text': 'a' * 1200, 'email': 'email123'}  # a*1200 is higher than limit 1024 symbols
         response = self.client.post(reverse('feedback_url'), data=data)
         self.assertEqual(response.status_code, 200)
         self.assertIn('class="error"', response.content.decode('utf-8'))
@@ -151,7 +151,7 @@ class TestFeedbackView(TestCase):
         """
         POST with captcha but wrong text limit should return 200 and error
         """
-        data = {'text': 'a' * 600, 'email': 'example@gmail.com', 'agreement': 'True'}
+        data = {'text': 'a' * 1200, 'email': 'example@gmail.com', 'agreement': 'True'}
         response = self.client.post(reverse('feedback_url'), data=data)
         self.assertEqual(response.status_code, 200)
         self.assertIn('class="error"', response.content.decode('utf-8'))
@@ -190,7 +190,7 @@ class TestFeedbackView(TestCase):
         """
         POST with wrong data should return 400 and errors
         """
-        data = {'text': 'a' * 600, 'email': 'email123'}  # a*600 is higher than limit 512 symbols
+        data = {'text': 'a' * 1200, 'email': 'email123'}  # a*1200 is higher than limit 1024 symbols
         response = self.client.post(reverse('feedback_url'), data=data, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         json_content = json.loads(response.content, encoding='utf-8')
         self.assertEqual(response.status_code, 400)
@@ -213,7 +213,7 @@ class TestFeedbackView(TestCase):
         """
         POST with captcha but wrong text limit should return 400 and error
         """
-        data = {'text': 'a' * 600, 'email': 'example@gmail.com', 'agreement': 'True'}
+        data = {'text': 'a' * 1200, 'email': 'example@gmail.com', 'agreement': 'True'}
         response = self.client.post(reverse('feedback_url'), data=data, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         json_content = json.loads(response.content, encoding='utf-8')
         self.assertEqual(response.status_code, 400)
