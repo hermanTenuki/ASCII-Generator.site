@@ -359,7 +359,7 @@ $(document).ready(function () {
     }
 
     // Switch image ascii art
-    function update_displayed_image_art(adapt=true) {
+    function update_displayed_image_art(adapt=true, limit_width=true) {
         const slider_window = $('section.index .ascii-image-output .slider-window');
         const art_div = $('section.index .ascii-image-output .ascii-art');
         art_div.css({
@@ -387,7 +387,7 @@ $(document).ready(function () {
         image.css('width', parseFloat(slider_window.css('width')));
         image.css('height', parseFloat(art_div.css('height')));
         if (adapt) {
-            resize_ascii_image_art();
+            resize_ascii_image_art(limit_width);
         }
     }
 
@@ -407,7 +407,7 @@ $(document).ready(function () {
         }
         art_div.css('font-size', font_size);
         span_font_size_number.text(font_size);
-        update_displayed_image_art();
+        update_displayed_image_art(true, false);
     }
 
     $('section.index .ascii-image-output .container_slider').on('click', 'input[type=button]', function () {
@@ -419,7 +419,7 @@ $(document).ready(function () {
         if ($(this).hasClass('chosen') === false) {
             $('section.index .ascii-image-output .buttons.second_row').find('div').removeClass('chosen');
             $(this).addClass('chosen');
-            update_displayed_image_art()
+            update_displayed_image_art(true, false)
         }
     });
 
@@ -613,7 +613,7 @@ $(document).ready(function () {
                 'left': 0,
                 'top': 0
             });
-            update_displayed_image_art(false);
+            update_displayed_image_art(false, false);
         }
         html2canvas(art_download[0], {
             scrollX: 0,
@@ -635,14 +635,14 @@ $(document).ready(function () {
 
 
     // ASCII-arts adaptations on resize
-    function resize_ascii_image_art() {
+    function resize_ascii_image_art(limit_width=false) {
         const art_div = $('section.index .ascii-image-output .ascii-art');
         const font_size = parseInt(art_div.css('font-size'));
         const container_slider_width = $('section.index .ascii-image-output .container_slider').width();
         const wrapper_width = $('section.index .wrapper').width();
-        if ((container_slider_width + 100 >= wrapper_width) && (font_size > 1)) {
+        if (((container_slider_width + 100 >= wrapper_width) && (font_size > 1)) || ((limit_width) && (container_slider_width > 900))) {
             change_font_size_on_art(false, '-');
-            update_displayed_image_art(true);
+            update_displayed_image_art(true, limit_width);
         }
     }
 
