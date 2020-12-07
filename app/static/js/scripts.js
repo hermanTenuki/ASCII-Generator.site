@@ -232,6 +232,7 @@ $(document).ready(function () {
     // Upload File ajax request
     const uploadFile = function (file) {
         fileUploadEnabled = false;
+        const fileInputElement = $('.js-file__input');
         const fileDropZone = $('section.index .js-dropzone');
         const fileUploadModal = $('section.index .file-upload__modal');
         const asciiImageOutput = $('section.index .ascii-image-output');
@@ -279,8 +280,8 @@ $(document).ready(function () {
                 update_displayed_image_art();
             },
             complete: function (response) {
+                fileInputElement.val('');
                 fileUploadEnabled = true;
-
             }
         });
     };
