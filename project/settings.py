@@ -3,7 +3,7 @@ from pathlib import Path
 import atexit
 from distutils.util import strtobool
 
-# SECURITY WARNING: don't run with EASY_SETUP_MODE turned on in production!
+# SECURITY WARNING: don't run with EASY_RUN_MODE turned on in production!
 # Variable for fast project start without dealing with environment variables
 EASY_RUN_MODE = False
 
@@ -69,13 +69,14 @@ INSTALLED_APPS = DEFAULT_APPS + CUSTOM_APPS + THIRD_PARTY_APPS
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # 'app.middleware.ForceDefaultLanguageMiddleware',  # Deletes "HTTP_ACCEPT_LANGUAGE" to keep default lang
-    'django.middleware.locale.LocaleMiddleware',
+    'staff.middleware.RestrictStaffToAdminMiddleware',  # Restrict staff to admin page
 ]
 
 ROOT_URLCONF = 'project.urls'
@@ -183,6 +184,7 @@ if EASY_RUN_MODE:
 # django-rosetta settings
 
 ROSETTA_SHOW_AT_ADMIN_PANEL = True
+
 
 # Numba optimization (EXPERIMENTAL). Depending on the system, it can greatly improve or decrease performance.
 # 4 cores tested: 150%-300% speed improvement;

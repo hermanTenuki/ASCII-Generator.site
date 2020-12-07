@@ -16,25 +16,39 @@ class FeedbackForm(forms.ModelForm):
         fields = ['text', 'email']
         widgets = {
             'text': forms.Textarea(attrs={'placeholder': _('Your message*')}),
-            'email': forms.EmailInput(attrs={'placeholder': _('Email (optional)')})
+            'email': forms.EmailInput(attrs={'placeholder': _('Email (optional)')}),
         }
 
     def clean_text(self):
         text = self.cleaned_data['text']
         if not text or len(text) < 1:
             raise ValidationError(_('Please write your text there.'))
-        if len(text) > 512:
-            raise ValidationError(_('Characters limit is 512.'))
+        if len(text) > 1024:
+            raise ValidationError(_('Characters limit is 1024.'))
         return text
-
-    # def clean_captcha(self):
-    #     captcha = self.cleaned_data['captcha']
-    #     if not captcha:
-    #         raise ValidationError('Captcha is not passed.')  # "required=True" is making this validation useless
-    #     return captcha
 
     def clean_agreement(self):
         agreement = self.cleaned_data['agreement']
         if not agreement:
             raise ValidationError(_("We can't continue without your agreement."))
         return agreement
+
+
+class ReportForm(forms.ModelForm):
+    captcha = ReCaptchaField(required=True)
+
+    class Meta:
+        model = Report
+        fields = ['text', 'email']
+        widgets = {
+            'text': forms.Textarea(attrs={'placeholder': _('Your message*')}),
+            'email': forms.EmailInput(attrs={'placeholder': _('Email (optional)')}),
+        }
+
+    def clean_text(self):
+        text = self.cleaned_data['text']
+        if not text or len(text) < 1:
+            raise ValidationError(_('Please write your text there.'))
+        if len(text) > 1024:
+            raise ValidationError(_('Characters limit is 1024.'))
+        return text

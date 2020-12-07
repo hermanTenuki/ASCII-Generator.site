@@ -7,3 +7,4 @@ Dockerfile
 !/_images/temporary/.keep
 .idea/
 db.sqlite3
+/media/

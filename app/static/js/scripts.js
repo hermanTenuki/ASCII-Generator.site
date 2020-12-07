@@ -1,7 +1,4 @@
 $(document).ready(function () {
-    let generated_image_ascii = {};
-    let generated_text_ascii = {};
-
     // Turn on tippy.js tooltips
     tippy('[data-tippy-content]');
 
@@ -35,11 +32,10 @@ $(document).ready(function () {
 
     // Switch url link depending on what input type is selected ("/" for img, "t/" for txt)
     function switch_url_by_input(mode = '') {
-        const root_url_href = window.location.href.replace('/t/', '/');
         if (mode === 'img') {
-            window.history.replaceState({}, 'img2ascii', root_url_href)
+            window.history.replaceState({}, 'img2ascii', img2ascii_relative_link)
         } else if (mode === 'txt') {
-            window.history.replaceState({}, 'txt2ascii', 't/')
+            window.history.replaceState({}, 'txt2ascii', txt2ascii_relative_link)
         }
     }
 
@@ -98,14 +94,16 @@ $(document).ready(function () {
         language_form.submit();
     });
 
-    // Display agreements if 'Agreement - user_agreed_v1' cookie is not found
-    if (Cookies.get('Agreement') !== 'user_agreed_v1') {
+    const current_user_agreement = 'user_agreed_v2';
+
+    // Display agreements if 'Agreement - user_agreed_vX' cookie is not found
+    if (Cookies.get('Agreement') !== current_user_agreement) {
         animate_fade_in($('.agreements'), 200, 1000);
     }
 
-    // If "I Agree" button is clicked in agreements, hide message and set cookie 'Agreement - user_agreed_v1'
+    // If "I Agree" button is clicked in agreements, hide message and set cookie 'Agreement - user_agreed_vX'
     $('.agreements').on('click', 'input[type=button]', function () {
-        Cookies.set('Agreement', 'user_agreed_v1', {expires: 365});
+        Cookies.set('Agreement', current_user_agreement, {expires: 365});
         animate_fade_out($('.agreements'), 0);
     });
 
@@ -301,7 +299,7 @@ $(document).ready(function () {
                 errMessageOutput.textContent = errMessage;
             } else if (supportedExts.indexOf(ext) === -1) {
                 let errMessage =
-                    'Supported formats are: .png, .jpg, .bmp, .gif, .ico, .webp.';
+                    gettext('Supported formats are: .png, .jpg, .bmp, .gif, .ico, .webp.');
                 errMessageOutput.style.display = 'block';
                 errMessageOutput.textContent = errMessage;
                 // return '';
@@ -444,6 +442,10 @@ $(document).ready(function () {
 
     // Bring back image upload form by clicking "New image" btn
     $('section.index .ascii-image-output').on('click', '.new_file img', function () {
+        img2ascii_relative_link = '/';
+        switch_url_by_input('img');
+        remove_report_button_from_img();
+
         $('section.index .ascii-image-output').addClass('hide');
         animate_fade_in($('section.index .file-upload__modal'));
     });
@@ -553,6 +555,10 @@ $(document).ready(function () {
         const cur_elem = $(this);
         const output_div = $('section.index .ascii-text-output');
 
+        txt2ascii_relative_link = '/t/';
+        switch_url_by_input('txt');
+        remove_report_button_from_txt();
+
         const placement = cur_elem.offset().top + 10;
         cur_elem.find('input[type=submit]').attr('disabled', '');
         $('body').append( // animated loading circle
@@ -592,7 +598,7 @@ $(document).ready(function () {
             }
         });
         return false;
-    })
+    });
 
     // Screenshot and save image ASCII-art
     $("#button_art_download").click(function () {
@@ -629,7 +635,6 @@ $(document).ready(function () {
 
 
     // ASCII-arts adaptations on resize
-    // Can't implement this with just styling
     function resize_ascii_image_art() {
         const art_div = $('section.index .ascii-image-output .ascii-art');
         const font_size = parseInt(art_div.css('font-size'));
@@ -644,5 +649,185 @@ $(document).ready(function () {
     // ^
     window.onresize = function () {
         resize_ascii_image_art();
-    }
+    };
+
+    // Variable to determine what to share
+    let share_ascii_type = 'none';
+
+    // Display share ascii window on button click (and change it's text with variable)
+    $('section.index').on('click', '.button_art_share', function () {
+        if ($(this).hasClass('img_share')) {
+            share_ascii_type = 'img_share_type';
+            $('#ascii-share-dialog p.text').text(gettext('Are you sure that you want to share your uploaded image and generated results with access by link?'));
+        } else if ($(this).hasClass('txt_share')) {
+            share_ascii_type = 'txt_share_type';
+            $('#ascii-share-dialog p.text').text(gettext('Are you sure that you want to share your input text and generated results with access by link?'));
+        }
+        $('body').addClass('overflowHidden');
+        animate_fade_in($('.ascii-share-dialog-dark-background'), 400);
+    });
+
+    // Close share ascii window on X button click and revert to initial state
+    $('.ascii-share-dialog-dark-background img.close').on('click',function () {
+        const submit_btn = $('#ascii-share-dialog input[type=button]');
+        $('body').removeClass('overflowHidden');
+        animate_fade_out($('.ascii-share-dialog-dark-background'), 200);
+        setTimeout(function () {
+            $('#ascii-share-dialog p.error').remove();
+            submit_btn.removeAttr('disabled');
+            animate_fade_in(submit_btn, 0);
+        }, 200);
+    });
+
+    // Ajax to share ascii and redirect to new page
+    $('#ascii-share-dialog input[type=button]').on('click', function () {
+        const cur_elem = $(this);
+        const cur_ascii_img = $('section.index .ascii-image-output .image img');
+        const loading_twirl = $('#ascii-share-dialog .loading_twirl');
+        const p_text = $('#ascii-share-dialog p.text');
+
+        $('#ascii-share-dialog p.error').remove();
+        cur_elem.removeAttr('style');
+        cur_elem.attr('disabled', '');
+        animate_fade_in(loading_twirl, 200);
+
+        let data = null;
+        if (share_ascii_type === 'img_share_type') {
+            data = $('section.index .ascii-image-output .options_container form').serialize();
+            data += '&file_name=' + cur_ascii_img.data('file_name');
+            data += '&preferred_output_method=' + $('section.index .ascii-image-output .second_row .chosen').data('method_id');
+        } else if (share_ascii_type === 'txt_share_type') {
+            data = $('section.index .txt2ascii-input form.txt2ascii-form').serialize();
+            data += '&preferred_output_method=' + $('section.index .ascii-text-output .second_row select option:selected').text();
+        }
+
+        $.ajax({
+            url: cur_elem.data('share-url'),
+            type: 'POST',
+            data: data,
+            error: function (response) {
+                p_text.after('<p class="error">Error occurred.</p>');
+                cur_elem.removeAttr('disabled');
+            },
+            success: function (response) {
+                animate_fade_out(cur_elem, 200);
+                const shared_url = response['shared_redirect_url'];
+                const new_combined_share_url = location.origin + shared_url;
+                const new_combined_short_share_url = location.host + shared_url;
+                p_text.html('<span class="success">'+gettext("Success!")+'</span> '+gettext('Your new link:')+'<br><a class="a_underline_animation_primary" href="'+new_combined_share_url+'">'+new_combined_short_share_url+'</a>')
+            },
+            complete: function (response) {
+                animate_fade_out(loading_twirl, 200);
+            }
+        });
+    });
+
+    // if we are on share img2ascii page, re-render
+    if (img_share_onload_render) {
+        update_displayed_image_options(onload_img_share_options);
+        update_displayed_image_art();
+    };
+
+    // if we are on share txt2ascii page, re-render
+    if (txt_share_onload_render) {
+        update_displayed_text_art();
+    };
+
+    function remove_report_button_from_img() {
+        const buttons = $('section.index .ascii-image-output .buttons.first_row');
+        const report_button = buttons.find('#button_art_report');
+        const share_button = buttons.find('.button_art_share');
+
+        if (share_button.parent().hasClass('hide')) {
+            report_button.parent().addClass('hide');
+            share_button.parent().removeClass('hide');
+        }
+    };
+
+    function remove_report_button_from_txt() {
+        const buttons = $('section.index .ascii-text-output .buttons.first_row');
+        const report_button = buttons.find('#button_art_report');
+        const share_button = buttons.find('.button_art_share');
+
+        if (share_button.parent().hasClass('hide')) {
+            report_button.parent().addClass('hide');
+            share_button.parent().removeClass('hide');
+        }
+    };
+
+    // Display report ascii window on button click
+    $('section.index').on('click', '#button_art_report', function () {
+        $('body').addClass('overflowHidden');
+        animate_fade_in($('.ascii-report-dialog-dark-background'), 400);
+    });
+
+    // Close report ascii window on X button click
+    $('.ascii-report-dialog-dark-background img.close').on('click',function () {
+        $('body').removeClass('overflowHidden');
+        animate_fade_out($('.ascii-report-dialog-dark-background'), 200);
+    });
+
+    // Send ajax-request for report form
+    $('#ascii-report-dialog').on('submit', 'form', function () {
+        const cur_elem = $(this);
+        cur_elem.find('p.error').remove();
+
+        const placement = cur_elem.offset().top;
+        cur_elem.find('input[type=submit]').attr('disabled', '');
+        $('body').append( // animated loading circle
+            '<div class="circle-loader-div" style="top: ' + placement + 'px; z-index: 100000;">\n' +
+            '    <div class="circle-loader">\n' +
+            '        <div class="checkmark draw"></div>\n' +
+            '    </div>\n' +
+            '</div>'
+        );
+
+        $.ajax({
+            url: cur_elem.attr('action'),
+            type: 'POST',
+            data: cur_elem.serialize(),
+            error: function (response) {
+                const errors = response.responseJSON['errors'];
+                let error_obj = errors['text'];
+                if (error_obj) {
+                    for (let key in Object.keys(error_obj)) {
+                        cur_elem.find('#id_text').after(
+                            '<p class="error">' + error_obj[key] + '</p>'
+                        )
+                    }
+                }
+                error_obj = errors['email'];
+                if (error_obj) {
+                    for (let key in Object.keys(error_obj)) {
+                        cur_elem.find('#id_email').after(
+                            '<p class="error">' + error_obj[key] + '</p>'
+                        )
+                    }
+                }
+                error_obj = errors['captcha'];
+                if (error_obj) {
+                    for (let key in Object.keys(error_obj)) {
+                        cur_elem.find('#id_captcha').after(
+                            '<p class="error">' + error_obj[key] + '</p>'
+                        )
+                    }
+                }
+                $('.circle-loader').css({'border-color': '#ff2635'});
+                animate_fade_out($('.circle-loader-div'), 250, 250, true);
+            },
+            success: function (response) {
+                cur_elem[0].reset();
+                $('.circle-loader').toggleClass('load-complete');
+                $('.circle-loader .checkmark').toggle();
+                animate_fade_out($('.circle-loader-div'), 500, 1000, true);
+                $('body').removeClass('overflowHidden');
+                animate_fade_out($('.ascii-report-dialog-dark-background'), 200);
+            },
+            complete: function (response) {
+                cur_elem.find('input[type=submit]').removeAttr('disabled');
+                grecaptcha.reset();
+            }
+        });
+        return false
+    });
 });

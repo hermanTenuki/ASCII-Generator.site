@@ -9,11 +9,11 @@
                 <h3>{% translate 'About' %}</h3>
                 {% comment %}Translators: That's not important, but you can change english wikipedia page link to your's language page if it's exists (sometimes it won't work due slug in link).{% endcomment %}
                 <p>{% blocktranslate %}On this website, you can generate ASCII arts out of any image or text. Use two upper buttons to switch between both types of input. If you don't know what ASCII art is, check out <a href="https://en.wikipedia.org/wiki/ASCII_art">this Wikipedia page</a>.{% endblocktranslate %}</p>
-                {% translate 'New image' as action1 %}
-                {% translate 'Invert colors' as action2 %}
-                {% translate 'Copy to clipboard' as action3 %}
-                {% translate 'Download ASCII art as .png' as action4 %}
-                <p>{% blocktranslate %}Once you uploaded the image, the generated ASCII-art will be shown. With a slider, you can compare the original picture to art. Under it, you can use some action buttons like "{{ action1 }}", "{{ action2 }}", "{{ action3 }}" and "{{ action4 }}". Below them, you can switch between different art types and apply options to them. Also on the left side of the art, you can adjust font-size. For example, if the final art is a bit messy, you can try to raise the number of columns and contrast, as lowering font-size.{% endblocktranslate %}</p>
+{#                {% translate 'New image' as action1 %}#}
+{#                {% translate 'Invert colors' as action2 %}#}
+{#                {% translate 'Copy to clipboard' as action3 %}#}
+{#                {% translate 'Download ASCII art as .png' as action4 %}#}
+{#                <p>{% blocktranslate %}Once you uploaded the image, the generated ASCII-art will be shown. With a slider, you can compare the original picture to art. Under it, you can use some action buttons like "{{ action1 }}", "{{ action2 }}", "{{ action3 }}" and "{{ action4 }}". Below them, you can switch between different art types and apply options to them. Also on the left side of the art, you can adjust font-size. For example, if the final art is a bit messy, you can try to raise the number of columns and contrast, as lowering font-size.{% endblocktranslate %}</p>#}
                 {% translate 'Please, star us on GitHub' as Please_star_us_text %}
                 <p>{% blocktranslate with hermanTenuki='<a href="https://github.com/hermanTenuki">hermanTenuki</a>' license='<a href="https://github.com/hermanTenuki/ASCII-Generator.site/blob/master/LICENSE">MIT-License - Copyright (c) 2020 Herman Schechkin</a>' GitHubPage='https://github.com/hermanTenuki/ASCII-Generator.site' %}This project is made by {{ hermanTenuki }}. All the code can be found on <a href="{{ GitHubPage }}" title="{{ Please_star_us_text }}">it's GitHub page</a>, it is distributing under open-source {{ license }}.{% endblocktranslate %}</p>
                 <p>{% blocktranslate %}For generating ASCII arts from images or text, three different sources were used:{% endblocktranslate %}</p>
@@ -24,7 +24,7 @@
                 </ul>
                 {% url 'feedback_url' as URL_feedback_url %}
                 <p>{% blocktranslate with email='<a href="mailto:itseasy322@gmail.com">itseasy322@gmail.com</a>' GitHubIssuesLINK='<a href="https://github.com/hermanTenuki/ASCII-Generator.site/issues">GitHub issues</a>' %}If you want to contact me, suggest any improvement/idea, or report a bug, you can use {{ email }} email, <a href="{{ URL_feedback_url }}">Feedback</a> page or {{ GitHubIssuesLINK }}.{% endblocktranslate %}</p>
-                <p>{% blocktranslate with Freepik='<a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a>' Flaticon='<a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>' %}Icons made by {{ Freepik }} from {{ Flaticon }}.{% endblocktranslate %}</p>
+                <p>{% blocktranslate with Freepik='<a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a>' Flaticon='<a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>' PixelPerfect='<a href="https://www.flaticon.com/authors/pixel-perfect" title="Pixel Perfect">Pixel Perfect</a>' %}Icons made by {{ Freepik }} and {{ PixelPerfect }} from {{ Flaticon }}.{% endblocktranslate %}</p>
                 {% url 'policy_privacy_url' as URL_policy_privacy_url %}
                 {% url 'policy_cookie_url' as URL_policy_cookie_url %}
                 {% translate 'Privacy Policy' as Privacy_Policy %}

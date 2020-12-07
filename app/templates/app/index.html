@@ -8,7 +8,7 @@
             <h1 class="h1-page-title">ASCII-Generator</h1>
             <div class="img2ascii-input {% if app_txt_mode %}hide{% endif %}">
                 <h2 class="h2-method-desc">{% translate 'Upload an image file to convert it to ASCII art' %}</h2>
-                <div class="file-upload__modal" role="section">
+                <div class="file-upload__modal{% if ascii_obj and not app_txt_mode %} hide{% endif %}" role="section">
                     {# https://codepen.io/mmhuntsberry/pen/QowZwR #}
                     <p class="file-upload__modal-title" role="heading">{% translate 'UPLOAD IMAGE' %}</p>
                     <p class="file-upload__error" role="alertdialog"></p>
@@ -36,7 +36,7 @@
                         </label>
                     </form>
                 </div>
-                <div class="ascii-image-output hide">
+                <div class="ascii-image-output {% if not ascii_obj or app_txt_mode %} hide{% endif %}">
                     <div class="container_slider">
                         <div class="font-size_config">
                             <div class="font-size_up">
@@ -49,7 +49,7 @@
                         </div>
                         <div class="slider-window">
                             <div class="image" id="image_slider">
-                                <img src="">
+                                <img src="{% if ascii_obj and not app_txt_mode %}{{ ascii_obj.image_to_ascii_type.input_image.url }}{% endif %}"{% if ascii_obj and not app_txt_mode %} data-file_name="{{ ascii_obj.image_to_ascii_type.input_image.name }}"{% endif %}>
                             </div>
                             <div class="ascii-art" id="art_download"></div>
                         </div>
@@ -74,17 +74,31 @@
                             </div>
                             <div class="download_art">
                                 <img src="{% static 'svg/download.svg' %}" width="40" height="40"
-                                     data-tippy-content="{% translate 'Download ASCII art as .png' %}" id="button_art_download"
+                                     data-tippy-content="{% translate 'Download ASCII art as .png' %}"
+                                     id="button_art_download"
                                      alt="{% translate 'Download ASCII art as .png' %}">
+                            </div>
+                            <div class="share_art{% if ascii_obj and not app_txt_mode %} hide{% endif %}">
+                                <img src="{% static 'svg/share.svg' %}" width="40" height="40"
+                                     data-tippy-content="{% translate 'Share with access by link' %}"
+                                     class="button_art_share img_share"
+                                     alt="{% translate 'Share with access by link' %}">
+                            </div>
+                            <div class="report_art{% if not ascii_obj or app_txt_mode %} hide{% endif %}">
+                                <img src="{% static 'svg/report.svg' %}" width="40" height="40"
+                                     {% comment %}Translators: Report is like "to complain"{% endcomment %}
+                                     data-tippy-content="{% translate 'Report' %}"
+                                     id="button_art_report"
+                                     alt="{% translate 'Report' %}">
                             </div>
                         </div>
                     </div>
                     <div class="grid_container">
                         <div class="buttons second_row">
-                            <div class="method_1 chosen" data-method_id="0">1</div>
-                            <div class="method_2" data-method_id="1">2</div>
-                            <div class="method_3" data-method_id="2">3</div>
-                            <div class="method_4" data-method_id="3">4</div>
+                            <div class="method_1{% if ascii_obj and not app_txt_mode %}{% if ascii_obj.preferred_output_method == '0' %} chosen{% endif %}{% else %} chosen{% endif %}" data-method_id="0">1</div>
+                            <div class="method_2{% if ascii_obj and not app_txt_mode and ascii_obj.preferred_output_method == '1' %} chosen{% endif %}" data-method_id="1">2</div>
+                            <div class="method_3{% if ascii_obj and not app_txt_mode and ascii_obj.preferred_output_method == '2' %} chosen{% endif %}" data-method_id="2">3</div>
+                            <div class="method_4{% if ascii_obj and not app_txt_mode and ascii_obj.preferred_output_method == '3' %} chosen{% endif %}" data-method_id="3">4</div>
                         </div>
                     </div>
                     <div class="options_container">
@@ -126,19 +140,19 @@
                     {% csrf_token %}
                     <div class="single-line_text">
                         <div class="inline-grid_inline-text">
-                            <input name="txt" type="text" placeholder="Hello World" maxlength="256">
+                            <input name="txt" type="text" placeholder="Hello World" maxlength="256"{% if ascii_obj and app_txt_mode and not ascii_obj.text_to_ascii_type.multi_line_mode %} value="{{ ascii_obj.text_to_ascii_type.input_text }}"{% endif %}>
                             <input type="submit" value="GO" class="btn_2">
                         </div>
                     </div>
                     <div class="multi-line_text hide">
-                        <textarea name="txt_multi" placeholder="Hello&#10;World" maxlength="256"></textarea>
+                        <textarea name="txt_multi" placeholder="Hello&#10;World" maxlength="256">{% if ascii_obj and app_txt_mode and ascii_obj.text_to_ascii_type.multi_line_mode %}{{ ascii_obj.text_to_ascii_type.input_text }}{% endif %}</textarea>
                         <input type="submit" value="GO" class="btn_2">
                     </div>
                     <input type="checkbox" id="multiple_strings_checkbox" name="multiple_strings"
-                           style="position: absolute; opacity: 0">
+                           style="position: absolute; opacity: 0"{% if ascii_obj and app_txt_mode and ascii_obj.text_to_ascii_type.multi_line_mode %} checked{% endif %}>
                     <label class="label_checkbox" for="multiple_strings_checkbox">{% translate 'Multi-line mode' %}</label>
                 </form>
-                <div class="ascii-text-output hide">
+                <div class="ascii-text-output{% if not app_txt_mode or not ascii_obj %} hide{% endif %}">
                     <div id="ascii-text-output-resize-textarea">
                         <textarea name="output" value="" wrap="off" readonly></textarea>
                     </div>
@@ -158,6 +172,19 @@
                                 <img src="{% static 'svg/copy.svg' %}" width="40" height="40"
                                      data-tippy-content="{% translate 'Copy to clipboard' %}"
                                      alt="{% translate 'Copy to clipboard' %}">
+                            </div>
+                            <div class="share_art{% if ascii_obj and app_txt_mode %} hide{% endif %}">
+                                <img src="{% static 'svg/share.svg' %}" width="40" height="40"
+                                     data-tippy-content="{% translate 'Share with access by link' %}"
+                                     class="button_art_share txt_share"
+                                     alt="{% translate 'Share with access by link' %}">
+                            </div>
+                            <div class="report_art{% if not ascii_obj or not app_txt_mode %} hide{% endif %}">
+                                <img src="{% static 'svg/report.svg' %}" width="40" height="40"
+                                     {% comment %}Translators: Report is like "to complain"{% endcomment %}
+                                     data-tippy-content="{% translate 'Report' %}"
+                                     id="button_art_report"
+                                     alt="{% translate 'Report' %}">
                             </div>
                         </div>
                     </div>
@@ -182,6 +209,68 @@
             </div>
         </div>
     </section>
+     <div class="ascii-share-dialog-dark-background hide">
+         <div id="ascii-share-dialog">
+            <img src="{% static 'svg/close.svg' %}" alt="Close" class="close" height="38" width="38">
+            <h3 class="title">{% translate 'Share with access by link' %}</h3>
+            <p class="text">{% if not app_txt_mode %}Are you sure that you want to share your uploaded image and generated results with access by link?{% else %}Are you sure that you want to share your input text and generated results with access by link?{% endif %}</p>
+            <div class="loading_twirl hide" style="transform: translateX(-50%) translateY(19px)">
+                <img src="{% static 'svg/loading twirl.svg' %}" alt="">
+            </div>
+            <input type="button" value="{% translate 'Yes' %}" class="btn_1" data-share-url="{% url 'ascii_share_url' %}">
+        </div>
+    </div>
+    {% if ascii_obj %}
+    <div class="ascii-report-dialog-dark-background hide">
+        <div id="ascii-report-dialog">
+            <img src="{% static 'svg/close.svg' %}" alt="Close" class="close" height="38" width="38">
+            <h3 class="title">{% translate 'Report' %}</h3>
+            <form action="{% url 'ascii_report_url' ascii_url_code=ascii_obj.url_code %}" method="POST">
+                {% csrf_token %}
+                {{ report_form.text }}
+                {{ report_form.email }}
+                <div class="captcha-div">
+                    {{ report_form.captcha }}
+                </div>
+                <input type="submit" value="{% translate 'Send' %}" class="btn_1">
+            </form>
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}
+
+{% block body_end_before_scripts %}
+    <script type="text/javascript">
+        // Objects to store generated results
+        let generated_image_ascii = {};
+        let generated_text_ascii = {};
+
+        let img_share_onload_render = false;
+        let txt_share_onload_render = false;
+
+        let img2ascii_relative_link = '/';
+        let txt2ascii_relative_link = '/t/';
+
+        {% if ascii_obj and not app_txt_mode %}
+            img_share_onload_render = true;
+            img2ascii_relative_link = window.location.pathname;
+            const onload_img_share_options = {
+                "num_cols": "{{ ascii_obj.image_to_ascii_type.options.columns }}",
+                "brightness": "{{ ascii_obj.image_to_ascii_type.options.brightness }}",
+                "contrast": "{{ ascii_obj.image_to_ascii_type.options.contrast }}",
+            };
+        {% for output in ascii_obj.outputs.all %}generated_image_ascii['{{ output.method_name|add:-1 }}'] = "{{ output.ascii_txt|escapejs }}".replace(new RegExp("&" + "#" + "x27;", "g"), "'");
+        {% endfor %}
+        {% endif %}
+        {% if ascii_obj and app_txt_mode %}
+            txt_share_onload_render = true;
+            txt2ascii_relative_link = window.location.pathname;
+            {% for output in ascii_obj.outputs.all %}
+                $('#select-method').append('<option value="{{ forloop.counter0 }}"{% if output.method_name == ascii_obj.preferred_output_method %} selected{% endif %}>{{ output.method_name|escapejs }}</option>');
+                generated_text_ascii['{{ forloop.counter0 }}'] = "{{ output.ascii_txt|escapejs }}".replace(new RegExp("&" + "#" + "x27;", "g"), "'");
+            {% endfor %}
+        {% endif %}
+    </script>
 {% endblock %}
 
 {% block body_end %}

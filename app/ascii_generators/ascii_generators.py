@@ -34,7 +34,7 @@ def _generate_unique_image_path(file_extension, r=0, r_max=10):
     :return: Full path to file, name with extension.
     """
     # Random name to image
-    name = ''.join(random.choices(string.ascii_lowercase + string.digits, k=100))  # 100 symbols for security
+    name = ''.join(random.choices(string.ascii_lowercase + string.digits, k=30))  # 30 symbols for security
     # Making file name
     y = f'{name}{file_extension}'
     # Making path
@@ -90,7 +90,9 @@ def image_to_ascii_generator(request):
     if file_name is not None:  # If we are already having image saved - just need to re-generate arts
         path = os.path.join(settings.TEMPORARY_IMAGES, file_name)
         if not os.path.exists(path):
-            return JsonResponse({}, status=400)
+            path = os.path.join(settings.MEDIA_ROOT, file_name)
+            if not os.path.exists(path):
+                return JsonResponse({}, status=400)
     elif img is not None:  # If we are uploading new image
         # Getting extension of image
         unused_fn, file_extension = os.path.splitext(img.name)
