@@ -108,7 +108,7 @@ def text_to_ascii_generator(request):
 def ascii_detail(request, ascii_url_code):
     ascii_obj = get_object_or_404(GeneratedASCII, url_code=ascii_url_code)
     try:
-        exists = ascii_obj.image_to_ascii_type
+        _ = ascii_obj.image_to_ascii_type
         app_txt_mode = False
     except ImageToASCIIType.DoesNotExist:
         app_txt_mode = True
@@ -122,7 +122,7 @@ def _generate_unique_image_path(file_extension, r=0, r_max=10):
     """
     name = ''.join(random.choices(string.ascii_lowercase + string.digits, k=50))
     y = f'{name}{file_extension}'
-    x = os.path.join(settings.MEDIA_ROOT, y)
+    x = os.path.join(settings.MEDIA_ROOT, 'input_images/', y)
     if os.path.exists(x):
         if r >= r_max:
             return None, None
@@ -139,11 +139,15 @@ def ascii_share(request):
             else:
                 img2ascii_mode = False
                 result = {
-                    'txt': request.POST.get('txt', None),
-                    'txt_multi': request.POST.get('txt_multi', None),
+                    'txt': request.POST.get('txt', ''),
+                    'txt_multi': request.POST.get('txt_multi', ''),
                     'arts': ascii_generators.text_to_ascii_generator(request)
                 }
+            if type(result) == JsonResponse:
+                return result
             preferred_output_method = request.POST.get('preferred_output_method', None)
+            if preferred_output_method is None:
+                return JsonResponse({}, status=400)
             ascii_obj = GeneratedASCII.objects.create(preferred_output_method=preferred_output_method)
             ascii_obj.save()
             if img2ascii_mode:

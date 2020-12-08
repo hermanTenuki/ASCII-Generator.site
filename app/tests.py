@@ -2,11 +2,12 @@ from django.test import TestCase
 from django.urls import reverse
 import json
 from unittest import mock
-from .models import Feedback
+from .models import *
 import os
 from django.conf import settings
 import random
 import string
+from django.core.files import File
 
 
 class TestHandler404View(TestCase):
@@ -505,3 +506,387 @@ class TestTextToAsciiGeneratorView(TestCase):
                                     data={'txt': '򣠦ඪ󧯁ⶵӡ؎ᱜ'},
                                     HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 400)
+
+
+class TestAsciiDetailView(TestCase):
+    def test_wrong_ascii_url_code(self):
+        """
+        POST request with un-existing ascii_url_code should return 404
+        """
+        response = self.client.get(reverse('ascii_detail_url', kwargs={'ascii_url_code': '12345'}))
+        self.assertEqual(response.status_code, 404)
+
+    def test_success(self):
+        """
+        POST request right ascii_url_code should return 200
+        """
+        obj = GeneratedASCII.objects.create(preferred_output_method='testing123')
+        response = self.client.get(reverse('ascii_detail_url', kwargs={'ascii_url_code': obj.url_code}))
+        self.assertEqual(response.status_code, 200)
+        obj.delete()
+
+    def test_success_image_to_ascii_type(self):
+        """
+        POST request with right ascii_url_code and ImageToASCIIType should return 200 in Image to ASCII mode
+        """
+        obj = GeneratedASCII.objects.create(preferred_output_method='testing123')
+        file = open('_images/test/test_img_good.jpg', mode='rb')
+        obj_type = ImageToASCIIType.objects.create(generated_ascii=obj)
+        obj_type.input_image.save(
+            'test.jpg',
+            File(file),
+        )
+        obj_type.save()
+        file.close()
+        response = self.client.get(reverse('ascii_detail_url', kwargs={'ascii_url_code': obj.url_code}))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('img2ascii chosen', response.content.decode('utf-8'))
+        self.assertNotIn('txt2ascii chosen', response.content.decode('utf-8'))
+        os.remove('media/input_images/test.jpg')
+        obj.delete()
+
+    def test_success_text_to_ascii_type_single_line(self):
+        """
+        POST request with right ascii_url_code and ImageToASCIIType should return 200 in Text to ASCII mode,
+        also in single line mode
+        """
+        obj = GeneratedASCII.objects.create(preferred_output_method='testing123')
+        file = open('_images/test/test_img_good.jpg', mode='rb')
+        obj_type = TextToASCIIType.objects.create(generated_ascii=obj,
+                                                  input_text='testing')
+        file.close()
+        response = self.client.get(reverse('ascii_detail_url', kwargs={'ascii_url_code': obj.url_code}))
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn('img2ascii chosen', response.content.decode('utf-8'))
+        self.assertIn('txt2ascii chosen', response.content.decode('utf-8'))
+        self.assertNotIn('checked', response.content.decode('utf-8'))
+        obj.delete()
+
+    def test_success_text_to_ascii_type_multi_line(self):
+        """
+        POST request with right ascii_url_code and ImageToASCIIType should return 200 in Text to ASCII mode,
+        also in single line mode
+        """
+        obj = GeneratedASCII.objects.create(preferred_output_method='testing123')
+        file = open('_images/test/test_img_good.jpg', mode='rb')
+        obj_type = TextToASCIIType.objects.create(generated_ascii=obj,
+                                                  input_text='testing\ntext',
+                                                  multi_line_mode=True)
+        file.close()
+        response = self.client.get(reverse('ascii_detail_url', kwargs={'ascii_url_code': obj.url_code}))
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn('img2ascii chosen', response.content.decode('utf-8'))
+        self.assertIn('txt2ascii chosen', response.content.decode('utf-8'))
+        self.assertIn('checked', response.content.decode('utf-8'))
+        obj.delete()
+
+
+class TestAsciiShareView(TestCase):
+    def test_non_ajax_requests(self):
+        """
+        Non-ajax requests should return redirect 302
+        """
+        response = self.client.get(reverse('ascii_share_url'))
+        self.assertEqual(response.status_code, 302)
+        response = self.client.post(reverse('ascii_share_url'))
+        self.assertEqual(response.status_code, 302)
+
+    def test_ajax_get_request(self):
+        """
+        Ajax GET should return 405 method not allowed
+        """
+        response = self.client.get(reverse('ascii_share_url'), HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, 405)
+
+    def test_ajax_post_no_data(self):
+        """
+        Ajax POST without any data should return 400
+        """
+        response = self.client.post(reverse('ascii_share_url'), HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+                                    data={})
+        self.assertEqual(response.status_code, 400)
+
+    def test_ajax_blank_singleline_text(self):
+        """
+        Ajax POST to share blank single-line text should return 200 and create new objects in database
+        """
+        response = self.client.post(reverse('ascii_share_url'), HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+                                    data={'preferred_output_method': 'alpha'})
+        json_content = json.loads(response.content, encoding='utf-8')
+        self.assertEqual(response.status_code, 200)
+        obj = GeneratedASCII.objects.first()
+        self.assertEqual(obj.preferred_output_method, 'alpha')
+        self.assertFalse(obj.is_hidden)
+        self.assertEqual(obj.text_to_ascii_type.input_text, '')
+        self.assertFalse(obj.text_to_ascii_type.multi_line_mode)
+        self.assertIsNotNone(json_content.get('shared_redirect_url', None))
+        OutputASCII.objects.get(generated_ascii=obj, method_name='alpha')
+        obj.delete()
+
+    def test_ajax_blank_multiline_text(self):
+        """
+        Ajax POST to share blank multi-line text should return 200 and create new objects in database
+        """
+        response = self.client.post(reverse('ascii_share_url'), HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+                                    data={'preferred_output_method': 'alpha',
+                                          'multiple_strings': True})
+        json_content = json.loads(response.content, encoding='utf-8')
+        self.assertEqual(response.status_code, 200)
+        obj = GeneratedASCII.objects.first()
+        self.assertEqual(obj.preferred_output_method, 'alpha')
+        self.assertFalse(obj.is_hidden)
+        self.assertEqual(obj.text_to_ascii_type.input_text, '')
+        self.assertTrue(obj.text_to_ascii_type.multi_line_mode)
+        self.assertIsNotNone(json_content.get('shared_redirect_url', None))
+        OutputASCII.objects.get(generated_ascii=obj, method_name='alpha')
+        obj.delete()
+
+    def test_ajax_singleline_text(self):
+        """
+        Ajax POST to share single-line text should return 200 and create new objects in database
+        """
+        response = self.client.post(reverse('ascii_share_url'), HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+                                    data={'preferred_output_method': 'alpha',
+                                          'txt': 'single line text',
+                                          'txt_multi': 'multi line\ntext'})
+        json_content = json.loads(response.content, encoding='utf-8')
+        self.assertEqual(response.status_code, 200)
+        obj = GeneratedASCII.objects.first()
+        self.assertEqual(obj.preferred_output_method, 'alpha')
+        self.assertFalse(obj.is_hidden)
+        self.assertEqual(obj.text_to_ascii_type.input_text, 'single line text')
+        self.assertFalse(obj.text_to_ascii_type.multi_line_mode)
+        self.assertIsNotNone(json_content.get('shared_redirect_url', None))
+        OutputASCII.objects.get(generated_ascii=obj, method_name='alpha')
+        obj.delete()
+
+    def test_ajax_multiline_text(self):
+        """
+        Ajax POST to share multi-line text should return 200 and create new objects in database
+        """
+        response = self.client.post(reverse('ascii_share_url'), HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+                                    data={'preferred_output_method': 'alpha',
+                                          'txt': 'single line text',
+                                          'txt_multi': 'multi line\ntext',
+                                          'multiple_strings': True})
+        json_content = json.loads(response.content, encoding='utf-8')
+        self.assertEqual(response.status_code, 200)
+        obj = GeneratedASCII.objects.first()
+        self.assertEqual(obj.preferred_output_method, 'alpha')
+        self.assertFalse(obj.is_hidden)
+        self.assertEqual(obj.text_to_ascii_type.input_text, 'multi line\ntext')
+        self.assertTrue(obj.text_to_ascii_type.multi_line_mode)
+        self.assertIsNotNone(json_content.get('shared_redirect_url', None))
+        OutputASCII.objects.get(generated_ascii=obj, method_name='alpha')
+        obj.delete()
+
+    def test_ajax_image_wrong_file_name(self):
+        """
+        Ajax POST with wrong file_name should return 400
+        """
+        response = self.client.post(reverse('ascii_share_url'), HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+                                    data={'preferred_output_method': '1',
+                                          'file_name': 'wrong file name.txt'})
+        self.assertEqual(response.status_code, 400)
+
+    def test_ajax_image_success(self):
+        """
+        Ajax POST with right file_name should return 200 and create new objects in database
+        """
+        file = open('_images/test/test_img_good.jpg', mode='rb')
+        with open('_images/temporary/test_img_good.jpg', mode='wb') as file_new:
+            file_new.write(file.read())
+        file.close()
+        response = self.client.post(reverse('ascii_share_url'), HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+                                    data={'preferred_output_method': '1',
+                                          'file_name': 'test_img_good.jpg'})
+        json_content = json.loads(response.content, encoding='utf-8')
+        self.assertEqual(response.status_code, 200)
+        obj = GeneratedASCII.objects.first()
+        self.assertEqual(obj.preferred_output_method, '1')
+        self.assertFalse(obj.is_hidden)
+        self.assertIsNotNone(json_content.get('shared_redirect_url', None))
+        image_to_ascii_type = ImageToASCIIType.objects.get(generated_ascii=obj)
+        image_to_ascii_options = ImageToASCIIOptions.objects.get(image_to_ascii_type=image_to_ascii_type)
+        OutputASCII.objects.get(generated_ascii=obj, method_name='1')
+        self.assertEqual(image_to_ascii_options.columns, '90')
+        self.assertEqual(image_to_ascii_options.brightness, '100')
+        self.assertEqual(image_to_ascii_options.contrast, '100')
+        os.remove(image_to_ascii_type.input_image.path)
+        obj.delete()
+
+    def test_ajax_only_image(self):
+        """
+        Ajax POST with right file_name but without preferred_output_image should return 400
+        """
+        file = open('_images/test/test_img_good.jpg', mode='rb')
+        with open('_images/temporary/test_img_good.jpg', mode='wb') as file_new:
+            file_new.write(file.read())
+        file.close()
+        response = self.client.post(reverse('ascii_share_url'), HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+                                    data={'file_name': 'test_img_good.jpg'})
+        self.assertEqual(response.status_code, 400)
+
+    def test_ajax_image_success_with_settings(self):
+        """
+        Ajax POST with right file_name and custom settings should return 200 and create new objects in database
+        """
+        file = open('_images/test/test_img_good.jpg', mode='rb')
+        with open('_images/temporary/test_img_good.jpg', mode='wb') as file_new:
+            file_new.write(file.read())
+        file.close()
+        response = self.client.post(reverse('ascii_share_url'), HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+                                    data={'preferred_output_method': '1',
+                                          'file_name': 'test_img_good.jpg',
+                                          'num_cols': 150,
+                                          'brightness': 50,
+                                          'contrast': 123})
+        json_content = json.loads(response.content, encoding='utf-8')
+        self.assertEqual(response.status_code, 200)
+        obj = GeneratedASCII.objects.first()
+        self.assertEqual(obj.preferred_output_method, '1')
+        self.assertFalse(obj.is_hidden)
+        self.assertIsNotNone(json_content.get('shared_redirect_url', None))
+        image_to_ascii_type = ImageToASCIIType.objects.get(generated_ascii=obj)
+        image_to_ascii_options = ImageToASCIIOptions.objects.get(image_to_ascii_type=image_to_ascii_type)
+        OutputASCII.objects.get(generated_ascii=obj, method_name='1')
+        self.assertEqual(image_to_ascii_options.columns, '150')
+        self.assertEqual(image_to_ascii_options.brightness, '50')
+        self.assertEqual(image_to_ascii_options.contrast, '123')
+        os.remove(image_to_ascii_type.input_image.path)
+        obj.delete()
+
+
+class TestAsciiReportView(TestCase):
+    def _create_ascii_obj(self):
+        file = open('_images/test/test_img_good.jpg', mode='rb')
+        with open('_images/temporary/test_img_good.jpg', mode='wb') as file_new:
+            file_new.write(file.read())
+        file.close()
+        response = self.client.post(reverse('ascii_share_url'), HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+                                    data={'preferred_output_method': '1',
+                                          'file_name': 'test_img_good.jpg'})
+        obj = GeneratedASCII.objects.first()
+        return obj
+
+    def _delete_ascii_obj(self, obj):
+        image_to_ascii_type = ImageToASCIIType.objects.get(generated_ascii=obj)
+        os.remove(image_to_ascii_type.input_image.path)
+        image_to_ascii_type.delete()
+
+    def test_non_ajax(self):
+        """
+        Non-ajax requests should return redirect 302
+        """
+        response = self.client.get(reverse('ascii_report_url', kwargs={'ascii_url_code': 'test'}))
+        self.assertEqual(response.status_code, 302)
+        response = self.client.post(reverse('ascii_report_url', kwargs={'ascii_url_code': 'test'}))
+        self.assertEqual(response.status_code, 302)
+
+    def test_ajax_get_request(self):
+        """
+        Ajax GET should return 405 not allowed
+        """
+        response = self.client.get(reverse('ascii_report_url', kwargs={'ascii_url_code': 'test'}),
+                                   HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, 405)
+
+    def test_ajax_post_wrong_ascii_url_code(self):
+        """
+        Ajax POST with wrong ascii_url_code should return 400 and errors
+        """
+        response = self.client.post(reverse('ascii_report_url', kwargs={'ascii_url_code': 'test'}),
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+                                    data={})
+        json_content = json.loads(response.content, encoding='utf-8')
+        self.assertEqual(response.status_code, 400)
+        self.assertIsNotNone(json_content.get('errors', None))
+
+    @mock.patch("captcha.fields.ReCaptchaField.validate")
+    def test_ajax_success(self, mock):
+        """
+        Ajax POST with right data and capthca should return 200 and create new objects in database
+        """
+        obj = self._create_ascii_obj()
+        response = self.client.post(reverse('ascii_report_url', kwargs={'ascii_url_code': obj.url_code}),
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+                                    data={'text': 'testing text',
+                                          'email': 'example@gmail.com'})
+        json_content = json.loads(response.content, encoding='utf-8')
+        self.assertEqual(response.status_code, 200)
+        self.assertIsNone(json_content.get('errors', None))
+        report_obj = Report.objects.get(generated_ascii=obj)
+        self.assertEqual(report_obj.text, 'testing text')
+        self.assertEqual(report_obj.email, 'example@gmail.com')
+        self._delete_ascii_obj(obj)
+
+    @mock.patch("captcha.fields.ReCaptchaField.validate")
+    def test_ajax_without_email(self, mock):
+        """
+        Ajax POST with right data and without email should return 200 and create new objects in database
+        """
+        obj = self._create_ascii_obj()
+        response = self.client.post(reverse('ascii_report_url', kwargs={'ascii_url_code': obj.url_code}),
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+                                    data={'text': 'testing text'})
+        json_content = json.loads(response.content, encoding='utf-8')
+        self.assertEqual(response.status_code, 200)
+        self.assertIsNone(json_content.get('errors', None))
+        report_obj = Report.objects.get(generated_ascii=obj)
+        self.assertEqual(report_obj.text, 'testing text')
+        self.assertIsNone(report_obj.email)
+        self._delete_ascii_obj(obj)
+
+    @mock.patch("captcha.fields.ReCaptchaField.validate")
+    def test_ajax_with_wrong_email(self, mock):
+        """
+        Ajax POST with right data but wrong email should return 400 with errors
+        """
+        obj = self._create_ascii_obj()
+        response = self.client.post(reverse('ascii_report_url', kwargs={'ascii_url_code': obj.url_code}),
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+                                    data={'text': 'testing text',
+                                          'email': 'wrong email'})
+        json_content = json.loads(response.content, encoding='utf-8')
+        self.assertEqual(response.status_code, 400)
+        self.assertIsNotNone(json_content.get('errors', None))
+
+    def test_ajax_without_captcha(self):
+        """
+        Ajax POST with right data but without captcha should return 400 with errors
+        """
+        obj = self._create_ascii_obj()
+        response = self.client.post(reverse('ascii_report_url', kwargs={'ascii_url_code': obj.url_code}),
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+                                    data={'text': 'testing text',
+                                          'email': 'example@gmail.com'})
+        json_content = json.loads(response.content, encoding='utf-8')
+        self.assertEqual(response.status_code, 400)
+        self.assertIsNotNone(json_content.get('errors', None))
+
+    @mock.patch("captcha.fields.ReCaptchaField.validate")
+    def test_ajax_without_text(self, mock):
+        """
+        Ajax POST without text should return 400 with errors
+        """
+        obj = self._create_ascii_obj()
+        response = self.client.post(reverse('ascii_report_url', kwargs={'ascii_url_code': obj.url_code}),
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+                                    data={'email': 'example@gmail.com'})
+        json_content = json.loads(response.content, encoding='utf-8')
+        self.assertEqual(response.status_code, 400)
+        self.assertIsNotNone(json_content.get('errors', None))
+
+    @mock.patch("captcha.fields.ReCaptchaField.validate")
+    def test_ajax_with_text_beyond_limit(self, mock):
+        """
+        Ajax POST with text length > 1024 should return 400 with errors
+        """
+        obj = self._create_ascii_obj()
+        response = self.client.post(reverse('ascii_report_url', kwargs={'ascii_url_code': obj.url_code}),
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+                                    data={'text': 'a'*1200,
+                                          'email': 'example@gmail.com'})
+        json_content = json.loads(response.content, encoding='utf-8')
+        self.assertEqual(response.status_code, 400)
+        self.assertIsNotNone(json_content.get('errors', None))

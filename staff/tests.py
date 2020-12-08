@@ -123,3 +123,21 @@ class TestStaffLoginLogout(TestCase):
         response = self.client.get(reverse('staff_logout_url'))
         self.assertRedirects(response, '/', status_code=302)
         self.assertNotIn('Logout</a>', response.content.decode('utf-8'))
+
+
+class TestStaffAdminPageBehavior(TestCase):
+    def test_staff_not_logged(self):
+        """
+        If staff not logged, he should not have an access to admin page
+        """
+        response = self.client.get('/staff/admin/')
+        self.assertEqual(response.status_code, 404)
+
+    def test_staff_logged(self):
+        """
+        If staff is logged, he should have an access to admin page
+        """
+        user = _create_staff_user('admin', 'admin')
+        self.client.login(**user)
+        response = self.client.get('/staff/admin/')
+        self.assertEqual(response.status_code, 200)
