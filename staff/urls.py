@@ -1,11 +1,14 @@
-from django.urls import path
+from django.contrib import admin
+from django.urls import path, include
 from .views import *
-from django.contrib.auth.decorators import login_required
+from django.conf import settings
 
 urlpatterns = [
     path('authentication/', staff_authentication, name='staff_authentication_url'),
     path('logout/', staff_logout, name='staff_logout_url'),
-    path('feedback/', staff_feedback, name='staff_feedback_url'),
-    path('feedback/del_all/', staff_feedback_del_all, name='staff_feedback_del_all'),
-    path('feedback/del_spec/', staff_feedback_del_spec, name='staff_feedback_del_spec')
 ]
+
+# If we are in production, turn on admin page by /staff/admin/ instead of just /admin/
+if not settings.DEBUG:
+    urlpatterns.append(path('admin/', admin.site.urls))
+    urlpatterns.append(path('rosetta/', include('rosetta.urls')))

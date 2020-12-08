@@ -34,36 +34,3 @@ def staff_logout(request):
     if request.user.is_authenticated and request.user.is_staff:
         logout(request)
     return redirect('index_page_url')
-
-
-def staff_feedback(request):
-    if (not request.user.is_authenticated) or (not request.user.is_staff):
-        return redirect('index_page_url')
-
-    elif request.method == 'GET':
-        objs = Feedback.objects.all()
-        return render(request, 'staff/feedback.html', context={'objs': objs})
-
-
-def staff_feedback_del_all(request):
-    if request.is_ajax():
-        if request.method == 'POST':
-            if request.user.is_authenticated and request.user.is_staff:
-                Feedback.objects.all().delete()
-                return JsonResponse({}, status=200)
-        return JsonResponse({}, status=400)
-
-
-def staff_feedback_del_spec(request):
-    if request.is_ajax():
-        if request.method == 'POST':
-            if request.user.is_authenticated and request.user.is_staff:
-                obj_id = request.POST.get('obj_id', None)
-                if obj_id is not None:
-                    try:
-                        obj = Feedback.objects.get(id=obj_id)
-                        obj.delete()
-                        return JsonResponse({}, status=200)
-                    except Feedback.DoesNotExist:
-                        pass
-        return JsonResponse({}, status=400)

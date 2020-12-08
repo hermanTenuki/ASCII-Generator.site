@@ -5,7 +5,7 @@
 You can find it at [https://ASCII-Generator.site](https://ascii-generator.site)
 
 > ![demo GIF](.github/media/demo.gif)</br>
-> Example
+> Demo (a bit old for now)
 
 ## Fast local setup
 
@@ -38,9 +38,8 @@ For creating this project, several open-source repositories were used:
 ## Personal Todo
 - [x] ~~Add support for more image file types;~~
 - [x] ~~Implement languages;~~
-- [ ] Option to save generated results with access by link (models are made already);
-- [ ] Integrate neural-network-based image to ASCII-art generator;
-- [ ] SignUp/Login functionality, allowing to save/review results directly in personal account;
+- [x] ~~Option to share generated results with access by link;~~
+- [ ] Integrate neural-network-based image to ASCII art generator;
 - [ ] Video to ASCII.
 
 ## Other
@@ -49,4 +48,4 @@ For creating this project, several open-source repositories were used:
 
 [License](LICENSE).
 
-Icons made by [Freepik](https://www.flaticon.com/authors/freepik) from [www.flaticon.com](https://www.flaticon.com/).
+Icons made by [Freepik](https://www.flaticon.com/authors/freepik) and [Pixel Perfect](https://www.flaticon.com/authors/pixel-perfect) from [www.flaticon.com](https://www.flaticon.com/).

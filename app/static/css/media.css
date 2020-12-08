@@ -93,6 +93,14 @@
     font-size: 24px;
   }
 }
+@media screen and (max-width: 600px) {
+  body #ascii-share-dialog {
+    width: 350px;
+  }
+  body #ascii-share-dialog h3 {
+    max-width: 220px;
+  }
+}
 @media screen and (max-width: 550px) {
   body main section.index .wrapper .ascii-image-output .options_container .options_grid {
     grid-column-gap: unset;
@@ -200,6 +208,14 @@
   }
   body #borders-dashed footer .wrapper .language-switcher {
     grid-area: b;
+  }
+}
+@media screen and (max-width: 450px) {
+  body #ascii-share-dialog {
+    width: 300px;
+  }
+  body #ascii-share-dialog h3 {
+    max-width: 170px;
   }
 }
 @media screen and (max-width: 400px) {

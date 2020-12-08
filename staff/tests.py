@@ -1,9 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
-import json
 from django.contrib.auth.models import User
 from unittest import mock
-from app.models import Feedback
 
 
 def _create_staff_user(username='admin', password='admin'):
@@ -105,148 +103,41 @@ class TestStaffAuthenticationView(TestCase):
         self.assertNotIn('class="error"', response.content.decode('utf-8'))
 
 
-class TestStaffLogout(TestCase):
+class TestStaffLoginLogout(TestCase):
 
-    def test_staff_logged_out(self):
+    def test_staff_logged_in(self):
         """
-        If staff was logged, he should not more see special links, also redirect 302 to main page
+        If staff is logged, he should see special links
         """
         user = _create_staff_user('admin', 'admin')
         self.client.login(**user)
         response = self.client.get(reverse('index_page_url'))
-        self.assertIn('$Logout', response.content.decode('utf-8'))
+        self.assertIn('Logout</a>', response.content.decode('utf-8'))
+
+    def test_staff_logged_out(self):
+        """
+        If staff log out, he should no more see special links and should be redirected to the main page
+        """
+        user = _create_staff_user('admin', 'admin')
+        self.client.login(**user)
         response = self.client.get(reverse('staff_logout_url'))
         self.assertRedirects(response, '/', status_code=302)
-        self.assertNotIn('$Logout', response.content.decode('utf-8'))
+        self.assertNotIn('Logout</a>', response.content.decode('utf-8'))
 
 
-class TestStaffFeedback(TestCase):
+class TestStaffAdminPageBehavior(TestCase):
+    def test_staff_not_logged(self):
+        """
+        If staff not logged, he should not have an access to admin page
+        """
+        response = self.client.get('/staff/admin/')
+        self.assertEqual(response.status_code, 404)
 
-    def test_not_authenticated(self):
+    def test_staff_logged(self):
         """
-        Not authenticated GET should redirect 302
+        If staff is logged, he should have an access to admin page
         """
-        response = self.client.get(reverse('staff_feedback_url'))
-        self.assertEqual(response.status_code, 302)
-
-    def test_normal_user(self):
-        """
-        Authenticated non-staff user GET should redirect 302
-        """
-        user = _create_normal_user()
+        user = _create_staff_user('admin', 'admin')
         self.client.login(**user)
-        response = self.client.get(reverse('staff_feedback_url'))
-        self.assertEqual(response.status_code, 302)
-
-    def test_success(self):
-        """
-        Authenticated staff GET should return 200 and some Feedback objects
-        """
-        obj1 = Feedback.objects.create(text='test1')
-        obj2 = Feedback.objects.create(text='test2', email='example@gmail.com')
-        user = _create_staff_user()
-        self.client.login(**user)
-        response = self.client.get(reverse('staff_feedback_url'))
+        response = self.client.get('/staff/admin/')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context.get('objs', []).count(), 2)
-
-
-class TestStaffFeedbackDelAll(TestCase):
-
-    def test_ajax_get_request(self):
-        """
-        Ajax get-request should return status 400
-        """
-        response = self.client.get(reverse('staff_feedback_del_all'),
-                                   HTTP_X_REQUESTED_WITH='XMLHttpRequest')
-        self.assertEqual(response.status_code, 400)
-
-    def test_non_authenticated(self):
-        """
-        Empty POST ajax should return status 400
-        """
-        response = self.client.post(reverse('staff_feedback_del_all'),
-                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
-        self.assertEqual(response.status_code, 400)
-
-    def test_not_staff_user(self):
-        """
-        POST ajax from normal user should return status 400
-        """
-        user = _create_normal_user()
-        self.client.login(**user)
-        response = self.client.post(reverse('staff_feedback_del_all'),
-                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
-        self.assertEqual(response.status_code, 400)
-
-    def test_success(self):
-        """
-        POST ajax from staff should delete all Feedback objects and return 200
-        """
-        obj1 = Feedback.objects.create(text='test1')
-        obj2 = Feedback.objects.create(text='test2', email='example@gmail.com')
-        self.assertEqual(Feedback.objects.all().count(), 2)
-        user = _create_staff_user()
-        self.client.login(**user)
-        response = self.client.post(reverse('staff_feedback_del_all'),
-                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(Feedback.objects.all().count(), 0)
-
-
-class TestStaffFeedbackDelSpec(TestCase):
-
-    def test_ajax_get_request(self):
-        """
-        Ajax get-request should return status 400
-        """
-        response = self.client.get(reverse('staff_feedback_del_spec'),
-                                   HTTP_X_REQUESTED_WITH='XMLHttpRequest')
-        self.assertEqual(response.status_code, 400)
-
-    def test_non_authenticated(self):
-        """
-        Empty POST ajax should return status 400
-        """
-        response = self.client.post(reverse('staff_feedback_del_spec'),
-                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
-        self.assertEqual(response.status_code, 400)
-
-    def test_not_staff_user(self):
-        """
-        POST ajax from normal user should return status 400
-        """
-        user = _create_normal_user()
-        self.client.login(**user)
-        response = self.client.post(reverse('staff_feedback_del_spec'),
-                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
-        self.assertEqual(response.status_code, 400)
-
-    def test_wrong_id(self):
-        """
-        Wrong id in POST ajax from staff should return 400
-        """
-        user = _create_staff_user()
-        self.client.login(**user)
-        response = self.client.post(reverse('staff_feedback_del_spec'),
-                                    data={'obj_id': 123},
-                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
-        self.assertEqual(response.status_code, 400)
-
-    def test_success(self):
-        """
-        Right id in POST ajax from staff should return 200 and delete specific Feedback
-        """
-        obj1 = Feedback.objects.create(text='test1')
-        obj2 = Feedback.objects.create(text='test2', email='example@gmail.com')
-        obj3 = Feedback.objects.create(text='test3', email='sas222@gmail.com')
-        self.assertEqual(Feedback.objects.all().count(), 3)
-        user = _create_staff_user()
-        self.client.login(**user)
-        response = self.client.post(reverse('staff_feedback_del_spec'),
-                                    data={'obj_id': obj2.id},
-                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(Feedback.objects.all().count(), 2)
-        self.assertEqual(Feedback.objects.all().first().text, 'test1')
-        self.assertEqual(Feedback.objects.all().last().text, 'test3')

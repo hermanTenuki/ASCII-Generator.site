@@ -291,7 +291,7 @@ header nav.mobile-menu {
   display: none;
   z-index: 100;
   bottom: 0;
-  background-color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.95);
   left: 0;
   margin: 0;
   position: fixed;
@@ -299,7 +299,6 @@ header nav.mobile-menu {
   width: 100%;
   transform: translate3d(100%, 0, 0);
   transition: transform .2s linear;
-  opacity: 0.95;
   justify-content: center;
   align-items: center;
 }
@@ -328,7 +327,7 @@ header nav.mobile-menu ul li a {
   font-size: 19px;
   color: #242424;
   transition: 0.2s color;
-  letter-spacing: 1.4px;
+  letter-spacing: 1px;
 }
 main section.index {
   text-align: center;
@@ -705,11 +704,11 @@ main section.index .wrapper .ascii-image-output .grid_container {
   margin-top: 20px;
 }
 main section.index .wrapper .ascii-image-output .grid_container img,
-main section.index .wrapper .ascii-image-output .buttons div {
+main section.index .wrapper .ascii-image-output .buttons div img {
   cursor: pointer;
 }
 main section.index .wrapper .ascii-image-output .buttons {
-  display: grid;
+  display: inline-flex;
   margin: 0 auto;
 }
 main section.index .wrapper .ascii-image-output .buttons div {
@@ -723,13 +722,16 @@ main section.index .wrapper .ascii-image-output .buttons div:after {
   height: 3px;
 }
 main section.index .wrapper .ascii-image-output .buttons.first_row {
-  grid-template-columns: repeat(4, 1fr);
-  width: 210px;
+  justify-content: space-between;
+  grid-column-gap: 10px;
 }
 main section.index .wrapper .ascii-image-output .buttons.second_row {
   grid-template-columns: repeat(4, 1fr);
   width: 175px;
   grid-column-gap: 10px;
+}
+main section.index .wrapper .ascii-image-output .buttons.second_row div {
+  cursor: pointer;
 }
 main section.index .wrapper .ascii-image-output .options_container {
   margin: 0 auto;
@@ -769,20 +771,6 @@ main section.index .wrapper .ascii-image-output .options_container .option span.
   position: absolute;
   transform: translateX(5px) translateY(8px);
 }
-main section.index .wrapper .ascii-image-output .options_container .loading_twirl {
-  position: absolute;
-  text-align: center;
-  left: 50%;
-  transform: translateX(-50%) translateY(31px);
-  height: 26px;
-  width: 26px;
-  pointer-events: none;
-}
-main section.index .wrapper .ascii-image-output .options_container .loading_twirl img {
-  width: 100%;
-  height: 100%;
-  animation: animation-loading-twirl 2s infinite linear;
-}
 main section.index .wrapper .ascii-image-output .options_container input[type=submit] {
   color: #242424;
   display: block;
@@ -821,19 +809,18 @@ main section.index .wrapper .ascii-text-output img {
 }
 main section.index .wrapper .ascii-text-output .buttons {
   height: 100%;
-  display: inline-grid;
+  display: inline-flex;
 }
 main section.index .wrapper .ascii-text-output .grid_container {
   margin-top: 20px;
   height: 40px;
 }
 main section.index .wrapper .ascii-text-output .buttons.first_row {
-  grid-template-columns: repeat(3, 1fr);
-  width: 175px;
+  justify-content: space-between;
+  grid-column-gap: 10px;
 }
 main section.index .wrapper .ascii-text-output .buttons.second_row {
-  grid-template-columns: 40px auto 40px;
-  width: 250px;
+  justify-content: space-between;
   grid-column-gap: 10px;
 }
 main section.index .wrapper .ascii-text-output .buttons.second_row .back img {
@@ -1192,6 +1179,160 @@ footer .wrapper .language-switcher .language-switcher-window span {
   width: unset;
   font-size: 19px;
   transition: background-color 0.2s;
+}
+#ascii-share-dialog {
+  z-index: 10005;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: #242424;
+  font-size: 19px;
+  background-color: #ffffff;
+  border-radius: 25px;
+  padding: 20px;
+  width: 500px;
+  margin: 0 auto;
+  border: 2px dashed #242424;
+}
+#ascii-share-dialog h3 {
+  max-width: 360px;
+  margin: 0 auto;
+  text-align: center;
+  font-family: 'Ubuntu Medium', 'Ubuntu', sans-serif, 'Times New Roman';
+  font-weight: normal;
+  font-size: 24px;
+}
+#ascii-share-dialog a {
+  color: #e93644;
+}
+#ascii-share-dialog p.text {
+  padding-top: 15px;
+  line-height: 27px;
+  text-align: center;
+}
+#ascii-share-dialog p.text span.success {
+  color: #1cb71c;
+}
+#ascii-share-dialog p.text a {
+  font-size: 15px;
+}
+#ascii-share-dialog p.error {
+  padding-top: 10px;
+  text-align: center;
+  font-size: 15px;
+  color: #ff2635;
+}
+#ascii-share-dialog input[type=button] {
+  font-size: 19px;
+  display: block;
+  margin: 15px auto 0 auto;
+  padding: 6px 20px;
+  transition: 0.2s background-color, 0.2s opacity;
+}
+#ascii-share-dialog input[type=button]:disabled {
+  cursor: unset;
+  opacity: 0;
+}
+#ascii-share-dialog img.close {
+  cursor: pointer;
+  position: fixed;
+  right: 15px;
+  top: 15px;
+  border-radius: 50%;
+}
+.loading_twirl {
+  position: absolute;
+  text-align: center;
+  left: 50%;
+  transform: translateX(-50%) translateY(31px);
+  height: 26px;
+  width: 26px;
+  pointer-events: none;
+}
+.loading_twirl img {
+  width: 100%;
+  height: 100%;
+  animation: animation-loading-twirl 2s infinite linear;
+}
+.ascii-share-dialog-dark-background,
+.ascii-report-dialog-dark-background {
+  z-index: 10000;
+  content: '';
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.75);
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+}
+#ascii-report-dialog {
+  z-index: 10005;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: #242424;
+  font-size: 19px;
+  background-color: #ffffff;
+  border-radius: 25px;
+  padding: 20px;
+  width: 344px;
+  margin: 0 auto;
+  border: 2px dashed #242424;
+}
+#ascii-report-dialog h3 {
+  max-width: 200px;
+  margin: 0 auto;
+  text-align: center;
+  font-family: 'Ubuntu Medium', 'Ubuntu', sans-serif, 'Times New Roman';
+  font-weight: normal;
+  font-size: 24px;
+}
+#ascii-report-dialog textarea {
+  margin-top: 25px;
+  height: 74px;
+}
+#ascii-report-dialog textarea,
+#ascii-report-dialog input[type=email] {
+  width: 100%;
+  max-width: 100%;
+  padding: 6px 12px;
+  border: 1px solid #757575;
+}
+#ascii-report-dialog input[type=email] {
+  margin-top: 10px;
+}
+#ascii-report-dialog .captcha-div {
+  margin-top: 15px;
+}
+#ascii-report-dialog p.text {
+  padding-top: 15px;
+  line-height: 27px;
+  text-align: center;
+}
+#ascii-report-dialog p.error {
+  padding-top: 10px;
+  text-align: center;
+  font-size: 15px;
+  color: #ff2635;
+}
+#ascii-report-dialog input[type=submit] {
+  font-size: 19px;
+  display: block;
+  margin: 15px auto 0 auto;
+  padding: 6px 20px;
+  transition: 0.2s background-color, 0.2s opacity;
+}
+#ascii-report-dialog input[type=submit]:disabled {
+  cursor: unset;
+}
+#ascii-report-dialog img.close {
+  cursor: pointer;
+  position: fixed;
+  right: 15px;
+  top: 15px;
+  border-radius: 50%;
 }
 @keyframes animation-loading-twirl {
   from {
