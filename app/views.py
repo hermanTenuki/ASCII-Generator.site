@@ -149,9 +149,8 @@ def ascii_share(request):
             if preferred_output_method is None:
                 return JsonResponse({}, status=400)
             ascii_obj = GeneratedASCII.objects.create(preferred_output_method=preferred_output_method)
-            ascii_obj.save()
             if img2ascii_mode:
-                image_to_ascii_type_obj = ImageToASCIIType.objects.create(
+                image_to_ascii_type_obj = ImageToASCIIType(
                     generated_ascii=ascii_obj,
                 )
                 file = open(os.path.join(settings.TEMPORARY_IMAGES, result.get('file_name')), 'rb')
@@ -168,14 +167,14 @@ def ascii_share(request):
                     columns=result.get('num_cols'),
                     brightness=result.get('brightness'),
                     contrast=result.get('contrast'),
-                ).save()
+                )
                 arts = result.get('arts')
                 for i in range(len(arts)):
                     OutputASCII.objects.create(
                         generated_ascii=ascii_obj,
                         method_name=str(i + 1),
                         ascii_txt=arts[i]
-                    ).save()
+                    )
             else:
                 if not request.POST.get('multiple_strings', False):
                     multi_line_mode = False
@@ -187,14 +186,14 @@ def ascii_share(request):
                     generated_ascii=ascii_obj,
                     input_text=input_text,
                     multi_line_mode=multi_line_mode,
-                ).save()
+                )
                 arts = result.get('arts')
                 for art in arts:
                     OutputASCII.objects.create(
                         generated_ascii=ascii_obj,
                         method_name=art[0],
                         ascii_txt=art[1],
-                    ).save()
+                    )
             return JsonResponse({
                 'shared_redirect_url': reverse('ascii_detail_url', kwargs={'ascii_url_code': ascii_obj.url_code})
             }, status=200)
@@ -214,8 +213,7 @@ def ascii_report(request, ascii_url_code):
             if form.is_valid():
                 Report.objects.create(text=form.cleaned_data['text'],
                                       email=form.cleaned_data['email'],
-                                      generated_ascii=generated_ascii
-                                      ).save()
+                                      generated_ascii=generated_ascii)
                 return JsonResponse({}, status=200)
             return JsonResponse({'errors': form.errors}, status=400)
         return JsonResponse({}, status=405)  # 405 Method Not Allowed
