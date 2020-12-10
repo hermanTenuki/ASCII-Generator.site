@@ -2,7 +2,9 @@
 {% load i18n %}
 
 <!doctype html>
-<html lang="en">
+{% get_current_language as LANGUAGE_CODE %}
+{% get_language_info for LANGUAGE_CODE as local_language %}
+<html lang="{{ local_language.code }}">
 <head>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-176129427-1"></script>

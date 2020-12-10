@@ -23,8 +23,8 @@ For easier translating, this project is using [mbi](https://github.com/mbi) / [d
 
 To translate, do the following steps:
 
-- Create language files with ```python makemessages -l ru_RU``` where ```ru_RU``` - your language's code (that's actually Russian's language code);
-- Create JavaScript language files with ```python makemessages -d djangojs -l ru_RU``` where ```ru_RU``` - your language's code;
+- Create language files with ```python manage.py makemessages -l ru_RU``` where ```ru_RU``` - your language's code (that's actually Russian's language code);
+- Create JavaScript language files with ```python manage.py makemessages -d djangojs -l ru_RU``` where ```ru_RU``` - your language's code;
 - Add language code and it's original name to ```LANGUAGES``` variable in ```project/settings.py```;
 - Create admin account by typing ```python manage.py createsuperuser```;
 - Start server by ```python manage.py runserver```;
@@ -35,7 +35,7 @@ To translate, do the following steps:
 
 That's all! No need in compiling messages. Make sure you are browsed translated website for issues.
 
-Also, in ```LC_MESSAGES/django.po``` file don't forget to add yourself under ```AUTHORS LIST: NAME <EMAIL@ADDRESS>, YEAR.``` and replace ```"Last-Translator: b'NAME <EMAIL@ADDRESS>'\n"```.
+Also, in ```LC_MESSAGES/django.po``` and ```LC_MESSAGES/djangojs.po``` files don't forget to add yourself under ```AUTHORS LIST: NAME <EMAIL@ADDRESS>, YEAR.``` and replace ```"Last-Translator: b'NAME <EMAIL@ADDRESS>'\n"```.
 
 P.S. Privacy Policy and Cookie Policy NOT translated, otherwise it would be cruel.
 
