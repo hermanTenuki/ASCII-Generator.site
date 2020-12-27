@@ -885,8 +885,46 @@ class TestAsciiReportView(TestCase):
         obj = self._create_ascii_obj()
         response = self.client.post(reverse('ascii_report_url', kwargs={'ascii_url_code': obj.url_code}),
                                     HTTP_X_REQUESTED_WITH='XMLHttpRequest',
-                                    data={'text': 'a'*1200,
+                                    data={'text': 'a' * 1200,
                                           'email': 'example@gmail.com'})
         json_content = json.loads(response.content, encoding='utf-8')
         self.assertEqual(response.status_code, 400)
         self.assertIsNotNone(json_content.get('errors', None))
+
+
+class TestLanguageURLRedirectMiddleware(TestCase):
+    def test_wrong_language(self):
+        """
+        If specified url is wrong, 404.
+        """
+        response = self.client.get('/jp123/about/')
+        self.assertEqual(response.status_code, 404)
+
+    def test_english_language(self):
+        """
+        If specified url is right, 200 and activate english language.
+        """
+        response = self.client.get('/en/about/', follow=True)
+        content = response.content.decode('utf-8')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Image to ASCII', content)
+        self.assertIn('This project is made by', content)
+
+    def test_russian_language(self):
+        """
+        If specified url is right, 200 and activate russian language.
+        """
+        response = self.client.get('/ru/about/', follow=True)
+        content = response.content.decode('utf-8')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Изображение в ASCII', content)
+        self.assertIn('Этот проект сделал', content)
+
+    def test_in_root_url(self):
+        """
+        Root url should work too.
+        """
+        response = self.client.get('/en')
+        self.assertEqual(response.status_code, 302)
+        response = self.client.get('/en/')
+        self.assertEqual(response.status_code, 302)

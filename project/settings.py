@@ -71,6 +71,8 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'staff.middleware.RestrictStaffToAdminMiddleware',  # Restrict staff to admin page
     'django.middleware.locale.LocaleMiddleware',
+    # If language code is in url - set desired language and redirect to the same but normal url without lang code
+    'app.middleware.LanguageURLRedirectMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -152,9 +154,11 @@ LOCALE_PATHS = (
 
 LANGUAGE_CODE = 'en-us'
 
+LANGUAGES_SHORT_CODES = ('en', 'ru',)
+
 LANGUAGES = (
     ('en-us', 'English'),
-    ('ru-RU', 'Русский')
+    ('ru-RU', 'Русский'),
 )
 
 TIME_ZONE = 'UTC'
