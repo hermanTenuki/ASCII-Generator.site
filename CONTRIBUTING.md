@@ -25,7 +25,7 @@ To translate, do the following steps:
 
 - Create language files with ```python manage.py makemessages -l ru_RU``` where ```ru_RU``` - your language's code (that's actually Russian's language code);
 - Create JavaScript language files with ```python manage.py makemessages -d djangojs -l ru_RU``` where ```ru_RU``` - your language's code;
-- Add language code and it's original name to ```LANGUAGES``` variable in ```project/settings.py```;
+- Add language code and it's original name to ```LANGUAGES``` and short code to ```LANGUAGES_SHORT_CODES``` variables in ```project/settings.py```;
 - Create admin account by typing ```python manage.py createsuperuser```;
 - Start server by ```python manage.py runserver```;
 - Log in admin account on ```localhost:8000/admin/```;
