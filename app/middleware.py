@@ -1,5 +1,4 @@
 from django.utils.deprecation import MiddlewareMixin
-from django.shortcuts import redirect
 from django.conf import settings
 from django.utils import translation
 
@@ -20,11 +19,11 @@ class ForceDefaultLanguageMiddleware(MiddlewareMixin):
             del request.META['HTTP_ACCEPT_LANGUAGE']
 
 
-class LanguageURLRedirectMiddleware(MiddlewareMixin):
+class LanguageURLSpecifyMiddleware(MiddlewareMixin):
     """
     Checks if url is containing language code like "domain.com/ru/something/",
     and then middleware is activating this language for user
-    with redirecting him to url without language code like "domain.com/something/".
+    with using path without language code like "domain.com/something/".
 
     Made for SEO purposes, normal use of website will not trigger this.
     """
@@ -35,9 +34,9 @@ class LanguageURLRedirectMiddleware(MiddlewareMixin):
             language = path_split[1]  # ex. "ru"
             if language in settings.LANGUAGES_SHORT_CODES:
                 translation.activate(language)
-                if len(path_split) == 2:
-                    return redirect('/')
-                return redirect('/' + '/'.join(path_split[2:]))
+                request.path_info = '/'+'/'.join(path_split[2:])
+                if request.path_info[-1] != '/':
+                    request.path_info += '/'
 
     def process_response(self, request, response):
         path_split = request.path.split('/')
