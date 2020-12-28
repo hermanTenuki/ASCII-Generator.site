@@ -904,7 +904,7 @@ class TestLanguageURLRedirectMiddleware(TestCase):
         """
         If specified url is right, 200 and activate english language.
         """
-        response = self.client.get('/en/about/', follow=True)
+        response = self.client.get('/en/about/')
         content = response.content.decode('utf-8')
         self.assertEqual(response.status_code, 200)
         self.assertIn('Image to ASCII', content)
@@ -914,7 +914,7 @@ class TestLanguageURLRedirectMiddleware(TestCase):
         """
         If specified url is right, 200 and activate russian language.
         """
-        response = self.client.get('/ru/about/', follow=True)
+        response = self.client.get('/ru/about/')
         content = response.content.decode('utf-8')
         self.assertEqual(response.status_code, 200)
         self.assertIn('Изображение в ASCII', content)
@@ -925,6 +925,6 @@ class TestLanguageURLRedirectMiddleware(TestCase):
         Root url should work too.
         """
         response = self.client.get('/en')
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
         response = self.client.get('/en/')
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)

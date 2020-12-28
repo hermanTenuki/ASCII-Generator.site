@@ -71,8 +71,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'staff.middleware.RestrictStaffToAdminMiddleware',  # Restrict staff to admin page
     'django.middleware.locale.LocaleMiddleware',
-    # If language code is in url - set desired language and redirect to the same but normal url without lang code
-    'app.middleware.LanguageURLRedirectMiddleware',
+    'app.middleware.LanguageURLSpecifyMiddleware',  # If language code is in url - set desired language
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
