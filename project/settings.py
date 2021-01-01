@@ -188,16 +188,6 @@ if EASY_RUN_MODE:
 
 ROSETTA_SHOW_AT_ADMIN_PANEL = True
 
-
-# Numba optimization (EXPERIMENTAL). Depending on the system, it can greatly improve or decrease performance.
-# 4 cores tested: 150%-300% speed improvement;
-# 1 core tested: 100%-70% speed decrease.
-
-NUMBA = bool(strtobool(os.getenv('NUMBA', 'False')))
-if NUMBA:
-    print('Numba optimization (EXPERIMENTAL) is enabled! '
-          'First use of generators will be long and can occur warning messages.')
-
 # If DEBUG is True, at runserver exit delete all the temporary images
 
 if DEBUG:
