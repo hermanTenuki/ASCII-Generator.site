@@ -91,6 +91,11 @@ $(document).ready(function () {
         const language_form = $('footer #language-form');
         const language_input = $('footer #language-input');
         language_input.val($(this).data('language'));
+        window.history.pushState(
+            {},
+            local_language_code_i18n,
+            window.location.href.replace("/" + local_language_code_i18n + "/", "/")
+        );
         language_form.submit();
     });
 
