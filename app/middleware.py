@@ -35,8 +35,8 @@ class LanguageURLSpecifyMiddleware(MiddlewareMixin):
             if language in settings.LANGUAGES_SHORT_CODES:
                 translation.activate(language)
                 request.path_info = '/'+'/'.join(path_split[2:])
-                if request.path_info[-1] != '/':
-                    request.path_info += '/'
+                if request.path[-1] != '/':
+                    request.path += '/'
 
     def process_response(self, request, response):
         path_split = request.path.split('/')
@@ -45,4 +45,6 @@ class LanguageURLSpecifyMiddleware(MiddlewareMixin):
             if language in settings.LANGUAGES_SHORT_CODES:
                 translation.activate(language)
                 response.set_cookie(settings.LANGUAGE_COOKIE_NAME, language)
+                if request.path[-1] != '/':
+                    request.path += '/'
         return response

@@ -153,6 +153,11 @@
 <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
 <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
 <script src="{% url 'javascript-catalog' %}"></script>
+<script type="text/javascript">
+    {% get_current_language as LANGUAGE_CODE %}
+    {% get_language_info for LANGUAGE_CODE as local_language %}
+    const local_language_code_i18n = "{{ local_language.code }}";
+</script>
 {% block body_end_before_scripts %}{% endblock %}
 <script src="{% static 'js/scripts.js' %}?7" type="text/javascript"></script>
 {% block body_end %}{% endblock %}
