@@ -36,15 +36,15 @@ def _generate_unique_image_path(file_extension, r=0, r_max=10):
     # Random name to image
     name = ''.join(random.choices(string.ascii_lowercase + string.digits, k=30))  # 30 symbols for security
     # Making file name
-    y = f'{name}{file_extension}'
+    full_name = f'{name}{file_extension}'
     # Making path
-    x = os.path.join(settings.TEMPORARY_IMAGES, y)
+    full_path = os.path.join(settings.TEMPORARY_IMAGES, full_name)
     # Checking if it already exist
-    if os.path.exists(x):
+    if os.path.exists(full_path):
         if r >= r_max:
             return None, None
-        x, y = _generate_unique_image_path(file_extension, r=r + 1)  # Recursion
-    return x, y
+        full_path, full_name = _generate_unique_image_path(file_extension, r=r + 1)  # Recursion
+    return full_path, full_name
 
 
 def _generator_thread_1_hub(l, args, kwargs, kwargs1, kwargs2):  # custom args/kwargs, others not accepted

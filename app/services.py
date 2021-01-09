@@ -16,6 +16,11 @@ class FeedbackService:
 
     @staticmethod
     def create(data) -> (FeedbackForm, int):
+        """
+        Create "Feedback".
+        :param data: data for the FeedbackForm.
+        :return: Form and status code (200/400).
+        """
         form = FeedbackForm(data)
 
         if form.is_valid():
@@ -31,6 +36,12 @@ class ReportService:
 
     @staticmethod
     def create(data, ascii_url_code) -> JsonResponse:
+        """
+        Create "Report"
+        :param data: data for the ReportForm.
+        :param ascii_url_code: url code for "GeneratedASCII" object, passed from url.
+        :return: Fully built JsonResponse with errors if occurred.
+        """
         form = ReportForm(data)
         try:
             generated_ascii = GeneratedASCII.objects.get(url_code=ascii_url_code)
@@ -48,24 +59,29 @@ class GeneratedASCIIService:
     @staticmethod
     def _generate_unique_image_path(file_extension, r=0, r_max=10):
         """
-        Recursive function that generates random unique file name and path.
-        :return: Full path to file, name with extension.
+        Recursive function that generates random, but unique file name and path.
+        :return: Full path to file, name with extension. Return 2 nones if too many recursions.
         """
         name = ''.join(random.choices(string.ascii_lowercase + string.digits, k=50))
-        y = f'{name}{file_extension}'
-        x = os.path.join(settings.MEDIA_ROOT, 'input_images/', y)
-        if os.path.exists(x):
+        full_name = f'{name}{file_extension}'
+        full_path = os.path.join(settings.MEDIA_ROOT, 'input_images/', full_name)
+        if os.path.exists(full_path):
             if r >= r_max:
                 return None, None
-            x, y = GeneratedASCIIService._generate_unique_image_path(file_extension, r=r + 1)
-        return x, y
+            full_path, full_name = GeneratedASCIIService._generate_unique_image_path(file_extension, r=r + 1)
+        return full_path, full_name
 
     @staticmethod
     def get_object_or_404(ascii_url_code) -> GeneratedASCII:
         return get_object_or_404(GeneratedASCII, url_code=ascii_url_code)
 
     @staticmethod
-    def is_txt_mode(ascii_obj):
+    def is_txt_mode(ascii_obj) -> bool:
+        """
+        Check if "GeneratedASCII" object is containing TextToASCII arts.
+        :param ascii_obj: "GeneratedASCII" object.
+        :return: Boolean.
+        """
         try:
             _ = ascii_obj.image_to_ascii_type
             app_txt_mode = False
@@ -75,41 +91,60 @@ class GeneratedASCIIService:
 
     @staticmethod
     def create(request) -> JsonResponse:
+        """
+        Create (share) "GeneratedASCII" object with all generated arts stored in "OutputASCII"
+        while input data is stored in "TextToASCIIType" or "ImageToASCIIType" with "ImageToASCIIOptions".
+        :param request: Request, so it can access request.POST and request.FILE.
+        :return: Fully build JsonResponse with "shared_redirect_url" - relative path to shared object.
+        """
+        # At first, generate desired results.
         if request.POST.get('file_name', False):
+            # Generate ImageToASCII results from request
             img2ascii_mode = True
             result = ascii_generators.image_to_ascii_generator(request)
         else:
+            # Generate TextToASCII results from request
             img2ascii_mode = False
             result = {
                 'txt': request.POST.get('txt', ''),
                 'txt_multi': request.POST.get('txt_multi', ''),
                 'arts': ascii_generators.text_to_ascii_generator(request)
             }
-        if type(result) == JsonResponse:
-            return result
+        # Check if errors occurred while generating ASCII arts.
+        if img2ascii_mode:
+            if type(result) == JsonResponse:
+                return result
+        else:
+            if len(result['arts']) == 0:
+                return JsonResponse({}, status=400)
+        # Get preferred output method from request, if not provided - return error.
         preferred_output_method = request.POST.get('preferred_output_method', None)
         if preferred_output_method is None:
             return JsonResponse({}, status=400)
+        # Create "GeneratedASCII" object and all other needed stuff.
         ascii_obj = GeneratedASCII.objects.create(preferred_output_method=preferred_output_method)
         if img2ascii_mode:
+            # In ImageToASCII mode - create ImageToASCIIType with input image.
             image_to_ascii_type_obj = ImageToASCIIType(
                 generated_ascii=ascii_obj,
             )
-            file = open(os.path.join(settings.TEMPORARY_IMAGES, result.get('file_name')), 'rb')
-            unused_fn, file_extension = os.path.splitext(file.name)
-            unused_path, file_name = GeneratedASCIIService._generate_unique_image_path(file_extension)
+            file = open(os.path.join(settings.TEMPORARY_IMAGES, result['file_name']), 'rb')
+            _unused_fn, file_extension = os.path.splitext(file.name)
+            _unused_path, file_name = GeneratedASCIIService._generate_unique_image_path(file_extension)
             image_to_ascii_type_obj.input_image.save(
                 file_name,
                 File(file),
             )
             image_to_ascii_type_obj.save()
             file.close()
+            # Create "ImageToASCIIOptions".
             ImageToASCIIOptions.objects.create(
                 image_to_ascii_type=image_to_ascii_type_obj,
-                columns=result.get('num_cols'),
-                brightness=result.get('brightness'),
-                contrast=result.get('contrast'),
+                columns=result['num_cols'],
+                brightness=result['brightness'],
+                contrast=result['contrast'],
             )
+            # Create "OutputASCII" objects for every generated ascii.
             arts = result.get('arts')
             for i in range(len(arts)):
                 OutputASCII.objects.create(
@@ -118,6 +153,7 @@ class GeneratedASCIIService:
                     ascii_txt=arts[i]
                 )
         else:
+            # In TextToASCII mode - create TextToASCIIType with input text.
             if not request.POST.get('multiple_strings', False):
                 multi_line_mode = False
                 input_text = result.get('txt', '')

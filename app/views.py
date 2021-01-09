@@ -30,8 +30,8 @@ def index_page(request, app_txt_mode=False, ascii_obj=None):
     return render(request, 'app/index.html', context=context)
 
 
-# Open index_page with txt input mode
 def index_txt_page(request):
+    # Open index_page with txt input mode
     return index_page(request, app_txt_mode=True)
 
 
@@ -116,7 +116,7 @@ def ascii_share(request):
 def ascii_report(request, ascii_url_code):
     if request.is_ajax():
         if request.method == 'POST':
-            json_response = ReportService.create(data=request.POST, ascii_url_code=ascii_url_code)
+            json_response = ReportService.create(request.POST, ascii_url_code)
             return json_response
         return JsonResponse({}, status=405)  # 405 Method Not Allowed
     else:
