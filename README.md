@@ -27,7 +27,7 @@ For creating this project, several open-source repositories were used:
 
 - [ASCII-generator](https://github.com/uvipen/ASCII-generator) by [uvipen](https://github.com/uvipen) ([MIT-License - Copyright (c) 2018 Viet Nguyen](https://github.com/uvipen/ASCII-generator/blob/master/LICENSE));
 - [asciify](https://github.com/RameshAditya/asciify) by [RameshAditya](https://github.com/RameshAditya);
-- [art](https://github.com/sepandhaghighi/art) by [sepandhaghighi](https://github.com/sepandhaghighi) ([MIT-License - Copyright (c) 2017 Sepand Haghighi](https://github.com/sepandhaghighi/art/blob/master/LICENSE)).<br>Also, check out [his project's website](https://www.4r7.ir/).
+- [art](https://github.com/sepandhaghighi/art) by [sepandhaghighi](https://github.com/sepandhaghighi) ([MIT-License - Copyright (c) 2017 Sepand Haghighi](https://github.com/sepandhaghighi/art/blob/master/LICENSE)).<br>You can visit [his project's website](https://www.4r7.ir/).
 
 #### Django apps
 
