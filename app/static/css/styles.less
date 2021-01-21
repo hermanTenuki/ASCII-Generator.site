@@ -549,7 +549,7 @@ main {
 
         input[type=submit]:disabled {
           background-color: #e4e4e4;
-          cursor: wait;
+          cursor: default;
         }
 
         .inline-grid_inline-text {
@@ -930,7 +930,7 @@ main {
             &:disabled {
               box-shadow: none;
               background-color: #e4e4e4;
-              cursor: wait;
+              cursor: default;
             }
           }
         }
@@ -1121,6 +1121,10 @@ main {
           transition: background-color 0.2s;
           padding: 6px 25px;
           font-size: @font-size-normal;
+
+          &:disabled {
+            cursor: default;
+          }
         }
 
         h3 {
