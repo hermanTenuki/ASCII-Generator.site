@@ -8,3 +8,4 @@ Dockerfile
 .idea/
 db.sqlite3
 /media/
+.flake8

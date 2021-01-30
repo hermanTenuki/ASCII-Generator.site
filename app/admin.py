@@ -1,5 +1,10 @@
 from django.contrib import admin
-from .models import *
+
+from app.models import (
+    Feedback, GeneratedASCII,
+    ImageToASCIIType, ImageToASCIIOptions, TextToASCIIType,
+    OutputASCII, Report
+)
 
 
 admin.site.register(Feedback)

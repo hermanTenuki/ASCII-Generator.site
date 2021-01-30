@@ -1,13 +1,18 @@
-from django.test import TestCase
-from django.urls import reverse
 import json
-from unittest import mock
-from .models import *
-import os
-from django.conf import settings
 import random
 import string
+import os
+
+from unittest import mock
+from django.test import TestCase
+from django.urls import reverse
+from django.conf import settings
 from django.core.files import File
+
+from app.models import (
+    GeneratedASCII, Report, ImageToASCIIType, OutputASCII,
+    ImageToASCIIOptions, TextToASCIIType, Feedback
+)
 
 
 class TestHandler404View(TestCase):
@@ -553,8 +558,8 @@ class TestAsciiDetailView(TestCase):
         """
         obj = GeneratedASCII.objects.create(preferred_output_method='testing123')
         file = open('_images/test/test_img_good.jpg', mode='rb')
-        obj_type = TextToASCIIType.objects.create(generated_ascii=obj,
-                                                  input_text='testing')
+        TextToASCIIType.objects.create(generated_ascii=obj,
+                                       input_text='testing')
         file.close()
         response = self.client.get(reverse('ascii_detail_url', kwargs={'ascii_url_code': obj.url_code}))
         self.assertEqual(response.status_code, 200)
@@ -570,9 +575,11 @@ class TestAsciiDetailView(TestCase):
         """
         obj = GeneratedASCII.objects.create(preferred_output_method='testing123')
         file = open('_images/test/test_img_good.jpg', mode='rb')
-        obj_type = TextToASCIIType.objects.create(generated_ascii=obj,
-                                                  input_text='testing\ntext',
-                                                  multi_line_mode=True)
+        TextToASCIIType.objects.create(
+            generated_ascii=obj,
+            input_text='testing\ntext',
+            multi_line_mode=True
+        )
         file.close()
         response = self.client.get(reverse('ascii_detail_url', kwargs={'ascii_url_code': obj.url_code}))
         self.assertEqual(response.status_code, 200)
@@ -764,9 +771,11 @@ class TestAsciiReportView(TestCase):
         with open('_images/temporary/test_img_good.jpg', mode='wb') as file_new:
             file_new.write(file.read())
         file.close()
-        response = self.client.post(reverse('ascii_share_url'), HTTP_X_REQUESTED_WITH='XMLHttpRequest',
-                                    data={'preferred_output_method': '1',
-                                          'file_name': 'test_img_good.jpg'})
+        self.client.post(
+            reverse('ascii_share_url'),
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            data={'preferred_output_method': '1', 'file_name': 'test_img_good.jpg'}
+        )
         obj = GeneratedASCII.objects.first()
         return obj
 

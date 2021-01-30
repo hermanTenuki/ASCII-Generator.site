@@ -1,7 +1,8 @@
-from .services import *
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
-from .ascii_generators import ascii_generators
+
+from app.services import ReportService, FeedbackService, GeneratedASCIIService
+from app.ascii_generators import ascii_generators
 
 
 def handler400_view(request, *args, **kwargs):

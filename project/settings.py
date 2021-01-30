@@ -1,6 +1,7 @@
 import os
-from pathlib import Path
 import atexit
+
+from pathlib import Path
 from distutils.util import strtobool
 
 # SECURITY WARNING: don't run with EASY_RUN_MODE turned on in production!
@@ -195,8 +196,6 @@ if DEBUG:
         for file_name in os.listdir(TEMPORARY_IMAGES):
             if file_name != '.keep':  # Keep the .keep file
                 os.remove(os.path.join(TEMPORARY_IMAGES, file_name))
-
-
     atexit.register(clear_temporary_images_folder)
 
 # CACHING

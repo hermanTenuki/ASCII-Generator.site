@@ -1,6 +1,7 @@
-from django.db import models
 import random
 import string
+
+from django.db import models
 from django.urls import reverse
 
 
