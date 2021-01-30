@@ -198,3 +198,15 @@ if DEBUG:
 
 
     atexit.register(clear_temporary_images_folder)
+
+# CACHING
+
+CACHE_TIMEOUT = 600
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+        'TIMEOUT': CACHE_TIMEOUT
+    }
+}
