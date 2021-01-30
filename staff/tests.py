@@ -12,7 +12,7 @@ def _create_staff_user(username='admin', password='admin'):
 
 
 def _create_normal_user(username='user', password='user'):
-    user = User.objects.create_user(username=username, password=password)
+    User.objects.create_user(username=username, password=password)
     return {'username': username, 'password': password}
 
 

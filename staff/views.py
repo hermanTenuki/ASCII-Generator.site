@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
-from .forms import *
 from django.contrib.auth import authenticate, login, logout
+
+from staff.forms import StaffAuthenticationForm
 
 
 #  Staff pages is scuffed on purpose (for now)

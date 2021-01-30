@@ -1,4 +1,8 @@
-from .views import *
+from .views import (
+    index_page, index_txt_page, ascii_detail, ascii_share, ascii_report,
+    image_to_ascii_generator, text_to_ascii_generator, feedback, about,
+    policy_privacy, policy_cookie, sitemap_xml
+)
 from django.urls import path
 
 urlpatterns = [

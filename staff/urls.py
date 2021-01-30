@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.urls import path, include
-from .views import *
 from django.conf import settings
+
+from staff.views import staff_authentication, staff_logout
 
 urlpatterns = [
     path('authentication/', staff_authentication, name='staff_authentication_url'),

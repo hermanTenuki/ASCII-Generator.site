@@ -8,7 +8,7 @@ urlpatterns = [
     path('staff/', include('staff.urls')),
     path('i18n/', include('django.conf.urls.i18n')),
     path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog'),
-    path('', include('app.urls'))
+    path('', include('app.urls')),
 ]
 
 # Handlers

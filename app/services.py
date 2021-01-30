@@ -1,12 +1,21 @@
-from .forms import *
-from .models import *
-from django.http import JsonResponse
-from .ascii_generators import ascii_generators
-from django.conf import settings
 import os
+import random
+import string
+
+from django.shortcuts import reverse
+from django.http import JsonResponse
+from django.conf import settings
 from django.core.files import File
 from django.utils.translation import gettext_lazy as _
-from django.shortcuts import get_object_or_404
+from django.http import Http404
+from django.core.cache import cache
+
+from app.forms import FeedbackForm, ReportForm
+from app.models import (
+    GeneratedASCII, Report, ImageToASCIIType, OutputASCII,
+    ImageToASCIIOptions, TextToASCIIType
+)
+from app.ascii_generators import ascii_generators
 
 
 class FeedbackService:
@@ -73,7 +82,21 @@ class GeneratedASCIIService:
 
     @staticmethod
     def get_object_or_404(ascii_url_code) -> GeneratedASCII:
-        return get_object_or_404(GeneratedASCII, url_code=ascii_url_code)
+        # find it in cache, if not found - set it
+        key = f'GeneratedASCIIService_get_object_or_404_{ascii_url_code}'
+        generated_ascii = cache.get(key)
+        if not generated_ascii:
+            try:
+                generated_ascii = GeneratedASCII.objects.select_related(
+                    'image_to_ascii_type__options', 'text_to_ascii_type'
+                ).prefetch_related(
+                    'outputs', 'reports'
+                ).get(url_code=ascii_url_code)
+                cache.set(key, generated_ascii)
+            except GeneratedASCII.DoesNotExist:
+                raise Http404
+
+        return generated_ascii
 
     @staticmethod
     def is_txt_mode(ascii_obj) -> bool:
