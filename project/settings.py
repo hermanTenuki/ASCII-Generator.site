@@ -28,7 +28,7 @@ if not os.path.exists(TEMPORARY_IMAGES):  # If temporary images folder is not ex
 
 # Import environment variables from python file if it exist. For local development only.
 if os.path.exists(os.path.join(BASE_DIR, 'project/env_vars.py')):
-    from . import env_vars
+    from . import env_vars  # noqa: F401
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
