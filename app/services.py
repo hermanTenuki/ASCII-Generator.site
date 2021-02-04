@@ -81,7 +81,7 @@ class GeneratedASCIIService:
         return full_path, full_name
 
     @staticmethod
-    def get_object_or_404(ascii_url_code) -> GeneratedASCII:
+    def get_active_object_or_404(ascii_url_code) -> GeneratedASCII:
         # find it in cache, if not found - set it
         key = f'GeneratedASCIIService_get_object_or_404_{ascii_url_code}'
         generated_ascii = cache.get(key)
@@ -95,6 +95,9 @@ class GeneratedASCIIService:
                 cache.set(key, generated_ascii)
             except GeneratedASCII.DoesNotExist:
                 raise Http404
+        # we don't want to return hidden object
+        if generated_ascii.is_hidden:
+            raise Http404
 
         return generated_ascii
 

@@ -32,7 +32,8 @@ class GeneratedASCII(models.Model):
         return 'GeneratedASCII: ' + self.url_code
 
     def save(self, *args, **kwargs):
-        self.url_code = self.generate_random_unique_url_code()
+        if not self.url_code:
+            self.url_code = self.generate_random_unique_url_code()
         super().save(*args, **kwargs)
 
     def generate_random_unique_url_code(self):

@@ -99,7 +99,7 @@ def text_to_ascii_generator(request):
 
 
 def ascii_detail(request, ascii_url_code):
-    ascii_obj = GeneratedASCIIService.get_object_or_404(ascii_url_code)
+    ascii_obj = GeneratedASCIIService.get_active_object_or_404(ascii_url_code)
     app_txt_mode = GeneratedASCIIService.is_txt_mode(ascii_obj)
     return index_page(request, ascii_obj=ascii_obj, app_txt_mode=app_txt_mode)
 
