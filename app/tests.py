@@ -524,7 +524,7 @@ class TestAsciiDetailView(TestCase):
 
     def test_success(self):
         """
-        POST request right ascii_url_code should return 200
+        POST request with right ascii_url_code should return 200
         """
         obj = GeneratedASCII.objects.create(preferred_output_method='testing123')
         response = self.client.get(reverse('ascii_detail_url', kwargs={'ascii_url_code': obj.url_code}))
@@ -586,6 +586,18 @@ class TestAsciiDetailView(TestCase):
         self.assertNotIn('img2ascii chosen', response.content.decode('utf-8'))
         self.assertIn('txt2ascii chosen', response.content.decode('utf-8'))
         self.assertIn('checked', response.content.decode('utf-8'))
+        obj.delete()
+
+    def test_hidden(self):
+        """
+        POST request with right ascii_url_code, but with hidden status should return 404
+        """
+        obj = GeneratedASCII.objects.create(
+            preferred_output_method='testing123',
+            is_hidden=True
+        )
+        response = self.client.get(reverse('ascii_detail_url', kwargs={'ascii_url_code': obj.url_code}))
+        self.assertEqual(response.status_code, 404)
         obj.delete()
 
 
