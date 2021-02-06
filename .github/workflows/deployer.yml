@@ -1,7 +1,12 @@
 name: Django Deploy Runner
 on:
-  push:
+  workflow_run:
+    workflows: ["Django Tests Runner"]
     branches: [ master ]
+    types:
+      - completed
+  push:
+    
 
 jobs:
   deploy:
@@ -17,7 +22,8 @@ jobs:
         username: ${{ secrets.SERVER_USERNAME }}
         password: ${{ secrets.SERVER_PASSWORD }}
         source: "/home/runner/work/ASCII-Generator.site/ASCII-Generator.site"
-        target: "/home/user/ascii-generator/"
+        target: "/home/user/ascii-generator/ASCII-Generator.site/"
+        strip_components: 2
     - name: Execute Deploy Command on the Server
       uses: appleboy/ssh-action@master
       with: 
