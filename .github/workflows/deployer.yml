@@ -1,7 +1,7 @@
 name: Django Deploy Runner
 on:
   push:
-    brances: [ master ]
+    branches: [ master ]
 
 jobs:
   deploy:
@@ -20,10 +20,11 @@ jobs:
         target: "/home/user/ascii-generator/"
     - name: Execute Deploy Command on the Server
       uses: appleboy/ssh-action@master
-      with: ${{ secrets.SERVER_HOST }}
-      username: ${{ secrets.SERVER_USERNAME }}
-      password: ${{ secrets.SERVER_PASSWORD }}
-      script: |
-        cd /home/user/ascii-generator/
-        docker-compose up -d --build
-        docker image prune -a -f
+      with: 
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USERNAME }}
+        password: ${{ secrets.SERVER_PASSWORD }}
+        script: |
+          cd /home/user/ascii-generator/
+          docker-compose up -d --build
+          docker image prune -a -f
