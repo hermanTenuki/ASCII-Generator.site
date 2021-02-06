@@ -1,13 +1,8 @@
 name: Django Deploy Runner
 on:
-  workflow_run:
-    workflows: ["Django Tests Runner"]
-    branches: [ master ]
-    types:
-      - completed
   push:
+    branches: [ master ]
     
-
 jobs:
   deploy:
     name: deploy
