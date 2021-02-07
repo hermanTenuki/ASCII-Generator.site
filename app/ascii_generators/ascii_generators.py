@@ -92,7 +92,9 @@ def image_to_ascii_generator(request):
         if not os.path.exists(path):
             path = os.path.join(settings.MEDIA_ROOT, file_name)
             if not os.path.exists(path):
-                return JsonResponse({}, status=400)
+                return JsonResponse({
+                    'error': 'This image file does not exist or it was deleted from the server.'
+                }, status=410)
     elif img is not None:  # If we are uploading new image
         # Getting extension of image
         unused_fn, file_extension = os.path.splitext(img.name)

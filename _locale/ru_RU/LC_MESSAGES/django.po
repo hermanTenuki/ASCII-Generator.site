@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-10 15:34+0300\n"
-"PO-Revision-Date: 2021-01-10 15:35+0000\n"
+"PO-Revision-Date: 2021-02-07 09:31+0000\n"
 "Last-Translator: b'Herman Schechkin <itseasy322@gmail.com>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -317,7 +317,7 @@ msgstr "...или попробуйте изображение в ASCII"
 
 #: .\app\templates\app\index.html:220
 msgid "Yes"
-msgstr ""
+msgstr "Да"
 
 #: .\app\templates\errors\400.html:5
 msgid "Bad Request"
