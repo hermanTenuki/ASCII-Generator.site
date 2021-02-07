@@ -235,7 +235,7 @@ $(document).ready(function () {
     };
 
     // Upload File ajax request
-    const uploadFile = function (file) {
+    const uploadFile = function (file, hidden=false) {
         fileUploadEnabled = false;
         const fileInputElement = $('.js-file__input');
         const fileDropZone = $('section.index .js-dropzone');
@@ -245,14 +245,18 @@ $(document).ready(function () {
         let data = new FormData();
         data.append('img', file);
 
-        const placement = fileDropZone.offset().top - 25;
-        $('body').append( // animated loading circle
-            '<div class="circle-loader-div" style="top: ' + placement + 'px">\n' +
-            '    <div class="circle-loader">\n' +
-            '        <div class="checkmark draw"></div>\n' +
-            '    </div>\n' +
-            '</div>'
-        );
+        if (!(hidden)) {
+            const placement = fileDropZone.offset().top - 25;
+            $('body').append( // animated loading circle
+                '<div class="circle-loader-div" style="top: ' + placement + 'px">\n' +
+                '    <div class="circle-loader">\n' +
+                '        <div class="checkmark draw"></div>\n' +
+                '    </div>\n' +
+                '</div>'
+            );
+        }
+
+
 
         $.ajax({
             url: fileDropZone.attr('action'),
@@ -456,6 +460,16 @@ $(document).ready(function () {
         animate_fade_in($('section.index .file-upload__modal'));
     });
 
+    // function to convert dataurl into a file
+    function dataURLtoFile(dataurl, filename) {
+        var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+        while(n--){
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new File([u8arr], filename, {type:mime});
+}
+
     // Ajax request to update image with new settings
     $('section.index .ascii-image-output .options_container form').submit(function () {
         const cur_elem = $(this);
@@ -476,7 +490,10 @@ $(document).ready(function () {
             type: 'POST',
             data: data,
             error: function (response) {
-                uploadFile(cur_ascii_img[0].src);
+                if (response['status'] === 410) {
+                    const file = dataURLtoFile(cur_ascii_img[0].src, cur_ascii_img.data('file_name'));
+                    uploadFile(file, true);
+                }
             },
             success: function (response) {
                 const arts = response.arts;
