@@ -305,12 +305,12 @@ class TestImageToAsciiGeneratorView(TestCase):
 
     def test_ajax_post_wrong_filename(self):
         """
-        Ajax POST with wrong file_name should return 400
+        Ajax POST with wrong file_name should return 410
         """
         response = self.client.post(reverse('image_to_ascii_generator_url'),
                                     HTTP_X_REQUESTED_WITH='XMLHttpRequest',
                                     data={'file_name': 'test123ABCDEFG'})
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 410)
 
     def test_ajax_post_wrong_image(self):
         """
@@ -702,12 +702,12 @@ class TestAsciiShareView(TestCase):
 
     def test_ajax_image_wrong_file_name(self):
         """
-        Ajax POST with wrong file_name should return 400
+        Ajax POST with wrong file_name should return 410
         """
         response = self.client.post(reverse('ascii_share_url'), HTTP_X_REQUESTED_WITH='XMLHttpRequest',
                                     data={'preferred_output_method': '1',
                                           'file_name': 'wrong file name.txt'})
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 410)
 
     def test_ajax_image_success(self):
         """
