@@ -8,6 +8,7 @@ from django.http import JsonResponse
 import os
 from django.conf import settings
 import threading
+from django.core.cache import cache
 
 
 def _calculate_num_cols(path: str, num_cols: int) -> int:
@@ -74,18 +75,37 @@ def image_to_ascii_generator(request):
     try:
         brightness = float(brightness) / 100
     except:
-        brightness = 1
+        brightness = 1.
     try:
         contrast = float(contrast) / 100
     except:
-        contrast = 1
+        contrast = 1.
     try:
         num_cols = int(num_cols)
     except:
         num_cols = 90
-    if num_cols > 300:
-        num_cols = 300
+    # if we are in DEBUG = False, restrict num_cols to desired number
+    NUM_COLS_MAX = 300
+    if not settings.DEBUG and num_cols > NUM_COLS_MAX:
+        num_cols = NUM_COLS_MAX
     img = request.FILES.get('img', None)
+
+    # CACHING
+    if file_name:
+        cache_key = '_'.join(
+            (
+                'image_to_ascii_generator',
+                str(file_name),
+                str(num_cols),
+                str(brightness),
+                str(contrast),
+            )
+        )
+        response = cache.get(cache_key)
+        if response:
+            return response
+    else:
+        cache_key = None
 
     if file_name is not None:  # If we are already having image saved - just need to re-generate arts
         path = os.path.join(settings.TEMPORARY_IMAGES, file_name)
@@ -171,13 +191,19 @@ def image_to_ascii_generator(request):
     arts_1_thread.join()
     arts_2_thread.join()
 
-    return {
+    response = {
         'file_name': file_name,
         'num_cols': num_cols,
         'brightness': brightness,
         'contrast': contrast,
         'arts': [*arts_1_list, *arts_2_list]
     }
+
+    # CACHING
+    if cache_key:
+        cache.set(cache_key, response, settings.CACHE_TIMEOUT_SHORT)
+
+    return response
 
 
 def text_to_ascii_generator(request) -> list:
