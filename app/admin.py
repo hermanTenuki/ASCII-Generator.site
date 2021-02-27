@@ -5,7 +5,7 @@ from django.utils.html import mark_safe
 from app.models import (
     Feedback, GeneratedASCII,
     ImageToASCIIType, ImageToASCIIOptions, TextToASCIIType,
-    OutputASCII, Report
+    Report
 )
 
 
@@ -72,14 +72,6 @@ class TextToASCIITypeAdmin(admin.ModelAdmin):
 
 
 admin.site.register(TextToASCIIType, TextToASCIITypeAdmin)
-
-
-class OutputASCIIAdmin(admin.ModelAdmin):
-    search_fields = ('generated_ascii__url_code',)
-    raw_id_fields = ('generated_ascii',)
-
-
-admin.site.register(OutputASCII, OutputASCIIAdmin)
 
 
 class ReportAdmin(admin.ModelAdmin):
