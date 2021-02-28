@@ -4,7 +4,7 @@ You can contribute to this project by fixing typos, bugs and [translating](CONTR
 
 Currently, there is no need in contributing new functionality.
 
-[Fast local setup](README.md#Fast-local-setup) guide might be handy.
+[Fast local setup](README.md#Fast-local-setup) guide might be handy (postgresql is needed!).
 
 ## How to contribute in general
 

@@ -259,16 +259,24 @@
                 "brightness": "{{ ascii_obj.image_to_ascii_type.options.brightness }}",
                 "contrast": "{{ ascii_obj.image_to_ascii_type.options.contrast }}",
             };
-        {% for output in ascii_obj.outputs.all %}generated_image_ascii['{{ output.method_name|add:-1 }}'] = "{{ output.ascii_txt|escapejs }}".replace(new RegExp("&" + "#" + "x27;", "g"), "'");
-        {% endfor %}
+            let output_ascii = {{ ascii_obj.output_ascii|safe }};
+            for (let key in output_ascii) {
+                generated_image_ascii[output_ascii[key].method_name - 1] = output_ascii[key].ascii_txt;
+            }
         {% endif %}
         {% if ascii_obj and app_txt_mode %}
             txt_share_onload_render = true;
             txt2ascii_relative_link = window.location.pathname;
-            {% for output in ascii_obj.outputs.all %}
-                $('#select-method').append('<option value="{{ forloop.counter0 }}"{% if output.method_name == ascii_obj.preferred_output_method %} selected{% endif %}>{{ output.method_name|escapejs }}</option>');
-                generated_text_ascii['{{ forloop.counter0 }}'] = "{{ output.ascii_txt|escapejs }}".replace(new RegExp("&" + "#" + "x27;", "g"), "'");
-            {% endfor %}
+            let output_ascii = {{ ascii_obj.output_ascii|safe }};
+            for (let i = 0; i < output_ascii.length; i++) {
+                let html_option = '<option value="'+i+'"';
+                if (output_ascii[i].method_name === "{{ ascii_obj.preferred_output_method }}"){
+                    html_option += ' selected';
+                };
+                html_option += '>'+output_ascii[i].method_name+'</option>';
+                $('#select-method').append(html_option);
+                generated_text_ascii[i.toString()] = output_ascii[i].ascii_txt;
+            }
         {% endif %}
     </script>
 {% endblock %}

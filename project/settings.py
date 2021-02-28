@@ -10,10 +10,7 @@ EASY_RUN_MODE = False
 
 if EASY_RUN_MODE:
     os.environ['DEBUG'] = 'True'
-    os.environ['SECRET_KEY'] = 'test'
-    os.environ['DB_NAME'] = 'test_ascii_generator_db'
-    os.environ['DB_USERNAME'] = 'test_ascii_generator_user'
-    os.environ['DB_PASSWORD'] = 'test_ascii_generator_pass'
+    os.environ['SECRET_KEY'] = 'VERY_UNIQUE_AND_SECRET_KEY'
     os.environ['RECAPTCHA_PUBLIC_KEY'] = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'  # Those are test keys, don't bother
     os.environ['RECAPTCHA_PRIVATE_KEY'] = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'
 
@@ -104,7 +101,7 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-db_sqlite3 = {
+db_sqlite3 = {  # useless after JSONField being added in PR#66
     'ENGINE': 'django.db.backends.sqlite3',
     'NAME': BASE_DIR / 'db.sqlite3',
 }
@@ -118,14 +115,18 @@ db_postgresql = {
     'PORT': os.getenv('DB_PORT', '5432')
 }
 
-# Database can be switched here between sqlite3 and postgresql
+db_dummy = {
+    'ENGINE': '',
+}
+
+# Database can be switched here
 DATABASES = {
     'default': db_postgresql
 }
 
-# If EASY_RUN_MODE is True, use sqlite3
+# If EASY_RUN_MODE is True - just don't use any db
 if EASY_RUN_MODE:
-    DATABASES['default'] = db_sqlite3
+    DATABASES['default'] = db_dummy
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators

@@ -1,6 +1,7 @@
 import os
 import random
 import string
+import json
 
 from django.shortcuts import reverse
 from django.http import JsonResponse
@@ -12,7 +13,7 @@ from django.core.cache import cache
 
 from app.forms import FeedbackForm, ReportForm
 from app.models import (
-    GeneratedASCII, Report, ImageToASCIIType, OutputASCII,
+    GeneratedASCII, Report, ImageToASCIIType,
     ImageToASCIIOptions, TextToASCIIType
 )
 from app.ascii_generators import ascii_generators
@@ -90,7 +91,7 @@ class GeneratedASCIIService:
                 generated_ascii = GeneratedASCII.objects.select_related(
                     'image_to_ascii_type__options', 'text_to_ascii_type'
                 ).prefetch_related(
-                    'outputs', 'reports'
+                    'reports'
                 ).get(url_code=ascii_url_code)
                 cache.set(key, generated_ascii)
             except GeneratedASCII.DoesNotExist:
@@ -118,7 +119,7 @@ class GeneratedASCIIService:
     @staticmethod
     def create(request) -> JsonResponse:
         """
-        Create (share) "GeneratedASCII" object with all generated arts stored in "OutputASCII"
+        Create (share) "GeneratedASCII" object with all generated arts stored in "output_ascii" field.
         while input data is stored in "TextToASCIIType" or "ImageToASCIIType" with "ImageToASCIIOptions".
         :param request: Request, so it can access request.POST and request.FILE.
         :return: Fully build JsonResponse with "shared_redirect_url" - relative path to shared object.
@@ -170,14 +171,15 @@ class GeneratedASCIIService:
                 brightness=result['brightness'],
                 contrast=result['contrast'],
             )
-            # Create "OutputASCII" objects for every generated ascii.
+            # Add objects in json to "output_ascii" field for every generated ascii.
             arts = result.get('arts')
+            json_list = []
             for i in range(len(arts)):
-                OutputASCII.objects.create(
-                    generated_ascii=ascii_obj,
-                    method_name=str(i + 1),
-                    ascii_txt=arts[i]
-                )
+                json_list.append({
+                    'method_name': str(i + 1),
+                    'ascii_txt': arts[i]
+                })
+
         else:
             # In TextToASCII mode - create TextToASCIIType with input text.
             if not request.POST.get('multiple_strings', False):
@@ -192,12 +194,16 @@ class GeneratedASCIIService:
                 multi_line_mode=multi_line_mode,
             )
             arts = result.get('arts')
+            json_list = []
             for art in arts:
-                OutputASCII.objects.create(
-                    generated_ascii=ascii_obj,
-                    method_name=art[0],
-                    ascii_txt=art[1],
-                )
+                json_list.append({
+                    'method_name': art[0],
+                    'ascii_txt': art[1],
+                })
+
+        ascii_obj.output_ascii = json.dumps(json_list)
+        ascii_obj.save()
+
         return JsonResponse({
             'shared_redirect_url': reverse('ascii_detail_url', kwargs={'ascii_url_code': ascii_obj.url_code})
         }, status=200)

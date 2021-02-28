@@ -19,13 +19,13 @@ class GeneratedASCII(models.Model):
     """Main model for generated ASCII results (only published)"""
     #  image_to_ascii_type
     #  text_to_ascii_type
-    #  outputs
     #  reports
     preferred_output_method = models.CharField(  # Specifying what output method should be displayed on default
         max_length=128
     )
     url_code = models.CharField(max_length=6, unique=True, editable=False)  # Unique url code
     is_hidden = models.BooleanField(default=False)  # If we need to restrict access without actually deleting
+    output_ascii = models.JSONField(null=True)
     date_shared = models.DateTimeField(auto_now=True)
 
     def __str__(self):
@@ -92,16 +92,6 @@ class TextToASCIIType(models.Model):
 
     def get_absolute_url(self):
         return reverse('ascii_detail_url', kwargs={'ascii_url_code': self.generated_ascii.url_code})
-
-
-class OutputASCII(models.Model):
-    """All the generated ASCII outputs stored here"""
-    generated_ascii = models.ForeignKey(to=GeneratedASCII, on_delete=models.CASCADE, related_name='outputs')
-    method_name = models.CharField(max_length=128)
-    ascii_txt = models.TextField(default='')
-
-    class Meta:
-        ordering = ['id']
 
 
 class Report(models.Model):

@@ -10,7 +10,7 @@ from django.conf import settings
 from django.core.files import File
 
 from app.models import (
-    GeneratedASCII, Report, ImageToASCIIType, OutputASCII,
+    GeneratedASCII, Report, ImageToASCIIType,
     ImageToASCIIOptions, TextToASCIIType, Feedback
 )
 
@@ -640,7 +640,7 @@ class TestAsciiShareView(TestCase):
         self.assertEqual(obj.text_to_ascii_type.input_text, '')
         self.assertFalse(obj.text_to_ascii_type.multi_line_mode)
         self.assertIsNotNone(json_content.get('shared_redirect_url', None))
-        OutputASCII.objects.get(generated_ascii=obj, method_name='alpha')
+        self.assertIn('"method_name": "alpha"', obj.output_ascii)
         obj.delete()
 
     def test_ajax_blank_multiline_text(self):
@@ -658,7 +658,7 @@ class TestAsciiShareView(TestCase):
         self.assertEqual(obj.text_to_ascii_type.input_text, '')
         self.assertTrue(obj.text_to_ascii_type.multi_line_mode)
         self.assertIsNotNone(json_content.get('shared_redirect_url', None))
-        OutputASCII.objects.get(generated_ascii=obj, method_name='alpha')
+        self.assertIn('"method_name": "alpha"', obj.output_ascii)
         obj.delete()
 
     def test_ajax_singleline_text(self):
@@ -677,7 +677,7 @@ class TestAsciiShareView(TestCase):
         self.assertEqual(obj.text_to_ascii_type.input_text, 'single line text')
         self.assertFalse(obj.text_to_ascii_type.multi_line_mode)
         self.assertIsNotNone(json_content.get('shared_redirect_url', None))
-        OutputASCII.objects.get(generated_ascii=obj, method_name='alpha')
+        self.assertIn('"method_name": "alpha"', obj.output_ascii)
         obj.delete()
 
     def test_ajax_multiline_text(self):
@@ -697,7 +697,7 @@ class TestAsciiShareView(TestCase):
         self.assertEqual(obj.text_to_ascii_type.input_text, 'multi line\ntext')
         self.assertTrue(obj.text_to_ascii_type.multi_line_mode)
         self.assertIsNotNone(json_content.get('shared_redirect_url', None))
-        OutputASCII.objects.get(generated_ascii=obj, method_name='alpha')
+        self.assertIn('"method_name": "alpha"', obj.output_ascii)
         obj.delete()
 
     def test_ajax_image_wrong_file_name(self):
@@ -728,7 +728,7 @@ class TestAsciiShareView(TestCase):
         self.assertIsNotNone(json_content.get('shared_redirect_url', None))
         image_to_ascii_type = ImageToASCIIType.objects.get(generated_ascii=obj)
         image_to_ascii_options = ImageToASCIIOptions.objects.get(image_to_ascii_type=image_to_ascii_type)
-        OutputASCII.objects.get(generated_ascii=obj, method_name='1')
+        self.assertIn('"method_name": "1"', obj.output_ascii)
         self.assertEqual(image_to_ascii_options.columns, '90')
         self.assertEqual(image_to_ascii_options.brightness, '100')
         self.assertEqual(image_to_ascii_options.contrast, '100')
@@ -769,7 +769,7 @@ class TestAsciiShareView(TestCase):
         self.assertIsNotNone(json_content.get('shared_redirect_url', None))
         image_to_ascii_type = ImageToASCIIType.objects.get(generated_ascii=obj)
         image_to_ascii_options = ImageToASCIIOptions.objects.get(image_to_ascii_type=image_to_ascii_type)
-        OutputASCII.objects.get(generated_ascii=obj, method_name='1')
+        self.assertIn('"method_name": "1"', obj.output_ascii)
         self.assertEqual(image_to_ascii_options.columns, '150')
         self.assertEqual(image_to_ascii_options.brightness, '50')
         self.assertEqual(image_to_ascii_options.contrast, '123')
