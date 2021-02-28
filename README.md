@@ -9,14 +9,14 @@ You can find it at [https://ASCII-Generator.site](https://ascii-generator.site)
 
 ## Fast local setup
 
-You start this website locally by using these easy steps (python3 is needed):
+You can start this website locally by using these easy steps (python3 is needed):
 
 - Clone this repo to your pc;
 - Create virtual environment (if needed) with ```virtualenv venv```, activate it and install dependencies with ```pip install -r requirements.txt```;
 - At the top of ```project/settings.py``` set ```EASY_RUN_MODE``` from ```False``` to ```True```;
 - Start server with```python manage.py runserver``` or ```python manage.py runserver 0.0.0.0:1234``` to open it to local network (for example, over wifi).
 
-TAKE A NOTE that without postgresql, you can't use any database-related actions, only the generators.
+TAKE A NOTE that without postgresql, you can't use migrations, therefore, can't use any database-related actions. Generators will work of course.
 
 ## Used repositories
 
