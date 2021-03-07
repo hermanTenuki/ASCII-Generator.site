@@ -72,7 +72,7 @@ class GeneratedASCIIService:
         Recursive function that generates random, but unique file name and path.
         :return: Full path to file, name with extension. Return 2 nones if too many recursions.
         """
-        name = ''.join(random.choices(string.ascii_lowercase + string.digits, k=50))
+        name = ''.join(random.choices(string.ascii_lowercase + string.digits, k=20))
         full_name = f'{name}{file_extension}'
         full_path = os.path.join(settings.MEDIA_ROOT, 'input_images/', full_name)
         if os.path.exists(full_path):
@@ -109,12 +109,9 @@ class GeneratedASCIIService:
         :param ascii_obj: "GeneratedASCII" object.
         :return: Boolean.
         """
-        try:
-            _ = ascii_obj.image_to_ascii_type
-            app_txt_mode = False
-        except ImageToASCIIType.DoesNotExist:
-            app_txt_mode = True
-        return app_txt_mode
+        if hasattr(ascii_obj, 'text_to_ascii_type'):
+            return True
+        return False
 
     @staticmethod
     def create(request) -> JsonResponse:
