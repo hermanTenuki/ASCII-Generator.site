@@ -109,12 +109,9 @@ class GeneratedASCIIService:
         :param ascii_obj: "GeneratedASCII" object.
         :return: Boolean.
         """
-        try:
-            _ = ascii_obj.image_to_ascii_type
-            app_txt_mode = False
-        except ImageToASCIIType.DoesNotExist:
-            app_txt_mode = True
-        return app_txt_mode
+        if hasattr(ascii_obj, 'text_to_ascii_type'):
+            return True
+        return False
 
     @staticmethod
     def create(request) -> JsonResponse:
