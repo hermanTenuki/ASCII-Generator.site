@@ -72,7 +72,7 @@ class GeneratedASCIIService:
         Recursive function that generates random, but unique file name and path.
         :return: Full path to file, name with extension. Return 2 nones if too many recursions.
         """
-        name = ''.join(random.choices(string.ascii_lowercase + string.digits, k=50))
+        name = ''.join(random.choices(string.ascii_lowercase + string.digits, k=20))
         full_name = f'{name}{file_extension}'
         full_path = os.path.join(settings.MEDIA_ROOT, 'input_images/', full_name)
         if os.path.exists(full_path):

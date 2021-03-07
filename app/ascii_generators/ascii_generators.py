@@ -35,7 +35,7 @@ def _generate_unique_image_path(file_extension, r=0, r_max=10):
     :return: Full path to file, name with extension.
     """
     # Random name to image
-    name = ''.join(random.choices(string.ascii_lowercase + string.digits, k=30))  # 30 symbols for security
+    name = ''.join(random.choices(string.ascii_lowercase + string.digits, k=15))
     # Making file name
     full_name = f'{name}{file_extension}'
     # Making path
