@@ -1,7 +1,5 @@
 name: Django Deploy Runner
-on:
-  push:
-    branches: [ master ]
+on: workflow_dispatch
     
 jobs:
   deploy:
