@@ -5,7 +5,7 @@ from pathlib import Path
 from distutils.util import strtobool
 
 # Variable for fast project start without dealing with environment variables
-EASY_RUN_MODE = True
+EASY_RUN_MODE = False
 
 if EASY_RUN_MODE:
     os.environ['DEBUG'] = 'True'
