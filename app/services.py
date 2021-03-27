@@ -45,7 +45,7 @@ class ReportService:
         return ReportForm()
 
     @staticmethod
-    def create(data, ascii_url_code) -> JsonResponse:
+    def create(data, ascii_url_code: str) -> JsonResponse:
         """
         Create "Report"
         :param data: data for the ReportForm.
@@ -58,9 +58,11 @@ class ReportService:
         except GeneratedASCII.DoesNotExist:
             return JsonResponse({'errors': {'captcha': [_("Can't find object to report.")]}}, status=400)
         if form.is_valid():
-            Report.objects.create(text=form.cleaned_data['text'],
-                                  email=form.cleaned_data['email'],
-                                  generated_ascii=generated_ascii)
+            Report.objects.create(
+                text=form.cleaned_data['text'],
+                email=form.cleaned_data['email'],
+                generated_ascii=generated_ascii,
+            )
             return JsonResponse({}, status=200)
         return JsonResponse({'errors': form.errors}, status=400)
 
@@ -82,7 +84,7 @@ class GeneratedASCIIService:
         return full_path, full_name
 
     @staticmethod
-    def get_active_object_or_404(ascii_url_code) -> GeneratedASCII:
+    def get_active_object_or_404(ascii_url_code: str) -> GeneratedASCII:
         # find it in cache, if not found - set it
         key = f'GeneratedASCIIService_get_object_or_404_{ascii_url_code}'
         generated_ascii = cache.get(key)
@@ -93,9 +95,9 @@ class GeneratedASCIIService:
                 ).prefetch_related(
                     'reports'
                 ).get(url_code=ascii_url_code)
-                cache.set(key, generated_ascii)
             except GeneratedASCII.DoesNotExist:
                 raise Http404
+            cache.set(key, generated_ascii)
         # we don't want to return hidden object
         if generated_ascii.is_hidden:
             raise Http404
@@ -103,15 +105,11 @@ class GeneratedASCIIService:
         return generated_ascii
 
     @staticmethod
-    def is_txt_mode(ascii_obj) -> bool:
+    def is_txt_mode(ascii_obj: GeneratedASCII) -> bool:
         """
         Check if "GeneratedASCII" object is containing TextToASCII arts.
-        :param ascii_obj: "GeneratedASCII" object.
-        :return: Boolean.
         """
-        if hasattr(ascii_obj, 'text_to_ascii_type'):
-            return True
-        return False
+        return hasattr(ascii_obj, 'text_to_ascii_type')
 
     @staticmethod
     def create(request) -> JsonResponse:
@@ -136,14 +134,14 @@ class GeneratedASCIIService:
             }
         # Check if errors occurred while generating ASCII arts.
         if img2ascii_mode:
-            if type(result) == JsonResponse:
+            if isinstance(result, JsonResponse):
                 return result
         else:
             if len(result['arts']) == 0:
                 return JsonResponse({}, status=400)
         # Get preferred output method from request, if not provided - return error.
         preferred_output_method = request.POST.get('preferred_output_method', None)
-        if preferred_output_method is None:
+        if not preferred_output_method:
             return JsonResponse({}, status=400)
         # Create "GeneratedASCII" object and all other needed stuff.
         ascii_obj = GeneratedASCII.objects.create(preferred_output_method=preferred_output_method)
@@ -152,15 +150,15 @@ class GeneratedASCIIService:
             image_to_ascii_type_obj = ImageToASCIIType(
                 generated_ascii=ascii_obj,
             )
-            file = open(os.path.join(settings.TEMPORARY_IMAGES, result['file_name']), 'rb')
-            _unused_fn, file_extension = os.path.splitext(file.name)
-            _unused_path, file_name = GeneratedASCIIService._generate_unique_image_path(file_extension)
-            image_to_ascii_type_obj.input_image.save(
-                file_name,
-                File(file),
-            )
-            image_to_ascii_type_obj.save()
-            file.close()
+            with open(os.path.join(settings.TEMPORARY_IMAGES, result['file_name']), 'rb') as file:
+                _unused_fn, file_extension = os.path.splitext(file.name)
+                _unused_path, file_name = GeneratedASCIIService._generate_unique_image_path(file_extension)
+                image_to_ascii_type_obj.input_image.save(
+                    file_name,
+                    File(file),
+                )
+                image_to_ascii_type_obj.save()
+
             # Create "ImageToASCIIOptions".
             ImageToASCIIOptions.objects.create(
                 image_to_ascii_type=image_to_ascii_type_obj,

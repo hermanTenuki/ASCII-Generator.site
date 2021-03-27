@@ -17,8 +17,10 @@ def staff_authentication(request):
         form = StaffAuthenticationForm(request.POST)
         invalid_input = False
         if form.is_valid():
-            user = authenticate(username=form.cleaned_data['username'],
-                                password=form.cleaned_data['password'])
+            user = authenticate(
+                username=form.cleaned_data['username'],
+                password=form.cleaned_data['password'],
+            )
             if user is not None and user.is_staff:
                 login(request, user)
                 return redirect('index_page_url')

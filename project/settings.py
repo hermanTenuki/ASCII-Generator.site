@@ -4,9 +4,8 @@ import atexit
 from pathlib import Path
 from distutils.util import strtobool
 
-# SECURITY WARNING: don't run with EASY_RUN_MODE turned on in production!
 # Variable for fast project start without dealing with environment variables
-EASY_RUN_MODE = False
+EASY_RUN_MODE = True
 
 if EASY_RUN_MODE:
     os.environ['DEBUG'] = 'True'
@@ -25,7 +24,12 @@ if not os.path.exists(TEMPORARY_IMAGES):  # If temporary images folder is not ex
 
 # Import environment variables from python file if it exist. For local development only.
 if os.path.exists(os.path.join(BASE_DIR, 'project/env_vars.py')):
-    from . import env_vars  # noqa: F401
+    """
+    Example of file's content:
+    import os
+    os.environ['DEBUG'] = 'True'
+    """
+    from project import env_vars  # noqa: F401
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
@@ -112,16 +116,15 @@ db_postgresql = {
     'USER': os.getenv('DB_USERNAME'),
     'PASSWORD': os.getenv('DB_PASSWORD'),
     'HOST': os.getenv('DB_HOST', 'localhost'),
-    'PORT': os.getenv('DB_PORT', '5432')
+    'PORT': os.getenv('DB_PORT', '5432'),
 }
 
 db_dummy = {
     'ENGINE': '',
 }
 
-# Database can be switched here
 DATABASES = {
-    'default': db_postgresql
+    'default': db_postgresql,
 }
 
 # If EASY_RUN_MODE is True - just don't use any db
@@ -191,7 +194,6 @@ if EASY_RUN_MODE:
 ROSETTA_SHOW_AT_ADMIN_PANEL = True
 
 # If DEBUG is True, at runserver exit delete all the temporary images
-
 if DEBUG:
     def clear_temporary_images_folder():
         for file_name in os.listdir(TEMPORARY_IMAGES):
@@ -209,6 +211,6 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
         'LOCATION': 'unique-snowflake',
-        'TIMEOUT': CACHE_TIMEOUT
-    }
+        'TIMEOUT': CACHE_TIMEOUT,
+    },
 }
