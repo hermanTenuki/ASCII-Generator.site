@@ -16,7 +16,6 @@ handler400 = 'app.views.handler400_view'
 handler404 = 'app.views.handler404_view'
 handler500 = 'app.views.handler500_view'
 
-# If DEBUG is True:
 if settings.DEBUG:
     # Allow to visit error pages
     from app.views import handler400_view, handler404_view, handler500_view
