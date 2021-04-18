@@ -1,8 +1,11 @@
 import os
 import atexit
+import sys
 
 from pathlib import Path
 from distutils.util import strtobool
+
+IN_TESTING = 'test' in sys.argv
 
 # Variable for fast project start without dealing with environment variables
 EASY_RUN_MODE = False
@@ -37,8 +40,9 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(strtobool(os.getenv('DEBUG', 'False')))
 
-ALLOWED_HOSTS = ['www.ascii-generator.site', '.ascii-generator.site',
-                 'ascii-generator.site']
+ALLOWED_HOSTS = [
+    'www.ascii-generator.site', '.ascii-generator.site', 'ascii-generator.site'
+]
 
 # If DEBUG is True - allow all hosts. For local development only.
 if DEBUG:
@@ -203,14 +207,27 @@ if DEBUG:
 
 # CACHING
 
-CACHE_TIMEOUT_NORMAL = 600
-CACHE_TIMEOUT_SHORT = 300
-CACHE_TIMEOUT = CACHE_TIMEOUT_NORMAL
+CACHE_TIMEOUT_LONG = 600
+CACHE_TIMEOUT_NORMAL = 300
+
+CACHE_LOCMEM = {
+    'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    'LOCATION': 'unique-snowflake',
+    'TIMEOUT': CACHE_TIMEOUT_NORMAL,
+}
+
+CACHE_MEMCACHED = {
+    'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+    'LOCATION': '{}:{}'.format(
+        os.getenv('MEMCACHED_HOST', '127.0.0.1'),
+        os.getenv('MEMCACHED_PORT', '11211'),
+    ),
+    'TIMEOUT': CACHE_TIMEOUT_NORMAL,
+}
 
 CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'unique-snowflake',
-        'TIMEOUT': CACHE_TIMEOUT,
-    },
+    'default': CACHE_MEMCACHED,
 }
+
+if DEBUG or IN_TESTING:
+    CACHES['default'] = CACHE_LOCMEM

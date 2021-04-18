@@ -97,7 +97,7 @@ class GeneratedASCIIService:
                 ).get(url_code=ascii_url_code)
             except GeneratedASCII.DoesNotExist:
                 raise Http404
-            cache.set(key, generated_ascii)
+            cache.set(key, generated_ascii, settings.CACHE_TIMEOUT_LONG)
         # we don't want to return hidden object
         if generated_ascii.is_hidden:
             raise Http404
