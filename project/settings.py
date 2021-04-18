@@ -38,7 +38,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = bool(strtobool(os.getenv('DEBUG', 'False')))
 
 ALLOWED_HOSTS = [
-    'www.ascii-generator.site', '.ascii-generator.site', 'ascii-generator.site', '*',
+    'www.ascii-generator.site', '.ascii-generator.site', 'ascii-generator.site'
 ]
 
 # If DEBUG is True - allow all hosts. For local development only.
