@@ -1,8 +1,11 @@
 import os
 import atexit
+import sys
 
 from pathlib import Path
 from distutils.util import strtobool
+
+IN_TESTING = 'test' in sys.argv
 
 # Variable for fast project start without dealing with environment variables
 EASY_RUN_MODE = False
@@ -226,5 +229,5 @@ CACHES = {
     'default': CACHE_MEMCACHED,
 }
 
-if DEBUG:
+if DEBUG or IN_TESTING:
     CACHES['default'] = CACHE_LOCMEM
