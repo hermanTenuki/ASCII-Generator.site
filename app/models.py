@@ -9,7 +9,7 @@ class Feedback(models.Model):
     """People can leave their feedback messages with email address if reply is expected"""
     text = models.TextField(max_length=1024, blank=False)
     email = models.EmailField(blank=True, null=True)
-    date = models.DateTimeField(auto_now=True)
+    date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return 'Feedback: ' + self.text[:40]
@@ -26,7 +26,7 @@ class GeneratedASCII(models.Model):
     url_code = models.CharField(max_length=6, unique=True, editable=False)  # Unique url code
     is_hidden = models.BooleanField(default=False)  # If we need to restrict access without actually deleting
     output_ascii = models.JSONField(null=True)
-    date_shared = models.DateTimeField(auto_now=True)
+    date_shared = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return 'GeneratedASCII: ' + self.url_code
@@ -99,7 +99,7 @@ class Report(models.Model):
     generated_ascii = models.ForeignKey(to=GeneratedASCII, on_delete=models.CASCADE, related_name='reports')
     text = models.TextField(max_length=1024)
     email = models.EmailField(blank=True, null=True)
-    date_reported = models.DateTimeField(auto_now=True)
+    date_reported = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return 'Report: ' + self.text[:60]
