@@ -37,8 +37,9 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(strtobool(os.getenv('DEBUG', 'False')))
 
-ALLOWED_HOSTS = ['www.ascii-generator.site', '.ascii-generator.site',
-                 'ascii-generator.site']
+ALLOWED_HOSTS = [
+    'www.ascii-generator.site', '.ascii-generator.site', 'ascii-generator.site', '*',
+]
 
 # If DEBUG is True - allow all hosts. For local development only.
 if DEBUG:
@@ -203,14 +204,27 @@ if DEBUG:
 
 # CACHING
 
-CACHE_TIMEOUT_NORMAL = 600
-CACHE_TIMEOUT_SHORT = 300
-CACHE_TIMEOUT = CACHE_TIMEOUT_NORMAL
+CACHE_TIMEOUT_LONG = 600
+CACHE_TIMEOUT_NORMAL = 300
+
+CACHE_LOCMEM = {
+    'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    'LOCATION': 'unique-snowflake',
+    'TIMEOUT': CACHE_TIMEOUT_LONG,
+}
+
+CACHE_MEMCACHED = {
+    'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+    'LOCATION': '{}:{}'.format(
+        os.getenv('MEMCACHED_HOST', '127.0.0.1'),
+        os.getenv('MEMCACHED_PORT', '11211'),
+    ),
+    'TIMEOUT': CACHE_TIMEOUT_LONG,
+}
 
 CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'unique-snowflake',
-        'TIMEOUT': CACHE_TIMEOUT,
-    },
+    'default': CACHE_MEMCACHED,
 }
+
+if DEBUG:
+    CACHES['default'] = CACHE_LOCMEM
