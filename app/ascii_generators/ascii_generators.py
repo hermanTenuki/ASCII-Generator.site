@@ -201,7 +201,7 @@ def image_to_ascii_generator(request):
 
     # CACHING
     if cache_key:
-        cache.set(cache_key, response, settings.CACHE_TIMEOUT_SHORT)
+        cache.set(cache_key, response, settings.CACHE_TIMEOUT_NORMAL)
 
     return response
 

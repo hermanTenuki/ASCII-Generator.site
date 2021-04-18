@@ -210,7 +210,7 @@ CACHE_TIMEOUT_NORMAL = 300
 CACHE_LOCMEM = {
     'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
     'LOCATION': 'unique-snowflake',
-    'TIMEOUT': CACHE_TIMEOUT_LONG,
+    'TIMEOUT': CACHE_TIMEOUT_NORMAL,
 }
 
 CACHE_MEMCACHED = {
@@ -219,7 +219,7 @@ CACHE_MEMCACHED = {
         os.getenv('MEMCACHED_HOST', '127.0.0.1'),
         os.getenv('MEMCACHED_PORT', '11211'),
     ),
-    'TIMEOUT': CACHE_TIMEOUT_LONG,
+    'TIMEOUT': CACHE_TIMEOUT_NORMAL,
 }
 
 CACHES = {
