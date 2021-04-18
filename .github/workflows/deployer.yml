@@ -26,7 +26,5 @@ jobs:
         password: ${{ secrets.SERVER_PASSWORD }}
         script: |
           cd /home/user/ascii-generator/
-          docker-compose build
-          docker stop web_app && docker rm $(docker ps -aq)
           docker-compose up -d --build
           docker image prune -a -f
