@@ -18,7 +18,7 @@ jobs:
         source: "/home/runner/work/ASCII-Generator.site/ASCII-Generator.site"
         target: "/home/user/ascii-generator/ASCII-Generator.site/"
         strip_components: 2
-    - name: Execute Deploy Command on the Server
+    - name: Deploy on the Server
       uses: appleboy/ssh-action@master
       with: 
         host: ${{ secrets.SERVER_HOST }}
@@ -26,5 +26,10 @@ jobs:
         password: ${{ secrets.SERVER_PASSWORD }}
         script: |
           cd /home/user/ascii-generator/
-          docker-compose up -d --build
+          docker start web_app_backup
+          sleep 15
+          docker-compose up -d --build db nginx memcached web img_cleaner
+          sleep 15
+          docker-compose up -d --build web_backup
+          docker stop web_app_backup
           docker image prune -a -f
