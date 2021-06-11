@@ -13,8 +13,6 @@ EASY_RUN_MODE = False
 if EASY_RUN_MODE:
     os.environ['DEBUG'] = 'True'
     os.environ['SECRET_KEY'] = 'VERY_UNIQUE_AND_SECRET_KEY'
-    os.environ['RECAPTCHA_PUBLIC_KEY'] = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'  # Those are test keys, don't bother
-    os.environ['RECAPTCHA_PRIVATE_KEY'] = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
@@ -188,10 +186,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # RECAPTCHA API Keys
 
-RECAPTCHA_PUBLIC_KEY = os.getenv('RECAPTCHA_PUBLIC_KEY')
-RECAPTCHA_PRIVATE_KEY = os.getenv('RECAPTCHA_PRIVATE_KEY')
-if EASY_RUN_MODE:
+IGNORE_RECAPTCHA = bool(strtobool(os.getenv('IGNORE_RECAPTCHA', False)))
+if EASY_RUN_MODE or IN_TESTING or IGNORE_RECAPTCHA:
+    os.environ['RECAPTCHA_PUBLIC_KEY'] = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'  # Those are test keys, don't bother
+    os.environ['RECAPTCHA_PRIVATE_KEY'] = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'
     SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
+else:
+    RECAPTCHA_PUBLIC_KEY = os.getenv('RECAPTCHA_PUBLIC_KEY')
+    RECAPTCHA_PRIVATE_KEY = os.getenv('RECAPTCHA_PRIVATE_KEY')
 
 # django-rosetta settings
 

@@ -10,14 +10,13 @@ jobs:
     name: python3.8
     runs-on: ubuntu-18.04
     env:
-      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      SECRET_KEY: SECRET_TESTING_KEY
       DB_NAME: test_db
       DB_USERNAME: test_user
       DB_PASSWORD: test_pass
       DB_HOST: localhost
       DB_PORT: 5432
-      RECAPTCHA_PUBLIC_KEY: ${{ secrets.RECAPTCHA_PUBLIC_KEY }}
-      RECAPTCHA_PRIVATE_KEY: ${{ secrets.RECAPTCHA_PRIVATE_KEY }}
+      IGNORE_RECAPTCHA: True
     steps:
     - name: Setup PostgreSQL
       uses: Harmon758/postgresql-action@v1.0.0
