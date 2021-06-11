@@ -188,8 +188,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 IGNORE_RECAPTCHA = bool(strtobool(os.getenv('IGNORE_RECAPTCHA', 'False')))
 if EASY_RUN_MODE or IN_TESTING or IGNORE_RECAPTCHA:
-    os.environ['RECAPTCHA_PUBLIC_KEY'] = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'  # Those are test keys, don't bother
-    os.environ['RECAPTCHA_PRIVATE_KEY'] = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'
+    RECAPTCHA_PUBLIC_KEY = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
+    RECAPTCHA_PRIVATE_KEY = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'
     SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
 else:
     RECAPTCHA_PUBLIC_KEY = os.getenv('RECAPTCHA_PUBLIC_KEY')
