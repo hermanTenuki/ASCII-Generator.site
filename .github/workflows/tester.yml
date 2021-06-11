@@ -16,8 +16,7 @@ jobs:
       DB_PASSWORD: test_pass
       DB_HOST: localhost
       DB_PORT: 5432
-      RECAPTCHA_PUBLIC_KEY: 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
-      RECAPTCHA_PRIVATE_KEY: 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
+      IGNORE_RECAPTCHA: True
     steps:
     - name: Setup PostgreSQL
       uses: Harmon758/postgresql-action@v1.0.0
