@@ -190,7 +190,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 RECAPTCHA_PUBLIC_KEY = os.getenv('RECAPTCHA_PUBLIC_KEY')
 RECAPTCHA_PRIVATE_KEY = os.getenv('RECAPTCHA_PRIVATE_KEY')
-if EASY_RUN_MODE:
+if EASY_RUN_MODE or IN_TESTING:
     SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
 
 # django-rosetta settings
