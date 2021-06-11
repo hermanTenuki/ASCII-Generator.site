@@ -186,7 +186,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # RECAPTCHA API Keys
 
-IGNORE_RECAPTCHA = bool(strtobool(os.getenv('IGNORE_RECAPTCHA', False)))
+IGNORE_RECAPTCHA = bool(strtobool(os.getenv('IGNORE_RECAPTCHA', 'False')))
 if EASY_RUN_MODE or IN_TESTING or IGNORE_RECAPTCHA:
     os.environ['RECAPTCHA_PUBLIC_KEY'] = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'  # Those are test keys, don't bother
     os.environ['RECAPTCHA_PRIVATE_KEY'] = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'
