@@ -1,27 +1,19 @@
-import os
 import atexit
+import os
 import sys
 
-from pathlib import Path
 from distutils.util import strtobool
+from pathlib import Path
 
-IN_TESTING = 'test' in sys.argv
-
-# Variable for fast project start without dealing with environment variables
-EASY_RUN_MODE = False
-
+EASY_RUN_MODE = False  # Variable for fast project start without dealing with environment variables
 if EASY_RUN_MODE:
     os.environ['DEBUG'] = 'True'
     os.environ['SECRET_KEY'] = 'VERY_UNIQUE_AND_SECRET_KEY'
 
+IN_TESTING = 'test' in sys.argv
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
-
-TEMPORARY_IMAGES = os.path.join(BASE_DIR, '_images/temporary/')
-if not os.path.exists(TEMPORARY_IMAGES):  # If temporary images folder is not exists, create it with .keep file
-    os.mkdir(TEMPORARY_IMAGES)
-    file = open(os.path.join(TEMPORARY_IMAGES, '.keep'), 'w')
-    file.close()
 
 # Import environment variables from python file if it exist. For local development only.
 if os.path.exists(os.path.join(BASE_DIR, 'project/env_vars.py')):
@@ -39,7 +31,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = bool(strtobool(os.getenv('DEBUG', 'False')))
 
 ALLOWED_HOSTS = [
-    'www.ascii-generator.site', '.ascii-generator.site', 'ascii-generator.site'
+    'www.ascii-generator.site', '.ascii-generator.site', 'ascii-generator.site',
 ]
 
 # If DEBUG is True - allow all hosts. For local development only.
@@ -81,7 +73,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'app.middleware.ForceDefaultLanguageMiddleware',  # Deletes "HTTP_ACCEPT_LANGUAGE" to keep default lang
 ]
 
 ROOT_URLCONF = 'project.urls'
@@ -106,11 +97,6 @@ WSGI_APPLICATION = 'project.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-
-db_sqlite3 = {  # useless after JSONField being added in PR#66
-    'ENGINE': 'django.db.backends.sqlite3',
-    'NAME': BASE_DIR / 'db.sqlite3',
-}
 
 db_postgresql = {
     'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -199,8 +185,11 @@ else:
 
 ROSETTA_SHOW_AT_ADMIN_PANEL = True
 
-# If DEBUG is True, at runserver exit delete all the temporary images
-if DEBUG:
+# temporary images folder
+
+TEMPORARY_IMAGES = os.path.join(BASE_DIR, '_images/temporary/')
+
+if DEBUG:  # If DEBUG is True, at runserver exit delete all the temporary images
     def clear_temporary_images_folder():
         for file_name in os.listdir(TEMPORARY_IMAGES):
             if file_name != '.keep':  # Keep the .keep file
