@@ -38,8 +38,12 @@ jobs:
         mkdir media
         pip install -r requirements.txt
         python manage.py collectstatic --noinput
-        python manage.py makemigrations --check
         python manage.py migrate
+    - name: Migrations check
+      run: |
+        python manage.py makemigrations --check
+        python manage.py makemigrations --lint
+        python manage.py lintmigrations
     - name: Flake8
       run: flake8 --config flake8.ini
     - name: Run Tests
