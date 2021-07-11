@@ -58,6 +58,7 @@ THIRD_PARTY_APPS = [
     'django_cleanup',
     'captcha',
     'rosetta',
+    'django_migration_linter',
 ]
 
 INSTALLED_APPS = DEFAULT_APPS + CUSTOM_APPS + THIRD_PARTY_APPS
