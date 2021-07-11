@@ -2,6 +2,7 @@
 
 import json
 
+import django_migration_linter
 from django.db import migrations, models
 from django.db import transaction
 
@@ -28,6 +29,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        django_migration_linter.IgnoreMigration(),
         migrations.AddField(
             model_name='generatedascii',
             name='output_ascii',
