@@ -304,7 +304,7 @@ $(document).ready(function () {
         files.forEach(file => {
             const ext = getFileExtension(file);
             if (file.size > 5242880) {
-                let errMessage = 'Maximum size is 5 MB.';
+                let errMessage = gettext('Maximum size is 5 MB.');
                 errMessageOutput.style.display = 'block';
                 errMessageOutput.textContent = errMessage;
             } else if (supportedExts.indexOf(ext) === -1) {

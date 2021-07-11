@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-07 19:15+0300\n"
-"PO-Revision-Date: 2020-12-07 19:15+0000\n"
-"Last-Translator: b'Herman Schechkin <itseasy322@gmail.com>'\n"
+"POT-Creation-Date: 2021-07-11 09:38+0000\n"
+"PO-Revision-Date: 2021-07-11 09:39+0000\n"
+"Last-Translator: b'hermanTenuki <itseasy322@gmail.com>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -19,11 +19,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Translated-Using: django-rosetta 0.9.5\n"
 
-#: .\app\static\js\scripts.js:302
+#: app/static/js/scripts.js:307
+msgid "Maximum size is 5 MB."
+msgstr "Максимальный размер 5 МБ."
+
+#: app/static/js/scripts.js:312
 msgid "Supported formats are: .png, .jpg, .bmp, .gif, .ico, .webp."
 msgstr "Поддерживаемые форматы: .png, .jpg, .bmp, .gif, .ico, .webp."
 
-#: .\app\static\js\scripts.js:661
+#: app/static/js/scripts.js:684
 msgid ""
 "Are you sure that you want to share your uploaded image and generated "
 "results with access by link?"
@@ -31,7 +35,7 @@ msgstr ""
 "Вы уверены, что хотите поделиться загруженным изображением и "
 "сгенерированными результатами с доступом по ссылке?"
 
-#: .\app\static\js\scripts.js:664
+#: app/static/js/scripts.js:687
 msgid ""
 "Are you sure that you want to share your input text and generated results "
 "with access by link?"
@@ -39,11 +43,10 @@ msgstr ""
 "Вы уверены, что хотите поделиться введённым текстом и сгенерированными "
 "результатами с доступом по ссылке?"
 
-#: .\app\static\js\scripts.js:717
+#: app/static/js/scripts.js:740
 msgid "Success!"
 msgstr "Успешно!"
 
-#: .\app\static\js\scripts.js:717
-#| msgid "Your new share link:"
+#: app/static/js/scripts.js:740
 msgid "Your new link:"
 msgstr "Ваша новая ссылка:"
