@@ -26,10 +26,4 @@ jobs:
         password: ${{ secrets.SERVER_PASSWORD }}
         script: |
           cd /home/user/ascii-generator/
-          docker-compose up -d web_backup
-          sleep 15
-          docker-compose up -d --build db nginx memcached web img_cleaner
-          sleep 15
-          docker stop web_app_backup
-          docker rm web_app_backup
-          docker image prune -a -f
+          ./deploy.sh
