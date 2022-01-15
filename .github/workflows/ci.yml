@@ -89,7 +89,7 @@ jobs:
           pip freeze
 
       - name: Check requirements
-        run: diff -w -B --new-line-format="" --unchanged-line-format="" <(sort requirements.txt) <(pip freeze)
+        run: diff -w -B -i --new-line-format="" --unchanged-line-format="" <(sort requirements.txt) <(pip freeze)
 
   tests:
     needs: [linter, migrations, requirements]
