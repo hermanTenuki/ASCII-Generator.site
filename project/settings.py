@@ -5,6 +5,9 @@ import sys
 from distutils.util import strtobool
 from pathlib import Path
 
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
 EASY_RUN_MODE = False  # Variable for fast project start without dealing with environment variables
 if EASY_RUN_MODE:
     os.environ['DEBUG'] = 'True'
@@ -223,3 +226,10 @@ CACHES = {
 
 if DEBUG or IN_TESTING:
     CACHES['default'] = CACHE_LOCMEM
+
+sentry_sdk.init(
+    dsn=os.getenv('SENTRY_DSN', ''),
+    integrations=[DjangoIntegration()],
+    traces_sample_rate=1.0,
+    send_default_pii=False
+)
