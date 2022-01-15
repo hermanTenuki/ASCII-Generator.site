@@ -21,6 +21,7 @@ pyflakes==2.3.1
 python-memcached==1.59
 pytz==2020.1
 requests==2.24.0
+sentry-sdk==1.5.2
 six==1.15.0
 sqlparse==0.4.1
 toml==0.10.2
