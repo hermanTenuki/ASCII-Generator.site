@@ -1,0 +1,152 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+env:
+  SECRET_KEY: SECRET_TESTING_KEY
+  DB_NAME: test_db
+  DB_USERNAME: test_user
+  DB_PASSWORD: test_pass
+  DB_HOST: localhost
+  DB_PORT: 5432
+  IGNORE_RECAPTCHA: True
+
+jobs:
+  linter:
+    name: linter
+    runs-on: ubuntu-18.04
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+        architecture: 'x64'
+
+    - name: Install requirements
+      run: |
+        pip install -r requirements.txt
+        pip freeze
+
+    - name: Run linter
+      run: flake8 --config flake8.ini
+
+  migrations:
+    name: Check migrations
+    runs-on: ubuntu-18.04
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup PostgreSQL
+      uses: Harmon758/postgresql-action@v1.0.0
+      with:
+        postgresql version: 10
+        postgresql db: test_db
+        postgresql user: test_user
+        postgresql password: test_pass
+
+    - name: Setup Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+        architecture: 'x64'
+
+    - name: Install requirements
+      run: |
+        pip install -r requirements.txt
+        pip freeze
+
+    - name: Check migrations
+      run: |
+        python manage.py lintmigrations
+        python manage.py makemigrations --check
+        python manage.py makemigrations --lint
+
+  requirements:
+    name: Check requirements
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+          architecture: 'x64'
+
+      - name: Install requirements
+        run: |
+          pip install -r requirements.txt
+          pip freeze
+
+      - name: Check requirements
+        run: diff -w -B --new-line-format="" --unchanged-line-format="" <(sort requirements.txt) <(pip freeze)
+
+  tests:
+    needs: [linter, migrations, requirements]
+
+    name: Run tests
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup PostgreSQL
+        uses: Harmon758/postgresql-action@v1.0.0
+        with:
+          postgresql version: 10
+          postgresql db: test_db
+          postgresql user: test_user
+          postgresql password: test_pass
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+          architecture: 'x64'
+
+      - name: Install requirements
+        run: |
+          pip install -r requirements.txt
+          pip freeze
+
+      - name: Run Tests
+        run: python manage.py test
+
+  deploy:
+    needs: [tests]
+    concurrency: prod
+
+    name: deploy
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Transfer Files to the Server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          source: "/home/runner/work/ASCII-Generator.site/ASCII-Generator.site"
+          target: "/home/user/ascii-generator/ASCII-Generator.site/"
+          strip_components: 2
+      - name: Deploy on the Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          script: |
+            cd /home/user/ascii-generator/
+            ./deploy.sh
