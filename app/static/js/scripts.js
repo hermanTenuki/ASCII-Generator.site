@@ -441,13 +441,25 @@ $(document).ready(function () {
     // Copy to clipboard ascii-image-output
     $('section.index .ascii-image-output').on('click', '.copy_to_clipboard img', function () {
         $(this).after('<textarea id="textarea_to_copy" ' +
-            'style="opacity: 0; position: absolute; height: 0; width: 0;">' + $('section.index .ascii-image-output .ascii-art').text() + '</textarea>');
+            'style="opacity: 0; position: absolute; height: 5; width: 5;">' + $('section.index .ascii-image-output .ascii-art').text() + '</textarea>');
         let textarea_to_copy = $('section.index #textarea_to_copy');
-        textarea_to_copy.select();
-        document.execCommand('copy');
+        try {
+            textarea_to_copy.select();
+            document.execCommand('copy');
+        } catch (e) {
+            console.error(e)
+        }
         textarea_to_copy.remove();
         window.getSelection().removeAllRanges();
-        document.selection.empty();
+        if (window.getSelection) {
+            if (window.getSelection().empty) {  // Chrome
+                window.getSelection().empty();
+            } else if (window.getSelection().removeAllRanges) {  // Firefox
+                window.getSelection().removeAllRanges();
+            }
+        } else if (document.selection) {  // IE?
+            document.selection.empty();
+        }
     });
 
     // Bring back image upload form by clicking "New image" btn
@@ -523,7 +535,15 @@ $(document).ready(function () {
         $('section.index .ascii-text-output textarea[name="output"]').select();
         document.execCommand('copy');
         window.getSelection().removeAllRanges();
-        document.selection.empty();
+        if (window.getSelection) {
+            if (window.getSelection().empty) {  // Chrome
+                window.getSelection().empty();
+            } else if (window.getSelection().removeAllRanges) {  // Firefox
+                window.getSelection().removeAllRanges();
+            }
+        } else if (document.selection) {  // IE?
+            document.selection.empty();
+        }
     });
 
     // Update displayed ASCII art in output textarea
