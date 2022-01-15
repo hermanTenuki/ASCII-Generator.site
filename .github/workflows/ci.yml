@@ -124,6 +124,7 @@ jobs:
 
   deploy:
     needs: [tests]
+    if: github.event.pull_request.merged == 'true' || (github.event_name == 'push' && github.ref == 'refs/heads/master')
     concurrency: prod
 
     name: deploy
