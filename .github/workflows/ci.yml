@@ -89,7 +89,7 @@ jobs:
           pip freeze
 
       - name: Check requirements
-        run: diff -w -B <(pip freeze) <(sort requirements.txt)
+        run: diff -w -B <(sort <(pip freeze)) <(sort requirements.txt)
 
   tests:
     needs: [linter, migrations, requirements]
