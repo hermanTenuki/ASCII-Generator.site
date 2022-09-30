@@ -334,7 +334,7 @@ $(document).ready(function () {
 
     // Returns the files type extension
     const getFileExtension = function (file) {
-        return file.name.split('.').pop();
+        return file.name.split('.').pop().toLowerCase();
     };
 
     // Truncates a string if too long
