@@ -21,14 +21,6 @@
 .overflowHidden {
   overflow: hidden;
 }
-main#full-size {
-  min-height: calc(100vh -  60px  -  60px );
-}
-@media screen and (min-height: 1080px) {
-  main#full-size {
-    min-height: calc(960px);
-  }
-}
 body {
   font-family: 'Ubuntu', sans-serif, 'Times New Roman';
   color: #ffffff;
@@ -68,16 +60,6 @@ footer {
   border: 2px dashed #ffffff;
   border-top: 0;
   overflow: hidden;
-}
-#borders-dashed::after {
-  bottom: 0;
-  pointer-events: none;
-  content: "";
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%) translateY(2px);
-  width: 1920px;
-  border-bottom: 2px dashed #ffffff;
 }
 a {
   outline: none;

@@ -62,16 +62,6 @@
   overflow: hidden;
 }
 
-main#full-size {
-  min-height: calc(~"100vh - " @footer-header-height ~" - " @footer-header-height ~"");
-}
-
-@media screen and (min-height: @max-screen-height) {
-  main#full-size {
-    min-height: calc(@max-screen-height - @footer-header-height - @footer-header-height);
-  }
-}
-
 body {
   font-family: @font-family-normal;
   color: @color-white;
@@ -110,17 +100,6 @@ header, footer {
     border: 2px dashed @color-white;
     border-top: 0;
     overflow: hidden;
-  }
-
-  &::after {
-    bottom: 0;
-    pointer-events: none;
-    content: "";
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%) translateY(2px);
-    width: @max-screen-width;
-    border-bottom: 2px dashed @color-white;
   }
 }
 
