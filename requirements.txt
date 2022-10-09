@@ -1,8 +1,8 @@
 appdirs==1.4.4
-asgiref==3.2.10
+asgiref==3.5.2
 certifi==2020.6.20
 chardet==3.0.4
-Django==3.1.14
+Django==3.2.16
 django-cleanup==5.1.0
 django-migration-linter==3.0.0
 django-recaptcha==2.0.6
