@@ -233,3 +233,5 @@ sentry_sdk.init(
     traces_sample_rate=1.0,
     send_default_pii=False
 )
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
