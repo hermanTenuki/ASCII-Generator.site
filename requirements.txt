@@ -13,7 +13,7 @@ importlib-metadata==4.6.1
 mccabe==0.6.1
 numpy==1.21.0
 opencv-python==4.4.0.44
-Pillow==9.0.1
+Pillow==9.3.0
 polib==1.1.0
 psycopg2==2.8.6
 pycodestyle==2.7.0
